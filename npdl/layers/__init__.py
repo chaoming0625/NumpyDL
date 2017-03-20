@@ -24,11 +24,6 @@ from .core import Dropout
 # embedding
 from .embedding import Embedding
 
-# convolution
-from .convolution import Conv2D
-
-# pooling
-from .pool import MaxPool2D
 
 # shape
 from .shape import Flatten

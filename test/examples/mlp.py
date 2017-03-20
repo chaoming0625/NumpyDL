@@ -13,12 +13,12 @@ import numpy as np
 from sklearn.datasets import fetch_mldata
 from sklearn.datasets import load_digits
 
-import pydl
+import npdl
 
 
 def test_digits():
     # prepare
-    pydl.random.set_seed(1234)
+    npdl.random.set_seed(1234)
 
     # data
     digits = load_digits()
@@ -30,15 +30,15 @@ def test_digits():
     n_classes = np.unique(Y_train).size
 
     # model
-    model = pydl.model.Model()
-    model.add(pydl.layers.Linear(n_in=64, n_out=500))
-    model.add(pydl.layers.Activation('relu'))
-    model.add(pydl.layers.Linear(n_in=500, n_out=n_classes))
-    model.add(pydl.layers.Activation("softmax"))
-    model.compile(loss='scce', optimizer=pydl.optimizers.SGD(lr=0.005))
+    model = npdl.model.Model()
+    model.add(npdl.layers.Linear(n_in=64, n_out=500))
+    model.add(npdl.layers.Activation('relu'))
+    model.add(npdl.layers.Linear(n_in=500, n_out=n_classes))
+    model.add(npdl.layers.Activation("softmax"))
+    model.compile(loss='scce', optimizer=npdl.optimizers.SGD(lr=0.005))
 
     # train
-    model.fit(X_train, pydl.utils.data.one_hot(Y_train), max_iter=150, validation_split=0.1)
+    model.fit(X_train, npdl.utils.data.one_hot(Y_train), max_iter=150, validation_split=0.1)
 
 
 def test_mnist():
@@ -51,16 +51,16 @@ def test_mnist():
 
     # model
     print("building model ...")
-    model = pydl.model.Model()
-    model.add(pydl.layers.Linear(n_in=784, n_out=500))
-    model.add(pydl.layers.Activation('relu'))
-    model.add(pydl.layers.Linear(n_in=500, n_out=n_classes))
-    model.add(pydl.layers.Activation("softmax"))
-    model.compile(loss='scce', optimizer=pydl.optimizers.SGD(lr=0.001))
+    model = npdl.model.Model()
+    model.add(npdl.layers.Linear(n_in=784, n_out=500))
+    model.add(npdl.layers.Activation('relu'))
+    model.add(npdl.layers.Linear(n_in=500, n_out=n_classes))
+    model.add(npdl.layers.Activation("softmax"))
+    model.compile(loss='scce', optimizer=npdl.optimizers.SGD(lr=0.001))
 
     # train
     print("train model ... ")
-    model.fit(X_train, pydl.utils.data.one_hot(y_train), max_iter=150, validation_split=0.1)
+    model.fit(X_train, npdl.utils.data.one_hot(y_train), max_iter=150, validation_split=0.1)
 
 
 if __name__ == '__main__':
