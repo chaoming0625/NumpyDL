@@ -1,19 +1,11 @@
 # -*- coding: utf-8 -*-
 
-"""
-@author: ChaoMing (https://oujago.github.io/)
-
-@date: Created on 17-1-10
-
-@notes:
-    
-"""
 
 
 import numpy as np
 
 from .base import Layer
-from ..init import Uniform
+from ..initialization import Uniform
 
 
 class Embedding(Layer):

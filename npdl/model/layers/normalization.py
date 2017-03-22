@@ -1,20 +1,12 @@
 # -*- coding: utf-8 -*-
 
-"""
-@author: ChaoMing (https://oujago.github.io/)
-
-@date: Created on 17-1-10
-
-@notes:
-    
-"""
 
 import numpy as np
 
 from .base import Layer
 
-from ..init import One
-from ..init import Zero
+from ..initialization import One
+from ..initialization import Zero
 
 
 class BatchNormal(Layer):
