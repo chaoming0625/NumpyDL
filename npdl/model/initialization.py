@@ -1,14 +1,5 @@
 # -*- coding: utf-8 -*-
 
-"""
-@author: ChaoMing (https://oujago.github.io/)
-
-@date: Created on 17-1-9
-
-@notes:
-    
-"""
-
 
 import numpy as np
 from .random import get_rng
