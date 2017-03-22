@@ -29,7 +29,7 @@ def test_digits():
     model.compile(loss='scce', optimizer=npdl.model.optimizers.SGD(lr=0.005))
 
     # train
-    model.fit(X_train, npdl.model.utils.data.one_hot(Y_train), max_iter=150, validation_split=0.1)
+    model.fit(X_train, npdl.utils.data.one_hot(Y_train), max_iter=150, validation_split=0.1)
 
 
 def test_mnist():
@@ -51,7 +51,7 @@ def test_mnist():
 
     # train
     print("train model ... ")
-    model.fit(X_train, npdl.model.utils.data.one_hot(y_train), max_iter=150, validation_split=0.1)
+    model.fit(X_train, npdl.utils.data.one_hot(y_train), max_iter=150, validation_split=0.1)
 
 
 if __name__ == '__main__':
