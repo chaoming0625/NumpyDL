@@ -1,8 +1,43 @@
 # -*- coding: utf-8 -*-
 
 
+"""
+Functions to create initializer for parameter variables.
+
+Examples
+--------
+>>> from npdl.model.layers import Dense
+>>> from npdl.model.initialization import Normal
+>>> l1 = Dense(100, 200, init=Normal())
+
+"""
+
 import numpy as np
 from .random import get_rng
+
+
+class Initializer(object):
+    """
+    Base class: all initializer class inherit from this class.
+
+    The :class:`Initializer` class represents a weight initializer used
+    to initialize weight parameters in a neural network layer. It should be
+    subclassed when implementing new types of weight initializers.
+    """
+
+    def __call__(self, shape, dtype=None):
+        """
+        Makes :class:`Initializer` instances callable like a function.
+        """
+        raise NotImplementedError
+
+    def get_config(self):
+        raise NotImplementedError
+
+    @classmethod
+    def from_config(cls, config):
+        return cls(**config)
+
 
 
 class Zero:
