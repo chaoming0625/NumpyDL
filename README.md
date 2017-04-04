@@ -1,6 +1,6 @@
 # Deep Learning Framework based on Numpy
 
-_NumpyDL_ is a simple and powerful deep learning library for Python. 
+_NumpyDL_ is a simple and powerful deep learning library based on pure Python/Numpy. 
 
 ## Requirements
  
@@ -45,7 +45,7 @@ _NumpyDL_ is a simple and powerful deep learning library for Python.
     # train
     model.fit(X_train, npdl.utils.data.one_hot(Y_train), max_iter=150, validation_split=0.1)
 
-## install 
+## Install 
 
 Install _NumpyDL_ using pip:
     
@@ -56,7 +56,9 @@ Install from source code:
     $> python setup.py install
    
    
-## Support Layers
+## Support
+
+### layer
 
 - [core.py](npdl/layers/core.py)
     - Dense (perceptron) Layer 
@@ -76,3 +78,36 @@ Install from source code:
 - [shape.py](npdl/layers/shape.py)
     - Flatten Layer
 
+### activation
+
+- Sigmoid
+- Tanh
+- ReLU
+- Softmax
+- Elliot
+- SymmetricElliot
+- LReLU
+- SoftPlus
+- SoftSign
+
+### initialization
+
+- Uniform
+- Normal
+- LecunUniform
+- GlorotUniform
+- GlorotNormal
+- HeNormal
+- HeUniform
+- Orthogonal
+
+### objective
+
+- MeanSquaredError
+- HellingerDistance
+- BinaryCrossEntropy
+- SoftmaxCategoricalCrossEntropy
+
+
+### optimizer
+- SGD
