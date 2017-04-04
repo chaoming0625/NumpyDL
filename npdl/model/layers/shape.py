@@ -16,7 +16,7 @@ class Flatten(Layer):
         self.out_shape = None
 
     def connect_to(self, prev_layer):
-        assert prev_layer.out_shape > 2
+        assert len(prev_layer.out_shape) > 2
 
         to_flatten = np.prod(prev_layer.out_shape[self.outdim - 1:])
         flattened_shape = prev_layer.out_shape[:self.outdim - 1] + (to_flatten,)
