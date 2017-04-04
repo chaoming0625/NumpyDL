@@ -6,7 +6,6 @@ import sys
 import numpy as np
 
 from npdl.utils.random import get_rng
-from .layers import InputLayer
 from .layers import Layer
 from .optimizers import SGD
 from ..utils.random import get_dtype

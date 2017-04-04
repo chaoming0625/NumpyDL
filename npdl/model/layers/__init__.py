@@ -20,6 +20,10 @@ from .embedding import Embedding
 from .reccurent import SimpleRNN
 
 
+# convolution
+from .convolution import Convolution
+
+
 # shape layer
 from .shape import Flatten
 

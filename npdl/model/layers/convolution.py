@@ -8,7 +8,7 @@ from ..initialization import GlorotUniform
 from ..initialization import Zero
 
 
-class ConvolutionLayer(Layer):
+class Convolution(Layer):
     """Convolution operator for filtering windows of two-dimensional inputs.
 
     When using this layer as the first layer in a model,
@@ -47,8 +47,8 @@ class ConvolutionLayer(Layer):
         nb_batch, pre_nb_filter, pre_height, pre_width = input_shape
         filter_height, filter_width = self.filter_size
 
-        height = (pre_height - filter_height) / self.stride + 1
-        width = (pre_width - filter_width) / self.stride + 1
+        height = (pre_height - filter_height) // self.stride + 1
+        width = (pre_width - filter_width) // self.stride + 1
 
         # output shape
         self.out_shape = (nb_batch, self.nb_filter, height, width)
@@ -92,6 +92,7 @@ class ConvolutionLayer(Layer):
         nb_batch, input_depth, old_img_h, old_img_w = self.last_input.shape
         new_img_h, new_img_w = self.out_shape[2:]
         filter_h, filter_w = self.filter_size
+        old_img_h, old_img_w = self.last_input.shape[-2:]
 
         # gradients
         zero = Zero()
@@ -103,10 +104,12 @@ class ConvolutionLayer(Layer):
         for r in np.arange(self.nb_filter):
             for t in np.arange(input_depth):
                 for h in np.arange(filter_h):
-                    for v in np.arange(filter_w):
-                        prev_a_window = self.last_input[:, t, v::self.stride, h::self.stride]
-                        delta_window = delta[:, r, v::self.stride, h::self.stride]
-                        self.dW[r, t, h, v] = np.sum(prev_a_window * delta_window) / nb_batch
+                    for w in np.arange(filter_w):
+                        input_window = self.last_input[:, t,
+                                       h:old_img_h - filter_h + h + 1:self.stride,
+                                       w:old_img_w - filter_w + w + 1:self.stride]
+                        delta_window = delta[:, r]
+                        self.dW[r, t, h, w] = np.sum(input_window * delta_window) / nb_batch
 
         # db
         for r in np.arange(self.nb_filter):
