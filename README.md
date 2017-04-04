@@ -9,10 +9,6 @@
 - xlwt
 - scikit-learn
 
-## Design philosophy
-
-- Abstract
-
 
 ## Features
 
