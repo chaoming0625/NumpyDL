@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import numpy as np
-from ..utils.random import get_dtype
+from npdl.utils.random import get_dtype
 
 
 class Activation(object):
