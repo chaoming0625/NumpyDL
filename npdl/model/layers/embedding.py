@@ -1,9 +1,6 @@
 # -*- coding: utf-8 -*-
 
 
-
-import numpy as np
-
 from .base import Layer
 from ..initialization import Uniform
 
@@ -31,7 +28,7 @@ class Embedding(Layer):
     def forward(self, input, *args, **kwargs):
         raise NotImplementedError()
 
-    def backward(self, pre_layer_grad, *args, **kwargs):
+    def backward(self, pre_grad, *args, **kwargs):
         raise NotImplementedError()
 
     @property
@@ -54,4 +51,3 @@ class Embedding(Layer):
             return []
         else:
             return [(self.embed_words, self.d_embed_words)]
-

@@ -2,72 +2,83 @@
 
 
 import numpy as np
-from .random import get_rng
+
+from ..utils.random import get_rng
+from ..utils.random import get_dtype
+from ..utils.generic import get_from_module
 
 
-class Zero:
+class Initializer(object):
     def __call__(self, size):
-        return np.zeros(size)
+        return self.call(size)
+
+    def call(self, size):
+        raise NotImplementedError()
 
 
-class One:
-    def __call__(self, size):
-        return np.ones(size)
+class Zero(Initializer):
+    def call(self, size):
+        return np.zeros(size, dtype=get_dtype())
 
 
-class Uniform:
+class One(Initializer):
+    def call(self, size):
+        return np.ones(size, dtype=get_dtype())
+
+
+class Uniform(Initializer):
     def __init__(self, scale=0.05):
         self.scale = scale
 
-    def __call__(self, size):
-        return get_rng().uniform(-self.scale, self.scale, size=size)
+    def call(self, size):
+        return get_rng().uniform(-self.scale, self.scale, size=size).astype(get_dtype())
 
 
-class Normal:
+class Normal(Initializer):
     def __init__(self, scale=0.05):
         self.scale = scale
 
-    def __call__(self, size):
-        return get_rng().normal(loc=0.0, scale=self.scale, size=size)(size)
+    def call(self, size):
+        return get_rng().normal(loc=0.0, scale=self.scale, size=size)(size).astype(get_dtype())
 
 
-class LecunUniform:
-    def __call__(self, size):
+class LecunUniform(Initializer):
+    def call(self, size):
         fan_in, fan_out = _decompose_size(size)
         return Uniform(np.sqrt(3. / fan_in))(size)
 
 
-class GlorotUniform:
-    def __call__(self, size):
+class GlorotUniform(Initializer):
+    def call(self, size):
         fan_in, fan_out = _decompose_size(size)
         return Uniform(np.sqrt(6 / (fan_in + fan_out)))(size)
 
 
-class GlorotNormal:
-    def __call__(self, size):
+class GlorotNormal(Initializer):
+    def call(self, size):
         fan_in, fan_out = _decompose_size(size)
         return Normal(np.sqrt(2 / (fan_out + fan_in)))(size)
 
 
-class HeNormal:
-    def __call__(self, size):
+class HeNormal(Initializer):
+    def call(self, size):
         fan_in, fan_out = _decompose_size(size)
         return Normal(np.sqrt(2. / fan_in))(size)
 
 
-class HeUniform:
-    def __call__(self, size):
+class HeUniform(Initializer):
+    def call(self, size):
         fan_in, fan_out = _decompose_size(size)
         return Uniform(np.sqrt(6. / fan_in))(size)
 
 
-class Orthogonal:
-    def __call__(self, size):
+class Orthogonal(Initializer):
+    def call(self, size):
         flat_shape = (size[0], np.prod(size[1:]))
         a = get_rng().normal(loc=0., scale=1., size=flat_shape)
         u, _, v = np.linalg.svd(a, full_matrices=False)
         q = u if u.shape == flat_shape else v
-        return q.reshape(size)
+        return q.reshape(size).astype(get_dtype())
 
 
 def _decompose_size(size):
@@ -84,3 +95,12 @@ def _decompose_size(size):
         fan_in = fan_out = int(np.sqrt(np.prod(size)))
 
     return fan_in, fan_out
+
+
+_zero = Zero()
+_one = One()
+
+
+def get(identifier):
+    get_from_module(identifier, globals(), 'initialization')
+

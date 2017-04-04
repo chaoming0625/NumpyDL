@@ -9,7 +9,7 @@ import npdl
 
 def test_digits():
     # prepare
-    npdl.model.random.set_seed(1234)
+    npdl.utils.random.set_seed(1234)
 
     # data
     digits = load_digits()
@@ -22,10 +22,9 @@ def test_digits():
 
     # model
     model = npdl.model.Model()
-    model.add(npdl.model.layers.Linear(n_in=64, n_out=500))
-    model.add(npdl.model.layers.Activation('relu'))
-    model.add(npdl.model.layers.Linear(n_in=500, n_out=n_classes))
-    model.add(npdl.model.layers.Activation("softmax"))
+    model.add(npdl.model.layers.InputLayer(n_in=64,))
+    model.add(npdl.model.layers.Dense(n_out=500, activation=npdl.model.activation.ReLU()))
+    model.add(npdl.model.layers.Dense(n_out=n_classes, activation=npdl.model.activation.Softmax()))
     model.compile(loss='scce', optimizer=npdl.model.optimizers.SGD(lr=0.005))
 
     # train
@@ -43,11 +42,10 @@ def test_mnist():
     # model
     print("building model ...")
     model = npdl.model.Model()
-    model.add(npdl.model.layers.Linear(n_in=784, n_out=500))
-    model.add(npdl.model.layers.Activation('relu'))
-    model.add(npdl.model.layers.Linear(n_in=500, n_out=n_classes))
-    model.add(npdl.model.layers.Activation("softmax"))
-    model.compile(loss='scce', optimizer=npdl.model.optimizers.SGD(lr=0.001))
+    # model.add(npdl.model.layers.InputLayer(n_in=784))
+    model.add(npdl.model.layers.Dense(n_out=500, n_in=784, activation=npdl.model.activation.ReLU()))
+    model.add(npdl.model.layers.Dense(n_out=n_classes, activation=npdl.model.activation.Softmax()))
+    model.compile(loss=npdl.model.objectives.SCCE(), optimizer=npdl.model.optimizers.SGD(lr=0.001))
 
     # train
     print("train model ... ")
