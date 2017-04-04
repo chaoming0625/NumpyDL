@@ -8,7 +8,6 @@ import nltk
 import numpy as np
 
 import npdl
-from npdl import model
 
 
 def load_data(corpus_path='data/lm/reddit-comments-2015-08.csv',
@@ -71,12 +70,11 @@ def character_lm(corpus_path='data/lm/tiny_shakespeare.txt'):
         batch_out[i, b_[-1]] = 1
 
     print("Building model ...")
-    net = model.Model()
-    # net.add(model.layers.InputLayer(n_in=vocab_size))
+    net = npdl.Model()
     # net.add(model.layers.SimpleRNN(n_out=500, return_sequence=True))
-    net.add(model.layers.SimpleRNN(n_out=500, n_in=vocab_size))
-    net.add(model.layers.Softmax(n_out=vocab_size))
-    net.compile(loss=model.objectives.SCCE(), optimizer=model.optimizers.SGD(lr=0.00001, clip=5))
+    net.add(npdl.layers.SimpleRNN(n_out=500, n_in=vocab_size))
+    net.add(npdl.layers.Softmax(n_out=vocab_size))
+    net.compile(loss=npdl.objectives.SCCE(), optimizer=npdl.optimizers.SGD(lr=0.00001, clip=5))
 
     print("Train model ...")
     net.fit(batch_in, batch_out, max_iter=100, batch_size=batch_size)

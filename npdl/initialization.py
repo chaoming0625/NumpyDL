@@ -3,9 +3,9 @@
 
 import numpy as np
 
-from ..utils.random import get_rng
-from ..utils.random import get_dtype
-from ..utils.generic import get_from_module
+from npdl.utils.random import get_rng
+from npdl.utils.random import get_dtype
+from npdl.utils.generic import get_from_module
 
 
 class Initializer(object):

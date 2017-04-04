@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from npdl.model import initialization
+from npdl import initialization
 
 
 def test1():
