@@ -1,15 +1,16 @@
 # -*- coding: utf-8 -*-
 
 
-import numpy as np
-
 import sys
 
-from .random import get_rng
-from .layers.base import Layer
-from .objectives import Loss
-from .optimizers import get_optimizer
-from .optimizers import Optimizer
+import numpy as np
+
+from npdl.utils.random import get_rng
+from .layers import InputLayer
+from .layers import Layer
+from .optimizers import SGD
+from ..utils.random import get_dtype
+from .objectives import SoftmaxCategoricalCrossEntropy
 
 
 class Model(object):
@@ -23,23 +24,33 @@ class Model(object):
         assert isinstance(layer, Layer), "Must be 'Layer' instance."
         self.layers.append(layer)
 
-    def compile(self, loss='scce', optimizer='sgd', **kwargs):
+    def compile(self, loss=SoftmaxCategoricalCrossEntropy(), optimizer=SGD()):
+        # check
+        # assert isinstance(self.layers[0], InputLayer)
+        self.layers[0].first_layer = True
+
+        # connect to
+        next_layer = None
+        for layer in self.layers:
+            layer.connect_to(next_layer)
+            next_layer = layer
+        # for pre_layer, layer in zip(self.layers[:-1], self.layers[1:]):
+        #     layer.connect_to(pre_layer)
+
         # get loss class
-        self.loss = Loss(loss)
+        self.loss = loss
 
         # get optimizer class
-        if type(optimizer).__name__ == 'str':
-            self.optimizer = get_optimizer(optimizer, **kwargs)
-        elif isinstance(optimizer, Optimizer):
-            self.optimizer = optimizer
-        else:
-            raise ValueError("Invalid optimizer.")
+        self.optimizer = optimizer
 
     def fit(self, X, Y, max_iter=100, batch_size=64, shuffle=True,
             validation_split=0., validation_data=None, file=sys.stdout):
 
         # prepare data
-        train_X, train_Y = X, Y
+        if np.issubdtype(X.dtype, np.dtype(get_dtype())):
+            train_X, train_Y = X.astype(get_dtype()), Y.astype(get_dtype())
+        else:
+            train_X, train_Y = X, Y
 
         if 1. > validation_split > 0.:
             split = int(train_Y.shape[0] * validation_split)
@@ -93,8 +104,11 @@ class Model(object):
                 train_targets.extend(y_batch)
 
             # output train status
-            runout = "iter %d, train-[loss %.4f, acc %.4f]; " % (
-                iter_idx, float(np.mean(train_losses)), float(self.accuracy(train_predicts, train_targets)))
+            # runout = "iter %d, train-[loss %.4f, acc %.4f]; " % (
+            #     iter_idx, float(np.mean(train_losses)), float(self.accuracy(train_predicts, train_targets)))
+
+            runout = "iter %d, train-[loss %.4f, ]; " % (
+                iter_idx, float(np.mean(train_losses)))
 
             if valid_X is not None and valid_Y is not None:
                 # valid
@@ -122,7 +136,7 @@ class Model(object):
     def predict(self, X):
         """ Calculate an output Y for the given input X. """
         x_next = X
-        for layer in self.layers:
+        for layer in self.layers[:]:
             x_next = layer.forward(x_next)
         y_pred = x_next
         return y_pred

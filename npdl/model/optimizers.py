@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
 
 
+import numpy as np
+
+
 class Optimizer(object):
     def __init__(self, ):
         self.param_grads = None
@@ -13,17 +16,18 @@ class Optimizer(object):
 
 
 class SGD(Optimizer):
-    def __init__(self, lr=0.001, ):
+    def __init__(self, lr=0.001, clip=-1):
         super(SGD, self).__init__()
 
         self.lr = lr
+        self.clip = clip
 
     def add_param_grads(self, param_grads):
         self.param_grads = param_grads
 
     def update_params(self, ):
         for p, g in self.param_grads:
-            p -= self.lr * g
+            p -= self.lr * npdl_clip(g, self.clip)
 
 
 class Momentum(Optimizer):
@@ -40,15 +44,8 @@ class Momentum(Optimizer):
         pass
 
 
-sgd = SGD
-
-
-def get_optimizer(optimizer, **kwargs):
-    opt_cls = globals().get(optimizer)
-
-    if opt_cls is None:
-        raise ValueError("Invalid optimizer: %s." % optimizer)
-
-    return opt_cls(**kwargs)
-
-
+def npdl_clip(grad, boundary):
+    if boundary > 0:
+        return np.clip(grad, -boundary, boundary)
+    else:
+        return grad
