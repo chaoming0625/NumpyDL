@@ -11,8 +11,7 @@
 NumpyDL: Deep Learning Library based on Numpy
 =============================================
 
-NumpyDL is a simple deep learning library based on pure Python/Numpy.
- Its main features are:
+NumpyDL is a simple deep learning library based on pure Python/Numpy.Its main features are:
 
 * Pure python + numpy
 * API like Keras deep learning library
@@ -37,7 +36,7 @@ Its design is governed by several principles:
   for everything to do with deep learning.
 
 Requirements
-------------
+============
 
 * Python3
 * Numpy
@@ -50,13 +49,13 @@ If you want to build the document, you need install:
 
 
 Documentation
--------------
+=============
 
 Documentation is available online: http://numpydl.readthedocs.io/en/latest/
 
 
 Example
--------
+=======
 
 .. code-block:: python
 
@@ -85,7 +84,7 @@ Example
 
 
 Installation
-------------
+============
 
 Install _NumpyDL_ using pip:
 
@@ -100,12 +99,13 @@ Install from source code:
    
    
 Support
--------
+=======
 
-### layer
+Layers
+------
 
 * `core.py <npdl/layers/core.py>`_
-    * Dense  <perceptron>`_ Layer 
+    * Dense (perceptron) Layer
     * Softmax Layer
     * Dropout Layer
 * `normalization.py <npdl/layers/normalization.py>`_
@@ -122,7 +122,8 @@ Support
 * `shape.py <npdl/layers/shape.py>`_
     * Flatten Layer
 
-### activation
+Activations
+-----------
 
 * Sigmoid
 * Tanh
@@ -134,7 +135,8 @@ Support
 * SoftPlus
 * SoftSign
 
-### initialization
+Initializations
+---------------
 
 * Uniform
 * Normal
@@ -145,7 +147,8 @@ Support
 * HeUniform
 * Orthogonal
 
-### objective
+Objectives
+----------
 
 * MeanSquaredError
 * HellingerDistance
@@ -153,5 +156,7 @@ Support
 * SoftmaxCategoricalCrossEntropy
 
 
-### optimizer
+Optimizers
+----------
+
 * SGD
