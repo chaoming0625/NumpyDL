@@ -1,17 +1,33 @@
 # -*- coding: utf-8 -*-
 
+"""
+Non-linear activation functions for artificial neurons.
+"""
+
 import numpy as np
 from npdl.utils.random import get_dtype
 
 
 class Activation(object):
+    """Base class for activations.
+    
+    """
     def __init__(self):
         self.last_forward = None
 
     def forward(self, input):
+        """Forward Step.
+        
+        :param input: 
+        :return: 
+        """
         raise NotImplementedError()
 
     def derivative(self):
+        """Backward step.
+        
+        :return: 
+        """
         raise NotImplementedError()
 
 
