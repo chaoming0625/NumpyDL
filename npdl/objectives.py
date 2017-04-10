@@ -68,27 +68,3 @@ class SoftmaxCategoricalCrossEntropy(Objective):
 
 SCCE = SoftmaxCategoricalCrossEntropy
 
-
-# def _globals():
-#     return globals()
-#
-#
-# class Loss:
-#     def __init__(self, type):
-#         self.loss_type = type
-#         self.loss_func = _globals().get(type)
-#
-#         if self.loss_func is None:
-#             raise ValueError("Invalid Loss function: %s." % type)
-#
-#     def forward(self, outputs, targets):
-#         return self.loss_func(outputs, targets, False)
-#
-#     def backward(self, outputs, targets):
-#         return self.loss_func(outputs, targets, True)
-#
-#     def to_json(self):
-#         config = {
-#             'type': self.loss_type
-#         }
-#         return config
