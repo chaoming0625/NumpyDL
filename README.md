@@ -4,10 +4,10 @@ _NumpyDL_ is a simple and powerful deep learning library based on pure Python/Nu
 
 ## Design Philosophy
 
-- Simplicity: Be easy to use, easy to understand and easy to extend, to facilitate use in research. Interfaces should be kept small, with as few classes and methods as possible. Every added abstraction and feature should be carefully scrutinized, to determine whether the added complexity is justified.
-- Transparency: Native to Numpy, directly process and return Python / numpy data types. Do not rely on the functionality of Theano, Tensorflow or any such DL framework.
-- Modularity: Allow all parts (layers, regularizers, optimizers, ...) to be used independently of NumpyDL. Make it easy to use components in isolation or in conjunction with other frameworks.
-- Focus: “Do one thing and do it well”. Do not try to provide a library for everything to do with deep learning.
+- **Simplicity**: Be easy to use, easy to understand and easy to extend, to facilitate use in research. Interfaces should be kept small, with as few classes and methods as possible. Every added abstraction and feature should be carefully scrutinized, to determine whether the added complexity is justified.
+- **Transparency**: Native to Numpy, directly process and return Python / numpy data types. Do not rely on the functionality of Theano, Tensorflow or any such DL framework.
+- **Modularity**: Allow all parts (layers, regularizers, optimizers, ...) to be used independently of NumpyDL. Make it easy to use components in isolation or in conjunction with other frameworks.
+- **Focus**: “Do one thing and do it well”. Do not try to provide a library for everything to do with deep learning.
 
 ## Requirements
 
