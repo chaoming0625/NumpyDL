@@ -30,8 +30,8 @@ setup(
     install_requires=[
         'numpy',
         'scikit-learn',
-        'scipy'
-        'sphinx'
-        'numpydoc'
+        'scipy',
+        'sphinx',
+        'numpydoc',
     ]
 )
