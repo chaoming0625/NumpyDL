@@ -1,4 +1,4 @@
 numpy>=1.6
-scipy
-numpydoc
-sphinx
+scipy>=0.19
+numpydoc>=0.6
+sphinx>=1.5.4
