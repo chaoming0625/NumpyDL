@@ -51,7 +51,7 @@ def test_mnist():
 
 
 if __name__ == '__main__':
-    # test_digits()
-    test_mnist()
+    test_digits()
+    # test_mnist()
 
 
