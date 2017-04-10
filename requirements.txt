@@ -1,2 +1,4 @@
 numpy>=1.6
 scipy
+numpydoc
+sphinx
