@@ -7,7 +7,7 @@ __pycache__/
 
 
 .idea
-doc/_build/*
+docs/_build/*
 
 # C extensions
 *.so
