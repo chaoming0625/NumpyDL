@@ -46,6 +46,7 @@ Requirements
 If you want to build the document, you need install:
 
 * sphinx
+* numpydoc
 
 
 Documentation
@@ -86,9 +87,10 @@ Example
 Installation
 ============
 
-Install _NumpyDL_ using pip:
+Install NumpyDL using pip:
 
 .. code-block:: bash
+
     $> pip install numpydl
 
 Install from source code:
