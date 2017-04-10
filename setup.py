@@ -31,5 +31,7 @@ setup(
         'numpy',
         'scikit-learn',
         'scipy'
+        'sphinx'
+        'numpydoc'
     ]
 )
