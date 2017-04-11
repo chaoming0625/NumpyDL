@@ -12,20 +12,16 @@ from distutils.core import setup
 import numpy as np
 from setuptools import find_packages
 
-version = '0.1'
-
-description = """
-Deep Learning Framework based on Numpy
-"""
+version = '0.1.0'
 
 setup(
     name='npdl',
     version=version,
-    description=description,
+    description="Deep Learning Library based on pure Numpy",
     author='Chao-Ming Wang',
     packages=find_packages(),
     author_email='oujago@gmail.com',
-    url='https://oujago.github.io/',
+    url='http://numpydl.readthedocs.io',
     include_dirs=[np.get_include()],
     install_requires=[
         'numpy',

@@ -91,7 +91,7 @@ Install NumpyDL using pip:
 
 .. code-block:: bash
 
-    $> pip install numpydl
+    $> pip install npdl
 
 Install from source code:
 
