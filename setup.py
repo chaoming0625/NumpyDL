@@ -58,6 +58,7 @@ setup(
     install_requires=['numpy', ],
     extras_require={
         "test": ['pytest'],
-        'doc': ['sphinx', 'numpydoc']
+        'doc': ['sphinx', 'numpydoc'],
+        'example': ['scikit-learn'],
     }
 )
