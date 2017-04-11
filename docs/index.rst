@@ -23,7 +23,7 @@ developer.
    :maxdepth: 2
    :caption: Contents:
 
-   user/installation
+   user_guide/installation
 
 
 API Reference
@@ -36,8 +36,20 @@ method, this part of the documentation is for you.
    :maxdepth: 2
    :caption: Contents:
 
-   modules/activation.rst
-   modules/initialization.rst
+   api_reference/activation
+   api_reference/initialization
+
+
+Examples
+--------
+
+This part provides examples for building deep neural networks.
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Contents:
+
+
 
 
 Indices and tables
