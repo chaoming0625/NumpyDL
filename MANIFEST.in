@@ -1,3 +1,4 @@
 # misc
 include LICENSE
 include requirements.txt
+include CHANGES.rst
