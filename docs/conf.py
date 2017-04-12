@@ -193,7 +193,7 @@ def linkcode_resolve(domain, info):
     if domain != 'py' or not info['module']:
         return None
     try:
-        filename = 'numpydl/%s#L%d-L%d' % find_source()
+        filename = 'npdl/%s#L%d-L%d' % find_source()
     except Exception:
         filename = info['module'].replace('.', '/') + '.py'
     tag = 'master' if 'dev' in release else ('v' + release)

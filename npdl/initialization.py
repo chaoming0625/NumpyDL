@@ -52,7 +52,7 @@ class Zero(Initializer):
 
     """
     def call(self, size):
-        return np.zeros(size, dtype=get_dtype())
+        return _cast_dtype(np.zeros(size))
 
 
 class One(Initializer):
@@ -60,7 +60,7 @@ class One(Initializer):
 
         """
     def call(self, size):
-        return np.ones(size, dtype=get_dtype())
+        return _cast_dtype(np.ones(size))
 
 
 class Uniform(Initializer):
@@ -79,7 +79,7 @@ class Uniform(Initializer):
         self.scale = scale
 
     def call(self, size):
-        return get_rng().uniform(-self.scale, self.scale, size=size).astype(get_dtype())
+        return _cast_dtype(get_rng().uniform(-self.scale, self.scale, size=size))
 
 
 class Normal(Initializer):
@@ -99,7 +99,7 @@ class Normal(Initializer):
         self.mean = mean
 
     def call(self, size):
-        return get_rng().normal(loc=self.mean, scale=self.std, size=size)(size).astype(get_dtype())
+        return _cast_dtype(get_rng().normal(loc=self.mean, scale=self.std, size=size))
 
 
 class LecunUniform(Initializer):
@@ -175,7 +175,7 @@ class Orthogonal(Initializer):
         q = u if u.shape == flat_shape else v
         q = q.reshape(size)
         q = self.gain * q
-        return q.astype(get_dtype())
+        return _cast_dtype(q)
 
 
 def _decompose_size(size):
@@ -192,6 +192,10 @@ def _decompose_size(size):
         fan_in = fan_out = int(np.sqrt(np.prod(size)))
 
     return fan_in, fan_out
+
+
+def _cast_dtype(res):
+    return np.array(res, dtype=get_dtype())
 
 
 _zero = Zero()
