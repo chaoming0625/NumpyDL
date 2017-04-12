@@ -10,8 +10,8 @@
 .. image:: https://img.shields.io/coveralls/oujago/NumpyDL.svg
     :target: https://coveralls.io/r/oujago/NumpyDL
 
-.. image:: https://zenodo.org/badge/16974/Lasagne/Lasagne.svg
-   :target: https://zenodo.org/badge/latestdoi/16974/oujago/NumpyDL
+.. image:: https://zenodo.org/badge/83100910.svg
+   :target: https://zenodo.org/badge/latestdoi/83100910
 
 
 
