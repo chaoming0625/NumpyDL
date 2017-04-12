@@ -106,7 +106,7 @@ To install the NumpyDL package itself, in editable mode, run:
 
 .. code-block:: bash
 
-  pip install --editable .
+  pip install --editable
 
 As always, add ``--user`` to install it to your home directory instead.
 
