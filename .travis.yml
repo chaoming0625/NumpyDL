@@ -1,22 +1,9 @@
 language: python
 sudo: false
 python:
-  - "3.3"
-  - "3.4"
   - "3.5"
   - "3.6"
-  - "pypy3"
-addons:
-  apt:
-    packages:
-    - libblas-dev
-    - liblapack-dev
-before_install:
-  - pip install -U pip
 install:
-  - travis_wait travis_retry pip install -r requirements.txt
-  - travis_retry pip install python-coveralls
-  - travis_retry python setup.py install
-script: py.test --runslow --cov-config=.coveragerc
-after_success:
-  - coveralls
+  - python setup.py install
+  - pip install -r requirements.txt
+script: pytest
