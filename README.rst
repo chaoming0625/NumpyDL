@@ -10,9 +10,6 @@
 .. image:: https://img.shields.io/coveralls/oujago/NumpyDL.svg
     :target: https://coveralls.io/r/oujago/NumpyDL
 
-.. image:: https://zenodo.org/badge/83100910.svg
-   :target: https://zenodo.org/badge/latestdoi/83100910
-
 .. image:: https://codeclimate.com/github/oujago/NumpyDL/badges/gpa.svg
    :target: https://codeclimate.com/github/oujago/NumpyDL
    :alt: Code Climate
@@ -21,8 +18,12 @@
    :target: https://codeclimate.com/github/oujago/NumpyDL
    :alt: Issue Count
 
-NumpyDL: Deep Learning Library based on Numpy
-=============================================
+.. image:: https://zenodo.org/badge/83100910.svg
+   :target: https://zenodo.org/badge/latestdoi/83100910
+
+
+NumpyDL: Deep Learning Library based on Pure Numpy
+==================================================
 
 NumpyDL is a simple deep learning library based on pure Python/Numpy.Its main features are:
 
@@ -48,24 +49,11 @@ Its design is governed by several principles:
 * Focus: “Do one thing and do it well”. Do not try to provide a library
   for everything to do with deep learning.
 
-Requirements
-============
-
-* Python3
-* Numpy
-* Scipy
-* scikit-learn
-
-If you want to build the document, you need install:
-
-* sphinx
-* numpydoc
-
 
 Documentation
 =============
 
-Documentation is available online: http://numpydl.readthedocs.io/en/latest/
+Documentation is available online: http://numpydl.readthedocs.io
 
 
 Example
@@ -110,7 +98,7 @@ Install from source code:
 
 .. code-block:: bash
 
-    python setup.py install
+    $> python setup.py install
    
    
 Support

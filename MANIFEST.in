@@ -1,4 +1,10 @@
 # misc
 include LICENSE
-include requirements.txt
 include CHANGES.rst
+include requirements.txt
+include requirements-doc.txt
+
+recursive-include tests *.py
+include .coveragerc
+recursive-include examples *.py
+recursive-include docs *.rst conf.py *.css Makefile
