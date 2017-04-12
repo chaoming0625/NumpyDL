@@ -58,7 +58,10 @@ Its design is governed by several principles:
 Documentation
 =============
 
-Documentation is available online: http://numpydl.readthedocs.io
+Available online documents: `latest <http://numpydl.readthedocs.io/en/lastest>`_
+docs, `development <http://numpydl.readthedocs.io/en/develop/>`_ docs, and
+`stable <http://numpydl.readthedocs.io/en/stable/>`_ docs. Chinese version document
+is in development and will be available soon.
 
 
 Example
