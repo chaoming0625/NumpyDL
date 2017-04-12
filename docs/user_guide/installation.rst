@@ -71,7 +71,7 @@ on PyPI. To install a version that is known to work, run the following command:
 
 .. code-block:: bash
 
-  pip install numpydl
+  pip install npdl
 
 If you do not use ``virtualenv``, add ``--user`` to both commands to install
 into your home directory instead. To upgrade from an earlier installation, add
