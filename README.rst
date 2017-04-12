@@ -7,7 +7,7 @@
 .. image:: https://travis-ci.org/oujago/NumpyDL.svg
     :target: https://travis-ci.org/oujago/NumpyDL
 
-.. image:: https://img.shields.io/coveralls/Lasagne/Lasagne.svg
+.. image:: https://img.shields.io/coveralls/oujago/NumpyDL.svg
     :target: https://coveralls.io/r/oujago/NumpyDL
 
 .. image:: https://zenodo.org/badge/16974/Lasagne/Lasagne.svg
