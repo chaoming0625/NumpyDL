@@ -13,7 +13,13 @@
 .. image:: https://zenodo.org/badge/83100910.svg
    :target: https://zenodo.org/badge/latestdoi/83100910
 
+.. image:: https://codeclimate.com/github/oujago/NumpyDL/badges/gpa.svg
+   :target: https://codeclimate.com/github/oujago/NumpyDL
+   :alt: Code Climate
 
+.. image:: https://codeclimate.com/github/oujago/NumpyDL/badges/issue_count.svg
+   :target: https://codeclimate.com/github/oujago/NumpyDL
+   :alt: Issue Count
 
 NumpyDL: Deep Learning Library based on Numpy
 =============================================
