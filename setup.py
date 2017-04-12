@@ -1,11 +1,10 @@
 # -*- coding: utf-8 -*-
 
 import io
-import numpy as np
 import os
 import re
-from distutils.core import setup
-from setuptools import find_packages
+
+import numpy as np
 from setuptools import find_packages
 from setuptools import setup
 

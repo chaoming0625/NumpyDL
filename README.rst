@@ -5,6 +5,14 @@
     :target: https://github.com/oujago/NumpyDL/blob/master/LICENSE
 
 
+.. image:: https://travis-ci.org/Lasagne/Lasagne.svg
+    :target: https://travis-ci.org/oujago/NumpyDL
+
+.. image:: https://img.shields.io/coveralls/Lasagne/Lasagne.svg
+    :target: https://coveralls.io/r/oujago/NumpyDL
+
+.. image:: https://zenodo.org/badge/16974/Lasagne/Lasagne.svg
+   :target: https://zenodo.org/badge/latestdoi/16974/oujago/NumpyDL
 
 
 
