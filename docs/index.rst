@@ -12,8 +12,8 @@ NumpyDL is a work in progress, input is welcome. The available documentation is
 limited for now. The project is on `GitHub <https://github.com/oujago/NumpyDL>`_.
 
 
-User Guide
-----------
+User Guides
+-----------
 
 The NumpyDL user guide explains how to install NumpyDL, how to build and train
 neural networks using NumpyDL, and how to contribute to the library as a
@@ -38,6 +38,8 @@ method, this part of the documentation is for you.
 
    api_reference/activation
    api_reference/initialization
+   api_reference/objectives
+   api_reference/optimizers
 
 
 Examples
