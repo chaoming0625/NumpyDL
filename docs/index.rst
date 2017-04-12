@@ -3,8 +3,8 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to NumpyDL
-==================
+Hi, NumpyDL
+===========
 
 NumpyDL is a simple deep learning library based on pure Python/Numpy.
 
@@ -13,7 +13,7 @@ limited for now. The project is on `GitHub <https://github.com/oujago/NumpyDL>`_
 
 
 User Guides
------------
+===========
 
 The NumpyDL user guide explains how to install NumpyDL, how to build and train
 neural networks using NumpyDL, and how to contribute to the library as a
@@ -27,7 +27,7 @@ developer.
 
 
 API Reference
--------------
+=============
 
 If you are looking for information on a specific function, class or
 method, this part of the documentation is for you.
@@ -43,7 +43,7 @@ method, this part of the documentation is for you.
 
 
 Examples
---------
+========
 
 This part provides examples for building deep neural networks.
 
