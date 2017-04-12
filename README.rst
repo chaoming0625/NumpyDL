@@ -1,11 +1,10 @@
-.. image:: https://readthedocs.org/projects/lasagne/badge/
+.. image:: https://readthedocs.org/projects/numpydl/badge/
     :target: http://numpudl.readthedocs.org/en/latest/
 
 .. image:: https://img.shields.io/badge/license-MIT-blue.svg
     :target: https://github.com/oujago/NumpyDL/blob/master/LICENSE
 
-
-.. image:: https://travis-ci.org/Lasagne/Lasagne.svg
+.. image:: https://travis-ci.org/oujago/NumpyDL.svg
     :target: https://travis-ci.org/oujago/NumpyDL
 
 .. image:: https://img.shields.io/coveralls/Lasagne/Lasagne.svg
