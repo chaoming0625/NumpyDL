@@ -1,15 +1,29 @@
-.. image:: https://readthedocs.org/projects/lasagne/badge/
+.. image:: https://readthedocs.org/projects/numpydl/badge/
     :target: http://numpudl.readthedocs.org/en/latest/
 
 .. image:: https://img.shields.io/badge/license-MIT-blue.svg
     :target: https://github.com/oujago/NumpyDL/blob/master/LICENSE
 
+.. image:: https://travis-ci.org/oujago/NumpyDL.svg
+    :target: https://travis-ci.org/oujago/NumpyDL
+
+.. image:: https://img.shields.io/coveralls/oujago/NumpyDL.svg
+    :target: https://coveralls.io/r/oujago/NumpyDL
+
+.. image:: https://codeclimate.com/github/oujago/NumpyDL/badges/gpa.svg
+   :target: https://codeclimate.com/github/oujago/NumpyDL
+   :alt: Code Climate
+
+.. image:: https://codeclimate.com/github/oujago/NumpyDL/badges/issue_count.svg
+   :target: https://codeclimate.com/github/oujago/NumpyDL
+   :alt: Issue Count
+
+.. image:: https://zenodo.org/badge/83100910.svg
+   :target: https://zenodo.org/badge/latestdoi/83100910
 
 
-
-
-NumpyDL: Deep Learning Library based on Numpy
-=============================================
+NumpyDL: Deep Learning Library based on Pure Numpy
+==================================================
 
 NumpyDL is a simple deep learning library based on pure Python/Numpy.Its main features are:
 
@@ -35,24 +49,11 @@ Its design is governed by several principles:
 * Focus: “Do one thing and do it well”. Do not try to provide a library
   for everything to do with deep learning.
 
-Requirements
-============
-
-* Python3
-* Numpy
-* Scipy
-* scikit-learn
-
-If you want to build the document, you need install:
-
-* sphinx
-* numpydoc
-
 
 Documentation
 =============
 
-Documentation is available online: http://numpydl.readthedocs.io/en/latest/
+Documentation is available online: http://numpydl.readthedocs.io
 
 
 Example
@@ -91,13 +92,13 @@ Install NumpyDL using pip:
 
 .. code-block:: bash
 
-    $> pip install numpydl
+    $> pip install npdl
 
 Install from source code:
 
 .. code-block:: bash
 
-    python setup.py install
+    $> python setup.py install
    
    
 Support

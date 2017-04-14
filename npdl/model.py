@@ -1,5 +1,9 @@
 # -*- coding: utf-8 -*-
 
+"""
+Linear stack of layers.
+
+"""
 
 import sys
 
