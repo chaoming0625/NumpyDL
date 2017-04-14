@@ -64,6 +64,7 @@ method, this part of the documentation is for you.
    api_reference/initialization
    api_reference/objectives
    api_reference/optimizers
+   api_reference/model
 
 
 Examples

@@ -8,3 +8,6 @@
 Detailed Description
 --------------------
 
+.. autoclasses:: Model
+    :members:
+
