@@ -38,7 +38,7 @@ class Convolution(Layer):
         self.last_output = None
         self.last_input = None
 
-      
+
         self.init = init
         self.activation = activation
 
