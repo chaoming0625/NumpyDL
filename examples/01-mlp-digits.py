@@ -10,6 +10,7 @@ def main(max_iter):
     # prepare
     npdl.utils.random.set_seed(1234)
 
+	# 
     # data
     digits = load_digits()
 
