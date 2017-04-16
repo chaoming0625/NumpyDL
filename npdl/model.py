@@ -1,5 +1,9 @@
 # -*- coding: utf-8 -*-
 
+"""
+Linear stack of layers.
+
+"""
 
 import sys
 
@@ -103,11 +107,11 @@ class Model(object):
                 train_targets.extend(y_batch)
 
             # output train status
-            # runout = "iter %d, train-[loss %.4f, acc %.4f]; " % (
-            #     iter_idx, float(np.mean(train_losses)), float(self.accuracy(train_predicts, train_targets)))
+            runout = "iter %d, train-[loss %.4f, acc %.4f]; " % (
+                iter_idx, float(np.mean(train_losses)), float(self.accuracy(train_predicts, train_targets)))
 
-            runout = "iter %d, train-[loss %.4f, ]; " % (
-                iter_idx, float(np.mean(train_losses)))
+            # runout = "iter %d, train-[loss %.4f, ]; " % (
+            #     iter_idx, float(np.mean(train_losses)))
 
             if valid_X is not None and valid_Y is not None:
                 # valid
