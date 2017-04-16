@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-
+import os
 import csv
 import itertools
 
@@ -10,7 +10,7 @@ import numpy as np
 import npdl
 
 
-def load_data(corpus_path='data/lm/reddit-comments-2015-08.csv',
+def load_data(corpus_path=os.path.join(os.path.dirname(__file__), 'data/lm/reddit-comments-2015-08.csv'),
               vocabulary_size=8000):
     sentence_start_token = "SENTENCE_START"
     sentence_end_token = "SENTENCE_END"
@@ -50,7 +50,7 @@ def load_data(corpus_path='data/lm/reddit-comments-2015-08.csv',
     return index_to_word, word_to_index, train_x, train_y
 
 
-def character_lm(corpus_path='data/lm/tiny_shakespeare.txt'):
+def main(max_iter, corpus_path=os.path.join(os.path.dirname(__file__), 'data/lm/tiny_shakespeare.txt')):
     raw_text = open(corpus_path, 'r').read()
     chars = list(set(raw_text))
     data_size, vocab_size = len(raw_text), len(chars)
@@ -77,8 +77,8 @@ def character_lm(corpus_path='data/lm/tiny_shakespeare.txt'):
     net.compile(loss=npdl.objectives.SCCE(), optimizer=npdl.optimizers.SGD(lr=0.00001, clip=5))
 
     print("Train model ...")
-    net.fit(batch_in, batch_out, max_iter=100, batch_size=batch_size)
+    net.fit(batch_in, batch_out, max_iter=max_iter, batch_size=batch_size)
 
 
 if __name__ == '__main__':
-    character_lm()
+    main(100)
