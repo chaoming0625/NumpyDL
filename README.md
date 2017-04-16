@@ -1,4 +1,3 @@
-
 # Deep Learning Framework based on Numpy
 
 _NumpyDL_ is a simple and powerful deep learning library for Python. 
