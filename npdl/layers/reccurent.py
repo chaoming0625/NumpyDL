@@ -11,7 +11,7 @@ from ..initialization import Zero
 
 
 class SimpleRNN(Layer):
-    """Fully-connected RNN where the output is to be fed back to input.
+    """Fully-connected RNN where the output is to be fed back to input.(完全连接的RNN在输出将被反馈到输入。)
 
     # Arguments
         output_dim: dimension of the internal projections and the final output.

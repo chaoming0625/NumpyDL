@@ -43,7 +43,7 @@ def load_data(corpus_path=os.path.join(os.path.dirname(__file__), 'data/lm/reddi
     # Replace all words not in our vocabulary with the unknown token
     tokenized_sentences = [[word if word in word_to_index else unknown_token for word in sentence]
                            for sentence in tokenized_sentences]
-    # Create the training data
+    # Create the training data.
     train_x = np.asarray([[word_to_index[word] for word in sentence[:-1]] for sentence in tokenized_sentences])
     train_y = np.asarray([[word_to_index[word] for word in sentence[1:]] for sentence in tokenized_sentences])
 
