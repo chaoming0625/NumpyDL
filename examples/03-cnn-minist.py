@@ -12,7 +12,7 @@ def main(max_iter):
     seed = 100
     nb_data = 1000
 
-    print("loading data ...")
+    print("loading data .....")
     mnist = fetch_mldata('MNIST original', data_home=os.path.join(os.path.dirname(__file__), './data'))
     X_train = mnist.data.reshape((-1, 1, 28, 28)) / 255.0
     np.random.seed(seed)

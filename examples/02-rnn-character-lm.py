@@ -15,7 +15,7 @@ def load_data(corpus_path=os.path.join(os.path.dirname(__file__), 'data/lm/reddi
     sentence_start_token = "SENTENCE_START"
     sentence_end_token = "SENTENCE_END"
     unknown_token = 'UNKNOWN_TOKEN'
-
+    #read
     # Read the data and append SENTENCE_START and SENTENCE_END tokens
     with open(corpus_path, encoding='utf-8') as f:
         reader = csv.reader(f, skipinitialspace=True)
