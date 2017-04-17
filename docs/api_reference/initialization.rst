@@ -14,7 +14,7 @@ Initializers
    Normal
    Orthogonal
 
-Detailed description
+Detailed Description
 --------------------
 
 .. autoclass:: Initializer

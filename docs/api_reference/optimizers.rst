@@ -20,7 +20,7 @@ Optimizers
     Adamax
 
 
-Detailed description
+Detailed Description
 --------------------
 
 .. autoclass:: SGD
