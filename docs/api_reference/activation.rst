@@ -15,7 +15,7 @@ Activations
    Linear
    Softmax
 
-Detailed description
+Detailed Description
 --------------------
 
 .. autoclass:: Sigmoid
