@@ -16,7 +16,14 @@ class Convolution(Layer):
     (tuple of integers, does not include the sample axis),
     e.g. `input_shape=(3, 128, 128)` for 128x128 RGB pictures.
 
+
+    二维输入滤波窗的卷积算子。
+    当使用此层作为模型中的第一层时，
+    提供关键字参数` input_shape `
+    （整数的整数，不包括样本轴），
+    例如` input_shape =（3，128，128）`为128x128 RGB图片。
     """
+
 
     def __init__(self, nb_filter, filter_size, input_shape=None, stride=1,
                  init=GlorotUniform(), activation=ReLU()):
@@ -30,6 +37,7 @@ class Convolution(Layer):
         self.out_shape = None
         self.last_output = None
         self.last_input = None
+
 
         self.init = init
         self.activation = activation
