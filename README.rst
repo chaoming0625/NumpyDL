@@ -1,8 +1,4 @@
 
-
-.. image:: https://pypip.in/d/npdl/badge.svg
-    :target: https://pypi.python.org/pypi/npdl/
-
 .. image:: https://readthedocs.org/projects/numpydl/badge/
     :target: http://numpydl.readthedocs.org/en/latest/
 
