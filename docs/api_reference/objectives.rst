@@ -15,7 +15,7 @@ Objectives
     HellingerDistance
 
 
-Detailed description
+Detailed Description
 --------------------
 
 .. autoclass:: Objective
