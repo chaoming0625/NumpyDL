@@ -1,5 +1,6 @@
+
 .. image:: https://readthedocs.org/projects/numpydl/badge/
-    :target: http://numpudl.readthedocs.org/en/latest/
+    :target: http://numpydl.readthedocs.org/en/latest/
 
 .. image:: https://img.shields.io/badge/license-MIT-blue.svg
     :target: https://github.com/oujago/NumpyDL/blob/master/LICENSE
@@ -7,8 +8,8 @@
 .. image:: https://travis-ci.org/oujago/NumpyDL.svg
     :target: https://travis-ci.org/oujago/NumpyDL
 
-.. image:: https://img.shields.io/coveralls/oujago/NumpyDL.svg
-    :target: https://coveralls.io/r/oujago/NumpyDL
+.. image:: https://coveralls.io/repos/github/oujago/NumpyDL/badge.svg?branch=master
+    :target: https://coveralls.io/github/oujago/NumpyDL?branch=master
 
 .. image:: https://codeclimate.com/github/oujago/NumpyDL/badges/gpa.svg
    :target: https://codeclimate.com/github/oujago/NumpyDL
@@ -53,7 +54,10 @@ Its design is governed by several principles:
 Documentation
 =============
 
-Documentation is available online: http://numpydl.readthedocs.io
+Available online documents: `latest <http://numpydl.readthedocs.io/en/lastest>`_
+docs, `development <http://numpydl.readthedocs.io/en/develop/>`_ docs, and
+`stable <http://numpydl.readthedocs.io/en/stable/>`_ docs. Chinese version document
+is in development and will be available soon.
 
 
 Example

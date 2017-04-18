@@ -18,6 +18,7 @@ class Convolution(Layer):
 
     """
 
+
     def __init__(self, nb_filter, filter_size, input_shape=None, stride=1,
                  init=GlorotUniform(), activation=ReLU()):
         self.nb_filter = nb_filter
