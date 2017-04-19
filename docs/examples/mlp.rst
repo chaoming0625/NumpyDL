@@ -1,0 +1,290 @@
+.. index:: Multilayer Perceptron
+
+.. _mlp:
+
+
+Multilayer Perceptron
+=====================
+
+.. note::
+    This section assumes the reader has already read through :doc:`logreg`.
+    Additionally, it uses the following new Theano functions and concepts:
+    `T.tanh`_, `shared variables`_, `basic arithmetic ops`_, `T.grad`_,
+    :ref:`L1_L2_regularization`, `floatX`_. If you intend to run the
+    code on GPU also read `GPU`_.
+
+.. note::
+    The code for this section is available for download `here`_.
+
+.. _here: http://deeplearning.net/tutorial/code/mlp.py
+
+.. _T.tanh: http://deeplearning.net/software/theano/tutorial/examples.html?highlight=tanh
+
+.. _shared variables: http://deeplearning.net/software/theano/tutorial/examples.html#using-shared-variables
+
+.. _basic arithmetic ops: http://deeplearning.net/software/theano/tutorial/adding.html#adding-two-scalars
+
+.. _T.grad: http://deeplearning.net/software/theano/tutorial/examples.html#computing-gradients
+
+.. _floatX: http://deeplearning.net/software/theano/library/config.html#config.floatX
+
+.. _GPU: http://deeplearning.net/software/theano/tutorial/using_gpu.html
+
+
+The next architecture we are going to present using Theano is the
+single-hidden-layer Multi-Layer Perceptron (MLP). An MLP can be viewed as a
+logistic regression classifier where the input is first transformed using a
+learnt non-linear transformation :math:`\Phi`. This transformation projects the
+input data into a space where it becomes linearly separable. This intermediate
+layer is referred to as a **hidden layer**. A single hidden layer is sufficient
+to make MLPs a **universal approximator**. However we will see later on that
+there are substantial benefits to using many such hidden layers, i.e. the very
+premise of **deep learning**. See these course notes for an `introduction to
+MLPs, the back-propagation algorithm, and how to train MLPs
+<http://www.iro.umontreal.ca/~pift6266/H10/notes/mlp.html>`_.
+
+This tutorial will again tackle the problem of MNIST digit classification.
+
+The Model
++++++++++
+
+An MLP (or Artificial Neural Network - ANN) with a single hidden layer
+can be represented graphically as
+follows:
+
+.. figure:: images/mlp.png
+    :align: center
+
+Formally, a one-hidden-layer MLP is a function :math:`f: R^D \rightarrow
+R^L`, where :math:`D` is the size of input vector :math:`x` and :math:`L` is
+the size of the output vector :math:`f(x)`, such that, in matrix notation:
+
+.. math::
+
+    f(x) = G( b^{(2)} + W^{(2)}( s( b^{(1)} + W^{(1)} x))),
+
+with bias vectors :math:`b^{(1)}`, :math:`b^{(2)}`; weight matrices
+:math:`W^{(1)}`, :math:`W^{(2)}` and activation functions :math:`G` and :math:`s`.
+
+The vector :math:`h(x) = \Phi(x) = s(b^{(1)} + W^{(1)} x)` constitutes the hidden layer.
+:math:`W^{(1)} \in R^{D \times D_h}` is the weight matrix connecting the input vector
+to the hidden layer.  Each column :math:`W^{(1)}_{\cdot i}` represents the weights
+from the input units to the i-th hidden unit. Typical choices for :math:`s`
+include :math:`tanh`, with :math:`tanh(a)=(e^a-e^{-a})/(e^a+e^{-a})`,
+or the logistic :math:`sigmoid` function, with :math:`sigmoid(a)=1/(1+e^{-a})`. We will be using
+:math:`tanh` in this tutorial because it typically yields to faster training
+(and sometimes also to better local minima). Both the :math:`tanh`
+and :math:`sigmoid` are scalar-to-scalar functions but their natural
+extension to vectors and tensors consists in applying them element-wise
+(e.g. separately on each element of the vector, yielding a same-size vector).
+
+The output vector is then obtained as: :math:`o(x) = G(b^{(2)} + W^{(2)} h(x))`.
+The reader should recognize the form we already used for
+:doc:`logreg`. As before,
+class-membership probabilities can be obtained by choosing :math:`G` as the
+:math:`softmax` function (in the case of multi-class classification).
+
+To train an MLP, we learn **all** parameters of the model, and here we use
+:ref:`opt_SGD` with minibatches.
+The set of parameters to learn is the set :math:`\theta =
+\{W^{(2)},b^{(2)},W^{(1)},b^{(1)}\}`.  Obtaining the gradients
+:math:`\partial{\ell}/\partial{\theta}` can be achieved through the
+**backpropagation algorithm** (a special case of the chain-rule of derivation).
+Thankfully, since Theano performs automatic differentation, we will not need to
+cover this in the tutorial !
+
+
+Going from logistic regression to MLP
++++++++++++++++++++++++++++++++++++++
+
+This tutorial will focus on a single-hidden-layer MLP. We start off by
+implementing a class that will represent a hidden layer. To
+construct the MLP we will then only need to throw a logistic regression
+layer on top.
+
+.. literalinclude:: ../code/mlp.py
+  :start-after: start-snippet-1
+  :end-before: end-snippet-1
+
+The initial values for the weights of a hidden layer :math:`i` should be uniformly
+sampled from a symmetric interval that depends on the activation function. For
+:math:`tanh` activation function results obtained in [Xavier10]_ show that the
+interval should be
+:math:`[-\sqrt{\frac{6}{fan_{in}+fan_{out}}},\sqrt{\frac{6}{fan_{in}+fan_{out}}}]`, where
+:math:`fan_{in}` is the number of units in the :math:`(i-1)`-th layer,
+and :math:`fan_{out}` is the number of units in the :math:`i`-th layer. For
+the sigmoid function the interval is :math:`[-4\sqrt{\frac{6}{fan_{in}+fan_{out}}},4\sqrt{\frac{6}{fan_{in}+fan_{out}}}]`.
+This initialization ensures that, early in training, each neuron operates in a
+regime of its activation function where information can easily be propagated
+both upward (activations flowing from inputs to outputs) and backward
+(gradients flowing from outputs to inputs).
+
+.. literalinclude:: ../code/mlp.py
+  :start-after: end-snippet-1
+  :end-before:  lin_output = T.dot(input, self.W) + self.b
+
+Note that we used a given non-linear function as the activation function of the hidden layer. By default this is ``tanh``, but in many cases we might want
+to use something else.
+
+.. literalinclude:: ../code/mlp.py
+  :start-after: self.b = b
+  :end-before: # parameters of the model
+
+If you look into theory this class implements the graph that computes
+the hidden layer value :math:`h(x) = \Phi(x) = s(b^{(1)} + W^{(1)} x)`.
+If you give this graph as input to the ``LogisticRegression`` class,
+implemented in the previous tutorial :doc:`logreg`, you get the output
+of the MLP. You can see this in the following short implementation of
+the ``MLP`` class.
+
+.. literalinclude:: ../code/mlp.py
+  :start-after: start-snippet-2
+  :end-before: end-snippet-2
+
+In this tutorial we will also use L1 and L2 regularization (see
+:ref:`L1_L2_regularization`). For this, we need to compute the L1 norm and the squared L2
+norm of the weights :math:`W^{(1)}, W^{(2)}`.
+
+.. literalinclude:: ../code/mlp.py
+  :start-after: start-snippet-3
+  :end-before: end-snippet-3
+
+As before, we train this model using stochastic gradient descent with
+mini-batches. The difference is that we modify the cost function to include the
+regularization term. ``L1_reg`` and ``L2_reg`` are the hyperparameters
+controlling the weight of these regularization terms in the total cost function.
+The code that computes the new cost is:
+
+.. literalinclude:: ../code/mlp.py
+  :start-after: start-snippet-4
+  :end-before: end-snippet-4
+
+We then update the parameters of the model using the gradient. This code is
+almost identical to the one for logistic regression. Only the number of
+parameters differ. To get around this ( and write code that could work
+for any number of parameters) we will use the list of parameters that
+we created with the model ``params`` and parse it, computing a gradient
+at each step.
+
+.. literalinclude:: ../code/mlp.py
+  :start-after: start-snippet-5
+  :end-before: end-snippet-5
+
+Putting it All Together
++++++++++++++++++++++++
+
+Having covered the basic concepts, writing an MLP class becomes quite easy.
+The code below shows how this can be done, in a way which is analogous to our previous logistic regression implementation.
+
+.. literalinclude:: ../code/mlp.py
+
+The user can then run the code by calling :
+
+.. code-block:: bash
+
+    python code/mlp.py
+
+The output one should expect is of the form :
+
+.. code-block:: bash
+
+  Optimization complete. Best validation score of 1.690000 % obtained at iteration 2070000, with test performance 1.650000 %
+  The code for file mlp.py ran for 97.34m
+
+On an Intel(R) Core(TM) i7-2600K CPU @ 3.40GHz the code runs with
+approximately 10.3 epoch/minute and it took 828 epochs to reach a test
+error of 1.65%.
+
+To put this into perspective, we refer the reader to the results section of `this
+<http://yann.lecun.com/exdb/mnist>`_  page.
+
+Tips and Tricks for training MLPs
++++++++++++++++++++++++++++++++++
+
+There are several hyper-parameters in the above code, which are not (and,
+generally speaking, cannot be) optimized by gradient descent. Strictly speaking,
+finding an optimal set of values for these
+hyper-parameters is not a feasible problem. First, we can't simply optimize
+each of them independently. Second, we cannot readily apply gradient
+techniques that we described previously (partly because some parameters are
+discrete values and others are real-valued). Third, the optimization problem
+is not convex and finding a (local) minimum would involve a non-trivial
+amount of work.
+
+The good news is that over the last 25 years, researchers have devised various
+rules of thumb for choosing hyper-parameters in a neural network. A very
+good overview of these tricks can be found in `Efficient
+BackProp <http://yann.lecun.com/exdb/publis/pdf/lecun-98b.pdf>`_ by Yann LeCun,
+Leon Bottou, Genevieve Orr, and Klaus-Robert Mueller. In here, we summarize
+the same issues, with an emphasis on the parameters and techniques that we
+actually used in our code.
+
+Nonlinearity
+--------------
+
+Two of the most common ones are the :math:`sigmoid` and the :math:`tanh` function. For
+reasons explained in `Section 4.4  <http://yann.lecun.com/exdb/publis/pdf/lecun-98b.pdf>`_, nonlinearities that
+are symmetric around the origin are preferred because they tend to produce
+zero-mean inputs to the next layer (which is a desirable property).
+Empirically, we have observed that the :math:`tanh` has better convergence
+properties.
+
+Weight initialization
+---------------------
+
+At initialization we want the weights to be small enough around the origin
+so that the activation function operates in its linear regime, where gradients are
+the largest. Other desirable properties, especially for deep networks,
+are to conserve variance of the activation as well as variance of back-propagated gradients from layer to layer.
+This allows information to flow well upward and downward in the network and
+reduces discrepancies between layers.
+Under some assumptions, a compromise between these two constraints leads to the following
+initialization: :math:`uniform[-\frac{\sqrt{6}}{\sqrt{fan_{in}+fan_{out}}},\frac{\sqrt{6}}{\sqrt{fan_{in}+fan_{out}}}]`
+for tanh and :math:`uniform[-4*\frac{\sqrt{6}}{\sqrt{fan_{in}+fan_{out}}},4*\frac{\sqrt{6}}{\sqrt{fan_{in}+fan_{out}}}]`
+for sigmoid. Where :math:`fan_{in}` is the number of inputs and :math:`fan_{out}` the number of hidden units.
+For mathematical considerations please refer to [Xavier10]_.
+
+Learning rate
+--------------
+
+There is a great deal of literature on choosing a good learning rate. The
+simplest solution is to simply have a constant rate. Rule of thumb: try
+several log-spaced values (:math:`10^{-1},10^{-2},\ldots`) and narrow the
+(logarithmic) grid search to the region where you obtain the lowest
+validation error.
+
+Decreasing the learning rate over time is sometimes a good idea. One simple
+rule for doing that is :math:`\frac{\mu_0}{1 + d\times t}` where
+:math:`\mu_0` is the initial rate (chosen, perhaps, using the grid search
+technique explained above), :math:`d` is a so-called "decrease constant"
+which controls the rate at which the learning rate decreases (typically, a
+smaller positive number, :math:`10^{-3}` and smaller) and :math:`t` is the
+epoch/stage.
+
+`Section 4.7 <http://yann.lecun.com/exdb/publis/pdf/lecun-98b.pdf>`_ details
+procedures for choosing a learning rate for each parameter (weight) in our
+network and for choosing them adaptively based on the error of the
+classifier.
+
+Number of hidden units
+-----------------------
+
+This hyper-parameter is very much dataset-dependent. Vaguely speaking, the
+more complicated the input distribution is, the more capacity the network
+will require to model it, and so the larger the number of hidden units that
+will be needed (note that the number of weights in a layer, perhaps a more direct
+measure of capacity, is :math:`D\times D_h` (recall :math:`D` is the number of
+inputs and :math:`D_h` is the number of hidden units).
+
+Unless we employ some regularization scheme (early stopping or L1/L2
+penalties), a typical number of hidden  units vs. generalization performance graph will be U-shaped.
+
+Regularization parameter
+------------------------
+
+Typical values to try for the L1/L2 regularization parameter :math:`\lambda`
+are :math:`10^{-2},10^{-3},\ldots`. In the framework that we described so
+far, optimizing this parameter will not lead to significantly better
+solutions, but is worth exploring nonetheless.
+
+

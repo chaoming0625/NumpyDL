@@ -38,6 +38,7 @@ class MeanPooling(Layer):
     def __init__(self, pool_size):
         self.pool_size = pool_size
 
+        self.out_shape = 0
         self.out_shape = None
         self.input_shape = None
 
