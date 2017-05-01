@@ -76,7 +76,7 @@ This part provides examples for building deep neural networks.
    :maxdepth: 2
    :caption: Contents:
 
-
+   examples/mlp
 
 
 Indices and tables
