@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """
 Functions to create initializers for parameter variables.
 
@@ -7,7 +8,6 @@ Examples
 >>> from npdl.initialization import GlorotUniform
 >>> l1 = Dense(n_out=300, n_in=100, init=GlorotUniform())
 """
-# -*- coding: utf-8 -*-
 
 import numpy as np
 
@@ -22,34 +22,30 @@ class Initializer(object):
     The :class:`Initializer` class represents a weight initializer used
     to initialize weight parameters in a neural network layer. It should be
     subclassed when implementing new types of weight initializers.
-
     """
     def __call__(self, size):
-        """
-        Makes :class:`Initializer` instances callable like a function, invoking
+        """Makes :class:`Initializer` instances callable like a function, invoking
         their :meth:`call()` method.
         """
         return self.call(size)
 
     def call(self, size):
-        """
-        Sample should return a theano.tensor of size shape and data type
-        theano.config.floatX.
+        """Sample should return a numpy.array of size shape and data type
+        ``numpy.float32``.
 
         Parameters
         -----------
         size : tuple or int
             Integer or tuple specifying the size of the returned
             matrix.
-        returns : theano.tensor
-            Matrix of size shape and dtype theano.config.floatX.
+        returns : numpy.array
+            Matrix of size shape and dtype ``numpy.float32``.
         """
         raise NotImplementedError()
 
 
 class Zero(Initializer):
     """Initialize weights with zero value.
-
     """
     def call(self, size):
         return _cast_dtype(np.zeros(size))
@@ -57,8 +53,7 @@ class Zero(Initializer):
 
 class One(Initializer):
     """Initialize weights with one value.
-
-        """
+    """
     def call(self, size):
         return _cast_dtype(np.ones(size))
 
