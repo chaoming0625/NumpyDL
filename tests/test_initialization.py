@@ -50,3 +50,23 @@ def test_specified_rng():
             "random initialization was inconsistent " \
             "for {}".format(test_cls.__name__)
 
+
+def test_zero():
+    from npdl.initialization import Zero
+
+    sample = Zero().call((100, 20))
+    assert sample.shape == (100, 20)
+    assert sample.any() == 0.
+
+
+def test_one():
+    from npdl.initialization import One
+
+    sample = One().call((10, 20))
+
+    assert sample.shape == (10, 20)
+    assert sample.any() == 1.
+
+
+
+
