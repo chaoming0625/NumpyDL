@@ -35,3 +35,23 @@ Detailed Description
 .. autoclass:: Orthogonal
    :members:
 
+.. autoclass:: LecunUniform
+   :members:
+
+.. autoclass:: GlorotUniform
+   :members:
+
+.. autoclass:: GlorotNormal
+   :members:
+
+.. autoclass:: HeNormal
+   :members:
+
+.. autoclass:: HeUniform
+   :members:
+
+.. autoclass:: Orthogonal
+   :members:
+
+.. autofunction:: decompose_size
+
