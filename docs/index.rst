@@ -45,7 +45,6 @@ developer.
 
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
 
    user_guide/installation
 
@@ -70,9 +69,8 @@ This part provides examples for building deep neural networks.
 
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
 
-   examples/mlp
+
 
 
 
@@ -84,7 +82,6 @@ method, this part of the documentation is for you.
 
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
 
    api_reference/activation
    api_reference/initialization
