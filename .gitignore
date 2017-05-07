@@ -1,12 +1,17 @@
 # Created by .ignore support plugin (hsz.mobi)
 ### Python template
+
+# custom paths
+.idea
+report
+
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
 *$py.class
 tests/report
 .pypirc
-.idea
 docs/_build/*
 
 # C extensions
