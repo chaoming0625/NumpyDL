@@ -3,8 +3,8 @@ Activation Functions
 ====================
 
 
-What is activation function?
-----------------------------
+1. What is activation function?
+-------------------------------
 
 In computational networks, the activation function of a node defines the output of
 that node given an input or set of inputs. In biologically inspired neural networks, the
@@ -14,8 +14,8 @@ firing in the cell.
 .. figure:: pics/900px-ArtificialNeuronModel_english.png
 
 
-Why need activation function?
------------------------------
+2. Why need activation function?
+--------------------------------
 
 Neural networks compose several functions in layers: the output of a previous layer
 is the input to the next layer. If you compose linear functions, these functions are all linear.
@@ -36,16 +36,16 @@ Without activation function many layers would be equivalent to a single layer, a
   M = M_1 M_2 \cdots M_n
 
 
-Commonly used activation functions
-----------------------------------
+3. Commonly used activation functions
+-------------------------------------
 
 Every activation function (or non-linearity) takes a single number and performs a
 certain fixed mathematical operation on it. There are several activation functions
 you may encounter in practice:
 
 
-Sigmoid
-^^^^^^^
+3.1. Sigmoid
+^^^^^^^^^^^^
 
 .. figure:: pics/sigmoid_activation_function.png
 
@@ -81,8 +81,8 @@ out of favor and it is rarely ever used. It has two major drawbacks:
   activation problem above.
 
 
-Tangent
-^^^^^^^
+3.2. Tangent
+^^^^^^^^^^^^
 
 .. figure:: pics/tanh_activation_functions.png
 
@@ -99,8 +99,8 @@ sigmoid neuron, in particular the following holds:
     tanh(x) = 2σ(2x) − 1.
 
 
-ReLU
-^^^^
+3.3. ReLU
+^^^^^^^^^
 
 .. figure:: pics/relu_activation_functions.png
 
@@ -138,8 +138,8 @@ several pros and cons to using the ReLUs:
     with the ReLU unit compared to the tanh unit.
 
 
-Leaky ReLU
-^^^^^^^^^^
+3.4. Leaky ReLU
+^^^^^^^^^^^^^^^
 
 .. figure:: pics/leaky_relu_activation_functions.png
 
@@ -148,15 +148,8 @@ Leaky ReLUs are one attempt to fix the "dying ReLU" problem. Instead of the func
 zero when :math:`x < 0`, a leaky ReLU will instead have a small negative slope (of :math:`0.01`,
 or so). That is, the function computes
 
-.. math::
+.. math:: f(x)= \left \{ \begin{aligned} αx  & &  x < 0 \\ x & &  x >= 0 \\ \end{aligned}  \right
 
-    $$ f(x)= \left \{
-    \begin{aligned}
-        αx  & &  x < 0 \\
-        x & &  x >= 0 \\
-    \end{aligned}
-    \right
-    $$
 
 where :math:`α` is a small constant. Some people report success with this form of activation
 function, but the results are not always consistent. The slope in the negative region can also
@@ -165,12 +158,13 @@ be made into a parameter of each neuron, as seen in PReLU neurons, introduced in
 the benefit across tasks is presently unclear.
 
 
-Maxout
-^^^^^^
+3.5. Maxout
+^^^^^^^^^^^
 
 Other types of units have been proposed that do not have the functional form
 
 .. math::
+
     f(wTx+b)
 
 where a non-linearity is applied on the dot product between the weights and the data. One relatively
@@ -192,8 +186,8 @@ As a last comment, it is very rare to mix and match different types of neurons i
 even though there is no fundamental problem with doing so.
 
 
-What activation should I use?
------------------------------
+4. What activation should I use?
+--------------------------------
 
 Use the `ReLU` non-linearity, be careful with your learning rates and possibly monitor the fraction
 of “dead” units in a network. If this concerns you, give `Leaky ReLU` or `Maxout` a try. Never use
@@ -201,8 +195,8 @@ of “dead” units in a network. If this concerns you, give `Leaky ReLU` or `Ma
 
 
 
-References
-----------
+5. References
+-------------
 
 .. [1] Krizhevsky, Alex, Ilya Sutskever, and Geoffrey E. Hinton.
        "Imagenet classification with deep convolutional neural networks."
