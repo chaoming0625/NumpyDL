@@ -23,8 +23,8 @@
    :target: https://zenodo.org/badge/latestdoi/83100910
 
 
-NumpyDL: Deep Learning Library based on Pure Numpy (Class Homework)
-===================================================================
+NumpyDL: Deep Learning Library based on Pure Numpy
+==================================================
 
 NumpyDL is a simple deep learning library based on pure Python/Numpy.Its main features are:
 
@@ -54,7 +54,7 @@ Its design is governed by several principles:
 Documentation
 =============
 
-Available online documents: `latest <http://numpydl.readthedocs.io/en/lastest>`_
+Available online documents: `latest <http://numpydl.readthedocs.io/en/latest>`_
 docs, `development <http://numpydl.readthedocs.io/en/develop/>`_ docs, and
 `stable <http://numpydl.readthedocs.io/en/stable/>`_ docs. Chinese version document
 is in development and will be available soon.
