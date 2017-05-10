@@ -58,7 +58,8 @@ This is the tutorials of `NumpDL <https://github.com/oujago/NumpyDL>`_.
    :maxdepth: 2
 
    tutorials/activations
-
+   tutorials/CNN_Part1
+   tutorials/CNN_Part2
 
 
 
