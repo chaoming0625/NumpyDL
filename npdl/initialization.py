@@ -17,7 +17,7 @@ from npdl.utils.generic import get_from_module
 
 
 class Initializer(object):
-    """Base class for parameter tensor initializers.
+    """Base class for parameter weight initializers.
 
     The :class:`Initializer` class represents a weight initializer used
     to initialize weight parameters in a neural network layer. It should be
@@ -32,13 +32,16 @@ class Initializer(object):
     def call(self, size):
         """Sample should return a numpy.array of size shape and data type
         ``numpy.float32``.
-
+        
         Parameters
-        -----------
-        size : tuple or int
+        ----------
+        size : tuple or int.
             Integer or tuple specifying the size of the returned
             matrix.
-        returns : numpy.array
+        
+        Returns
+        -------
+        numpy.array. 
             Matrix of size shape and dtype ``numpy.float32``.
         """
         raise NotImplementedError()
@@ -62,10 +65,10 @@ class Uniform(Initializer):
     """Sample initial weights from the uniform distribution.
 
     Parameters are sampled from U(a, b).
-
+    
     Parameters
     ----------
-    scale : float or tuple
+    scale : float or tuple.
         When std is None then range determines a, b. If range is a float the
         weights are sampled from U(-range, range). If range is a tuple the
         weights are sampled from U(range[0], range[1]).
@@ -78,15 +81,16 @@ class Uniform(Initializer):
 
 
 class Normal(Initializer):
+
     """Sample initial weights from the Gaussian distribution.
 
     Initial weight parameters are sampled from N(mean, std).
-
+    
     Parameters
     ----------
-    std : float
+    std : float. 
         Std of initial parameters.
-    mean : float
+    mean : float. 
         Mean of initial parameters.
     """
     def __init__(self, std=0.01, mean=0.0):
@@ -98,40 +102,85 @@ class Normal(Initializer):
 
 
 class LecunUniform(Initializer):
+    """LeCun uniform initializer.
+
+    It draws samples from a uniform distribution within [-limit, limit]
+    where `limit` is `sqrt(3 / fan_in)` [1]_
+    where `fan_in` is the number of input units in the weight matrix.
+    
+    References
+    ----------
+    .. [1] LeCun 98, Efficient Backprop, http://yann.lecun.com/exdb/publis/pdf/lecun-98b.pdf
+    
+    """
     def call(self, size):
-        fan_in, fan_out = _decompose_size(size)
+        fan_in, fan_out = decompose_size(size)
         return Uniform(np.sqrt(3. / fan_in))(size)
 
 
 class GlorotUniform(Initializer):
-    """Glorot with weights sampled from the Normal distribution.
+    """Glorot uniform initializer, also called Xavier uniform initializer.
 
-    See :class:`Glorot` for a description of the parameters.
+    It draws samples from a uniform distribution within [-limit, limit]
+    where `limit` is `sqrt(6 / (fan_in + fan_out))` [1]_
+    where `fan_in` is the number of input units in the weight matrix
+    and `fan_out` is the number of output units in the weight matrix.
+    
+    References
+    ----------
+    .. [1] Glorot & Bengio, AISTATS 2010. http://jmlr.org/proceedings/papers/v9/glorot10a/glorot10a.pdf
     """
     def call(self, size):
-        fan_in, fan_out = _decompose_size(size)
+        fan_in, fan_out = decompose_size(size)
         return Uniform(np.sqrt(6 / (fan_in + fan_out)))(size)
 
 
 class GlorotNormal(Initializer):
-    """Glorot with weights sampled from the Uniform distribution.
+    """Glorot normal initializer, also called Xavier normal initializer.
 
-    See :class:`Glorot` for a description of the parameters.
+    It draws samples from a truncated normal distribution centered on 0
+    with `stddev = sqrt(2 / (fan_in + fan_out))` [1]_
+    where `fan_in` is the number of input units in the weight matrix
+    and `fan_out` is the number of output units in the weight matrix.
+    
+    References
+    ----------
+    .. [1] Glorot & Bengio, AISTATS 2010. http://jmlr.org/proceedings/papers/v9/glorot10a/glorot10a.pdf
     """
     def call(self, size):
-        fan_in, fan_out = _decompose_size(size)
+        fan_in, fan_out = decompose_size(size)
         return Normal(np.sqrt(2 / (fan_out + fan_in)))(size)
 
 
 class HeNormal(Initializer):
+    """He normal initializer.
+
+    It draws samples from a truncated normal distribution centered on 0
+    with `stddev = sqrt(2 / fan_in)` [1]_
+    where `fan_in` is the number of input units in the weight matrix.
+    
+    References
+    ----------
+    .. [1] He et al., http://arxiv.org/abs/1502.01852
+    """
     def call(self, size):
-        fan_in, fan_out = _decompose_size(size)
+        fan_in, fan_out = decompose_size(size)
         return Normal(np.sqrt(2. / fan_in))(size)
 
 
 class HeUniform(Initializer):
+    """He uniform variance scaling initializer.
+
+    It draws samples from a uniform distribution within [-limit, limit]
+    where `limit` is `sqrt(6 / fan_in)` [1]_
+    where `fan_in` is the number of input units in the weight matrix.
+    
+    References
+    ----------
+    .. [1] He et al., http://arxiv.org/abs/1502.01852
+    """
     def call(self, size):
-        fan_in, fan_out = _decompose_size(size)
+        fan_in, fan_out = decompose_size(size)
         return Uniform(np.sqrt(6. / fan_in))(size)
 
 
@@ -145,7 +194,7 @@ class Orthogonal(Initializer):
 
     Parameters
     ----------
-    gain : float or 'relu'
+    gain : float or 'relu'.
         Scaling factor for the weights. Set this to ``1.0`` for linear and
         sigmoid units, to 'relu' or ``sqrt(2)`` for rectified linear units, and
         to ``sqrt(2/(1+alpha**2))`` for leaky rectified linear units with
@@ -173,7 +222,18 @@ class Orthogonal(Initializer):
         return _cast_dtype(q)
 
 
-def _decompose_size(size):
+def decompose_size(size):
+    """Computes the number of input and output units for a weight shape.
+    
+    Parameters
+    ----------
+    size 
+        Integer shape tuple.
+    
+    Returns
+    -------
+    A tuple of scalars, `(fan_in, fan_out)`.
+    """
     if len(size) == 2:
         fan_in = size[0]
         fan_out = size[1]

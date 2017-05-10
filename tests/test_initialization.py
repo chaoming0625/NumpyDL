@@ -154,6 +154,7 @@ def test_he_normal():
     assert -0.001 < sample.mean() < 0.001
     assert std * 0.5 < sample.std() < std * 1.5
 
+
 def test_orthogonal_relu_gain():
     from npdl.initialization import Orthogonal
 
@@ -190,6 +191,3 @@ def test_orthoganal_multi():
     sample = Orthogonal().call((100, 50, 80))
     sample = sample.reshape(100, 50 * 80)
     assert np.allclose(np.dot(sample, sample.T), np.eye(100), atol=1e-6)
-
-
-

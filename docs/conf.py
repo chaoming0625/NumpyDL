@@ -44,6 +44,7 @@ extensions = ['sphinx.ext.autodoc',
               'sphinx.ext.doctest',
               'sphinx.ext.linkcode',  # link to github, see linkcode_resolve() below
               'numpydoc',
+              'sphinx.ext.viewcode'
               ]
 
 # Add any paths that contain templates here, relative to this directory.

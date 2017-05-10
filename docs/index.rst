@@ -45,7 +45,6 @@ developer.
 
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
 
    user_guide/installation
 
@@ -59,7 +58,8 @@ This is the tutorials of `NumpDL <https://github.com/oujago/NumpyDL>`_.
    :maxdepth: 2
 
    tutorials/activations
-
+   tutorials/CNN_Part1
+   tutorials/CNN_Part2
 
 
 
@@ -70,9 +70,8 @@ This part provides examples for building deep neural networks.
 
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
 
-   examples/mlp
+
 
 
 
@@ -84,7 +83,6 @@ method, this part of the documentation is for you.
 
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
 
    api_reference/activation
    api_reference/initialization
