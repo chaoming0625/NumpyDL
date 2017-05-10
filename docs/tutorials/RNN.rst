@@ -40,3 +40,29 @@ What can RNNs do?
 
 RNNs have shown great success in many NLP tasks. At this point I should mention that the most commonly used type of RNNs are LSTMs, which are much better at capturing long-term dependencies than vanilla RNNs are. But don’t worry, LSTMs are essentially the same thing as the RNN we will develop in this tutorial, they just have a different way of computing the hidden state. We’ll cover LSTMs in more detail in a later post. Here are some example applications of RNNs in NLP (by non means an exhaustive list).
 
+Language Modeling and Generating Text
+.....................................
+
+Given a sequence of words we want to predict the probability of each word given the previous words. Language Models allow us to measure how likely a sentence is, which is an important input for Machine Translation (since high-probability sentences are typically correct). A side-effect of being able to predict the next word is that we get a generative model, which allows us to generate new text by sampling from the output probabilities. And depending on what our training data is we can generate all kinds of stuff. In Language Modeling our input is typically a sequence of words (encoded as one-hot vectors for example), and our output is the sequence of predicted words. When training the network we set o_t = x_{t+1} since we want the output at step t to be the actual next word.
+
+Machine Translation
+...................
+
+Machine Translation is similar to language modeling in that our input is a sequence of words in our source language (e.g. German). We want to output a sequence of words in our target language (e.g. English). A key difference is that our output only starts after we have seen the complete input, because the first word of our translated sentences may require information captured from the complete input sequence.
+
+.. image:: ../pics/2.png
+
+Speech Recognition
+...................
+
+Given an input sequence of acoustic signals from a sound wave, we can predict a sequence of phonetic segments together with their probabilities.
+
+Generating Image Descriptions
+.............................
+
+Together with convolutional Neural Networks, RNNs have been used as part of a model to generate descriptions for unlabeled pics. It’s quite amazing how well this seems to work. The combined model even aligns the generated words with features found in the pics.
+
+.. image:: ../pics/3.png
+
+
+
