@@ -5,11 +5,11 @@
 .. image:: https://img.shields.io/badge/license-MIT-blue.svg
     :target: https://github.com/oujago/NumpyDL/blob/master/LICENSE
 
-.. image:: https://travis-ci.org/oujago/NumpyDL.svg
-    :target: https://travis-ci.org/oujago/NumpyDL
+.. image:: https://img.shields.io/travis/pfnet/chainer/master.svg
+    :target: https://travis-ci.org/pfnet/chainer
 
-.. image:: https://coveralls.io/repos/github/oujago/NumpyDL/badge.svg?branch=master
-    :target: https://coveralls.io/github/oujago/NumpyDL?branch=master
+.. image:: https://img.shields.io/coveralls/pfnet/chainer.svg
+    :target: https://coveralls.io/github/pfnet/chainer
 
 .. image:: https://codeclimate.com/github/oujago/NumpyDL/badges/gpa.svg
    :target: https://codeclimate.com/github/oujago/NumpyDL
@@ -21,6 +21,16 @@
 
 .. image:: https://zenodo.org/badge/83100910.svg
    :target: https://zenodo.org/badge/latestdoi/83100910
+
+.. image:: https://img.shields.io/github/issues/oujago/NumpyDL.svg
+   :target: https://github.com/oujago/NumpyDL
+
+.. image:: https://img.shields.io/github/forks/oujago/NumpyDL.svg
+   :target: https://github.com/oujago/NumpyDL
+
+.. image:: https://img.shields.io/github/stars/oujago/NumpyDL.svg
+   :target: https://github.com/oujago/NumpyDL
+
 
 
 NumpyDL: Deep Learning Library based on Pure Numpy
