@@ -65,18 +65,6 @@ This is the tutorials of `NumpDL <https://github.com/oujago/NumpyDL>`_.
 
 
 
-Examples
-========
-
-This part provides examples for building deep neural networks.
-
-.. toctree::
-   :maxdepth: 2
-
-
-
-
-
 API Reference
 =============
 
