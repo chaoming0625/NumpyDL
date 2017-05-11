@@ -5,10 +5,10 @@
 .. image:: https://img.shields.io/badge/license-MIT-blue.svg
     :target: https://github.com/oujago/NumpyDL/blob/master/LICENSE
 
-.. image:: https://travis-ci.org/oujago/NumpyDL.svg
-    :target: https://travis-ci.org/oujago/NumpyDL
-
 .. image:: https://img.shields.io/travis/pfnet/chainer/master.svg
+    :target: https://travis-ci.org/pfnet/chainer
+
+.. image:: https://img.shields.io/coveralls/pfnet/chainer.svg
     :target: https://coveralls.io/github/pfnet/chainer
 
 .. image:: https://codeclimate.com/github/oujago/NumpyDL/badges/gpa.svg
