@@ -58,6 +58,8 @@ to have development headers for your BLAS library installed (e.g., the
 command. Please refer to the `numpy/scipy build instructions
 <http://www.scipy.org/scipylib/building/index.html>`_ if in doubt.
 
+.. _numpydl-stable-release:
+
 
 2. Stable NumpyDL release
 =========================
@@ -77,8 +79,11 @@ into your home directory instead. To upgrade from an earlier installation, add
 ``--upgrade``.
 
 
-3. Development installation
-===========================
+.. _numpydl-development-install:
+
+
+3.Development installation
+==========================
 
 3.1. install from source
 ------------------------
