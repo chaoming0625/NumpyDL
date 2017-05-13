@@ -47,6 +47,7 @@ developer.
    :maxdepth: 2
 
    user_guides/installation
+   user_guides/development
 
 
 Tutorials
@@ -65,8 +66,8 @@ This is the tutorials of `NumpDL <https://github.com/oujago/NumpyDL>`_.
 
 
 
-API Reference
-=============
+API References
+==============
 
 If you are looking for information on a specific function, class or
 method, this part of the documentation is for you.

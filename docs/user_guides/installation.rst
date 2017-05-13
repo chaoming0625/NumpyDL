@@ -80,6 +80,9 @@ into your home directory instead. To upgrade from an earlier installation, add
 3. Development installation
 ===========================
 
+3.1. install from source
+------------------------
+
 Alternatively, you can install NumpyDL from source,
 in a way that any changes to your local copy of the source tree take effect
 without requiring a reinstall. This is often referred to as *editable* or
@@ -107,6 +110,9 @@ To install the NumpyDL package itself, in editable mode, run:
 
 As always, add ``--user`` to install it to your home directory instead.
 
+3.2. contribute
+---------------
+
 **Optional**: If you plan to contribute to NumpyDL, you will need to fork the
 NumpyDL repository on GitHub. This will create a repository under your user
 account. Update your local clone to refer to the official repository as
@@ -122,3 +128,32 @@ SSH clone URL instead: ``git@github.com:<your-github-name>/NumpyDL.git``.
 
 You can now use this installation to develop features and send us pull requests
 on GitHub, see :doc:`development`!
+
+
+3.3. build documents
+--------------------
+
+We use `sphinx <http://www.sphinx-doc.org>`_ to build all our documents. This site
+is created from `reStructuredText <https://en.wikipedia.org/wiki/ReStructuredText>`_
+using sphinx. `Sphinx <http://www.sphinx-doc.org>`_ is a tool that makes it easy
+to create intelligent and beautiful documentation, written by Georg Brandl and
+licensed under the BSD license. It was originally created for
+`the Python documentation <https://docs.python.org/>`_, and it has excellent facilities
+for the documentation of software projects in a range of languages.
+
+using following commands, you can build ``NumpyDL`` documents:
+
+.. code-block:: bash
+
+  cd docs
+  make html
+
+Then, go to ``_build/html`` directory, double click ``index.html``, you will browse
+``NumpyDL`` documents in you favourite browser.
+
+
+3.4. test and coverage
+----------------------
+
+``NumpyDL`` use `pytest <https://github.com/pytest-dev/pytest>`_
+
