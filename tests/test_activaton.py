@@ -24,7 +24,7 @@ class TestActivations(object):
                               'relu',
                               'linear',
                               'softmax',
-                              'Elliot',
+                              'elliot',
                               'SymmetricElliot',
                               'SoftPlus',
                               'SoftSign'])
@@ -62,7 +62,7 @@ class TestActivations(object):
             npdl_act = Linear()
             f_res = npdl_act.forward(input)
 
-            assert f_res == input
+            assert np.allclose(f_res, input)
 
         elif activation == 'softmax':
             from npdl.activation import Softmax
