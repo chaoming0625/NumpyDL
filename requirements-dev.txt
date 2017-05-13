@@ -1,12 +1,11 @@
-numpy>=1.6
-scipy>=0.16
-scikit-learn>=0.18
-nltk>=3.0
+-r requirements-doc.txt
 
 # test requirements
+pep8
 coverage
 pytest
 pytest-cov
+pytest-pep8
 python-coveralls
 requests
 six
