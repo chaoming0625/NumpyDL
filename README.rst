@@ -38,26 +38,27 @@ NumpyDL: Deep Learning Library based on Pure Numpy
 
 NumpyDL is a simple deep learning library based on pure Python/Numpy.Its main features are:
 
-* Pure python + numpy
-* API like Keras deep learning library
-* Support basic automatic differentiation;
-* Support commonly used models, such as MLP, RNNs LSTMs and convnets.
+* *Pure* in Numpy and *native* to Python
+* Support basic *automatic differentiation*
+* Support *commonly used models*, such as MLP, RNNs, GRUs, LSTMs and CNNs
+* *Perfect documents* and easy to learn deep learning knowledge
 * Flexible network configurations and learning algorithms.
+* API like Keras deep learning library
 
-Its design is governed by several principles:
+The design of NumpyDL is governed by several principles:
 
-* Simplicity: Be easy to use, easy to understand and easy to extend, to
+* **Simplicity**: Be easy to use, easy to understand and easy to extend, to
   facilitate use in research. Interfaces should be kept small, with as few
   classes and methods as possible. Every added abstraction and feature
   should be carefully scrutinized, to determine whether the added complexity
   is justified.
-* Transparency: Native to Numpy, directly process and return Python / numpy
+* **Transparency**: Native to Numpy, directly process and return Python/Numpy
   data types. Do not rely on the functionality of Theano, Tensorflow or any
-  such DL framework.
-* Modularity: Allow all parts (layers, regularizers, optimizers, ...) to be
+  such deep learning frameworks.
+* **Modularity**: Allow all parts (layers, regularizers, optimizers, ...) to be
   used independently of NumpyDL. Make it easy to use components in isolation
   or in conjunction with other frameworks.
-* Focus: “Do one thing and do it well”. Do not try to provide a library
+* **Focus**: “Do one thing and do it well”. Do not try to provide a library
   for everything to do with deep learning.
 
 
