@@ -61,10 +61,8 @@ Now give them the initial value, as shown below:
 
 .. figure:: pics/7(1).png
 
-Among them, Input data i1=0.05, i2=0.10;
-            Output data o1=0.01, o2=0.99;
-            Initial weight w1=0.15, w2=0.20, w3=0.25, w4=0.30;
-                           w5=0.40, w6=0.45, w7=0.50, w8=0.88;
+Among them, Input data :math:`i1=0.05, i2=0.10`; Output data :math:`o1=0.01, o2=0.99`; Initial weight
+:math:`w1=0.15, w2=0.20, w3=0.25, w4=0.30, w5=0.40, w6=0.45, w7=0.50, w8=0.88`;
 
 Objective: to give input data i1, i2 (0.05 and 0.10), so that the output is as close as possible to the original output o1, o2 (0.01 and 0.99).
 

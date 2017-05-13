@@ -46,7 +46,7 @@ developer.
 .. toctree::
    :maxdepth: 2
 
-   user_guide/installation
+   user_guides/installation
 
 
 Tutorials
