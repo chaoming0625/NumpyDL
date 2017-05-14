@@ -179,8 +179,7 @@ When you're satisfied with your addition, the tests pass and the documentation
 looks good without any markup errors, commit your changes to a new branch, push
 that branch to your fork and send us a Pull Request via GitHub's web interface.
 
-All these steps are nicely explained on GitHub:
-https://guides.github.com/introduction/flow/
+All these steps are nicely explained on GitHub: https://guides.github.com/introduction/flow/
 
 When filing your Pull Request, please include a description of what it does, to
 help us reviewing it. If it is fixing an open issue, say, issue #123, add
