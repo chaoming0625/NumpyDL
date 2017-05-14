@@ -8,8 +8,9 @@
 .. image:: https://api.travis-ci.org/oujago/NumpyDL.svg
     :target: https://travis-ci.org/oujago/NumpyDL
 
-.. image:: https://img.shields.io/coveralls/oujago/NumpyDL.svg
-    :target: https://coveralls.io/github/oujago/NumpyDL
+.. image:: https://coveralls.io/repos/github/oujago/NumpyDL/badge.svg?branch=reduction
+    :target: https://coveralls.io/github/oujago/NumpyDL?branch=reduction
+
 
 .. image:: https://codeclimate.com/github/oujago/NumpyDL/badges/gpa.svg
    :target: https://codeclimate.com/github/oujago/NumpyDL
