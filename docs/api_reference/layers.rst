@@ -4,7 +4,7 @@
 .. automodule:: npdl.layers
 
 .. toctree::
-    :hidden:
+    :maxdepth: 2
 
     layers/base
 
