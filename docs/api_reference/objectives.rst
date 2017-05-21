@@ -9,10 +9,14 @@ Objectives
 .. autosummary::
     :nosignatures:
 
-    BinaryCrossEntropy
-    SoftmaxCategoricalCrossEntropy
     MeanSquaredError
+    MSE
     HellingerDistance
+    HeD
+    BinaryCrossEntropy
+    BCE
+    SoftmaxCategoricalCrossEntropy
+    SCCE
 
 
 Detailed Description
