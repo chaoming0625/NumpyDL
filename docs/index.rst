@@ -61,9 +61,8 @@ This is the tutorials of `NumpDL <https://github.com/oujago/NumpyDL>`_.
    tutorials/activations
    tutorials/initialization
    tutorials/MLP
-   tutorials/CNN_Part1
-   tutorials/CNN_Part2
-   tutorials/RNN_part1
+   tutorials/CNN
+   tutorials/RNN
 
 
 
