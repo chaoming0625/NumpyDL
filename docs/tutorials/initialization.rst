@@ -90,11 +90,107 @@ time steps and can be propagated back to a much earlier time without vanishing.
 2. Xavier Initialization
 ========================
 
+Why’s Xavier initialization important?
+--------------------------------------
+
+In short, it helps signals reach deep into the network.
+
+* If the weights in a network start too small, then the signal shrinks as it passes through each layer until
+  it’s too tiny to be useful.
+* If the weights in a network start too large, then the signal grows as it passes through each layer until
+  it’s too massive to be useful.
+
+Xavier initialization makes sure the weights are ‘just right’, keeping the signal in a reasonable range of
+values through many layers.
+
+To go any further than this, you’re going to need a small amount of statistics - specifically you need to
+know about random distributions and their variance.
+
+What’s Xavier initialization?
+-----------------------------
+
+For specific implementation, it’s initializing the weights in your network by drawing them from a distribution
+with zero mean and a specific variance,
+
+.. math::
+
+    Var(W) = \frac{1}{n_{in}}
+
+where :math:`W` is the initialization distribution for the neuron in question, and :math:`n_{in}` is the
+number of neurons feeding into it. The distribution used is typically Gaussian or uniform.
+
+It’s worth mentioning that Glorot & Bengio’s paper [1]_ originally recommended using:
+
+.. math::
+
+    Var(W) = \frac{2}{n_{in} + n_{out}}
+
+where :math:`n_{out}` is the number of neurons the result is fed to.
 
 
+Where did those formulas come from?
+-----------------------------------
 
+Suppose we have an input :math:`X` with :math:`n` components and a linear neuron with random weights :math:`W`
+that spits out a number :math:`Y`. What’s the variance of :math:`Y`? Well, we can write
 
+.. math::
 
+    Y=W_1 X_1+W_2 X_2+⋯+W_n X_n
+
+And from Wikipedia [5]_ we can work out that :math:`W_iX_i` is going to have variance
+
+.. math::
+
+    Var(W_i X_i)=E[X_i]^2Var(W_i)+E[W_i]^2Var(X_i)+Var(W_i)Var(i_i)
+
+Now if our inputs and weights both have mean :math:`0`, that simplifies to
+
+.. math::
+
+    Var(W_i X_i)=Var(W_i)Var(X_i)
+
+Then if we make a further assumption that the :math:`X_i` and :math:`W_i` are all independent and identically
+distributed, we can work out that the variance of :math:`Y` is [6]_
+
+.. math::
+
+    Var(Y)=Var(W_1 X_1+W_2 X_2+⋯+W_n X_n)=nVar(W_i)Var(X_i)
+
+Or in words: the variance of the output is the variance of the input, but scaled by :math:`nVar(W_i)`. So if
+we want the variance of the input and output to be the same, that means :math:`nVar(W_i)` should be 1. Which
+means the variance of the weights should be
+
+.. math::
+
+    Var(W_i)= \frac{1}{n}= \frac{1}{n_{in}}
+
+Voila. There’s your Xavier initialization.
+
+Glorot & Bengio’s formula needs a tiny bit more work. If you go through the same steps for the backpropagated
+signal, you find that you need
+
+.. math::
+
+    Var(W_i)=\frac{1}{n_{out}}
+
+to keep the variance of the input gradient & the output gradient the same. These two constraints can only be
+satisfied simultaneously if :math:`n_{in}=n_{out}`, so as a compromise, Glorot & Bengio take the average of
+the two:
+
+.. math::
+
+    Var(W_i)=\frac{2}{n_{in}+n_{out}}
+
+Caffe authors used the :math:`n_{in}`-only variant. The two possibilities that come to mind are:
+
+* that preserving the forward-propagated signal is much more important than preserving the back-propagated
+  one.
+* that for implementation reasons, it’s a pain to find out how many neurons in the next layer consume the
+  output of the current one.
+
+It is. But it works. Xavier initialization was one of the big enablers of the move away from per-layer
+generative pre-training.
 
 3. References
 =============
@@ -108,4 +204,5 @@ time steps and can be propagated back to a much earlier time without vanishing.
        Performance on ImageNet Classification,” arXiv:1502.01852 [cs], Feb. 2015.
 .. [4] S. Ioffe and C. Szegedy, “Batch Normalization: Accelerating Deep Network Training by Reducing
        Internal Covariate Shift,” arXiv:1502.03167 [cs], Feb. 2015.
-
+.. [5] https://en.wikipedia.org/wiki/Variance#Product_of_independent_variables
+.. [6] https://en.wikipedia.org/wiki/Variance#Sum_of_uncorrelated_variables_.28Bienaym.C3.A9_formula.29

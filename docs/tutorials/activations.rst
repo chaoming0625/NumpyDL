@@ -5,7 +5,7 @@ Activation Functions
 
 
 1. What is activation function?
-==============================-
+===============================
 
 In computational networks, the activation function of a node defines the output of
 that node given an input or set of inputs. In biologically inspired neural networks, the
@@ -38,7 +38,7 @@ Without activation function many layers would be equivalent to a single layer, a
 
 
 3. Commonly used activation functions
-====================================-
+=====================================
 
 Every activation function (or non-linearity) takes a single number and performs a
 certain fixed mathematical operation on it. There are several activation functions
@@ -101,7 +101,7 @@ sigmoid neuron, in particular the following holds:
 
 
 3.3. ReLU
---------^
+---------
 
 .. figure:: pics/relu_activation_functions.png
 
@@ -140,7 +140,7 @@ several pros and cons to using the ReLUs:
 
 
 3.4. Leaky ReLU
---------------^
+---------------
 
 .. figure:: pics/leaky_relu_activation_functions.png
 
@@ -160,7 +160,7 @@ the benefit across tasks is presently unclear.
 
 
 3.5. Maxout
-----------^
+-----------
 
 Other types of units have been proposed that do not have the functional form
 
@@ -197,7 +197,7 @@ of “dead” units in a network. If this concerns you, give `Leaky ReLU` or `Ma
 
 
 5. References
-============-
+=============
 
 .. [1] Krizhevsky, Alex, Ilya Sutskever, and Geoffrey E. Hinton.
        "Imagenet classification with deep convolutional neural networks."
