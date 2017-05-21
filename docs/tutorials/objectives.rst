@@ -127,8 +127,8 @@ is commonly used instead. In this class will use the terms subgradient [3]_ and 
 
 
 
-References
-==========
+3. References
+=============
 
 .. [1] https://en.wikipedia.org/wiki/Convex_function
 .. [2] http://stanford.edu/~boyd/cvxbook/
