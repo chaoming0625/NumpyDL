@@ -61,6 +61,7 @@ This is the tutorials of Deep Learning.
    tutorials/activations
    tutorials/initializations
    tutorials/objectives
+   tutorials/optimizers
    tutorials/MLP
    tutorials/CNN
    tutorials/RNN
