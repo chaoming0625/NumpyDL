@@ -51,7 +51,6 @@ class Objective(object):
 class MeanSquaredError(Objective):
     """Computes the element-wise squared difference between ``targets`` and ``outputs``.
 
-    
     In statistics, the mean squared error (MSE) or mean squared deviation (MSD) of an 
     estimator (of a procedure for estimating an unobserved quantity) measures the 
     average of the squares of the errors or deviations—that is, the difference between 
@@ -124,18 +123,31 @@ MSE = MeanSquaredError
 class HellingerDistance(Objective):
     """Computes the multi-class hinge loss between predictions and targets.
     
-
+    In probability and statistics, the Hellinger distance (closely related to, 
+    although different from, the Bhattacharyya distance) is used to quantify
+    the similarity between two probability distributions. It is a type of 
+    f-divergence. The Hellinger distance is defined in terms of the Hellinger 
+    integral, which was introduced by Ernst Hellinger in 1909.[1]_ [2]_
+    
 
     Notes
     -----
     This is an alternative to the categorical cross-entropy loss for
     multi-class classification problems
+    
+    References
+    ----------
+    
+    .. [1] Nikulin, M.S. (2001), "Hellinger distance", in Hazewinkel, Michiel, 
+           Encyclopedia of Mathematics, Springer, ISBN 978-1-55608-010-4
+    .. [2] Jump up ^ Hellinger, Ernst (1909), "Neue Begründung der Theorie 
+           quadratischer Formen von unendlichvielen Veränderlichen", Journal 
+           für die reine und angewandte Mathematik (in German), 136: 210–271, 
+           doi:10.1515/crll.1909.136.210, JFM 40.0393.01
+
     """
     def forward(self, outputs, targets):
         """HellingerDistance forward propagation. 
-        
-        .. math:: L_i = \\max_{j \\not = p_i} (0, t_j - t_{p_i} + \\delta)
-        
         
         Parameters
         ----------
@@ -150,12 +162,14 @@ class HellingerDistance(Objective):
         Returns
         -------
         numpy 1D array
-            An expression for the item-wise multi-class hinge loss
+            An expression for the Hellinger Distance
         """
         root_difference = np.sqrt(outputs) - np.sqrt(targets)
         return np.mean(np.sum(np.power(root_difference, 2), axis=1) / np.sqrt(2))
 
     def backward(self, outputs, targets):
+        """HellingerDistance forward propagation. 
+        """
         root_difference = np.sqrt(outputs) - np.sqrt(targets)
         return root_difference / (np.sqrt(2) * np.sqrt(outputs))
 
@@ -166,11 +180,9 @@ HeD = HellingerDistance
 class BinaryCrossEntropy(Objective):
     """Computes the binary cross-entropy between predictions and targets.
     
-    .. math:: L = -t \\log(p) - (1 - t) \\log(1 - p)
-    
     Returns
     -------
-    Theano tensor
+    numpy array
         An expression for the element-wise binary cross-entropy.
 
     Notes
@@ -184,6 +196,8 @@ class BinaryCrossEntropy(Objective):
 
     def forward(self, outputs, targets):
         """Forward pass.
+        
+        .. math:: L = -t \\log(p) - (1 - t) \\log(1 - p)
         
         Parameters
         ----------
@@ -218,21 +232,6 @@ BCE = BinaryCrossEntropy
 class SoftmaxCategoricalCrossEntropy(Objective):
     """Computes the categorical cross-entropy between predictions and targets.
 
-    .. math:: L_i = - \\sum_j{t_{i,j} \\log(p_{i,j})}
-
-    Parameters
-    ----------
-    predictions : Theano 2D tensor
-        Predictions in (0, 1), such as softmax output of a neural network,
-        with data points in rows and class probabilities in columns.
-    targets : Theano 2D tensor or 1D tensor
-        Either targets in [0, 1] matching the layout of `predictions`, or
-        a vector of int giving the correct class index per data point.
-
-    Returns
-    -------
-    Theano 1D tensor
-        An expression for the item-wise categorical cross-entropy.
 
     Notes
     -----
@@ -246,10 +245,45 @@ class SoftmaxCategoricalCrossEntropy(Objective):
         self.epsilon = epsilon
 
     def forward(self, outputs, targets):
+        """SoftmaxCategoricalCrossEntropy forward propagation.
+        
+        .. math:: L_i = - \\sum_j{t_{i,j} \\log(p_{i,j})}
+        
+        Parameters
+        ----------
+        outputs : numpy 2D array
+            Predictions in (0, 1), such as softmax output of a neural network,
+            with data points in rows and class probabilities in columns.
+        targets : numpy 2D array 
+            Either targets in [0, 1] matching the layout of `outputs`, or
+            a vector of int giving the correct class index per data point.
+    
+        Returns
+        -------
+        numpy 1D array
+            An expression for the item-wise categorical cross-entropy.
+        """
         # outputs = np.clip(outputs, self.epsilon, 1 - self.epsilon)
         return np.mean(-np.sum(targets * np.log(outputs), axis=1))
 
     def backward(self, outputs, targets):
+        """SoftmaxCategoricalCrossEntropy backward propagation.
+        
+        .. math::  dE = p - t
+        
+        Parameters
+        ----------
+        outputs : numpy 2D array
+            Predictions in (0, 1), such as softmax output of a neural network,
+            with data points in rows and class probabilities in columns.
+        targets : numpy 2D array 
+            Either targets in [0, 1] matching the layout of `outputs`, or
+            a vector of int giving the correct class index per data point.
+    
+        Returns
+        -------
+        numpy 1D array
+        """
         # outputs = np.clip(outputs, self.epsilon, 1 - self.epsilon)
         return outputs - targets
 
