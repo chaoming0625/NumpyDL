@@ -1,10 +1,11 @@
 
+====================
 Activation Functions
 ====================
 
 
 1. What is activation function?
--------------------------------
+==============================-
 
 In computational networks, the activation function of a node defines the output of
 that node given an input or set of inputs. In biologically inspired neural networks, the
@@ -15,7 +16,7 @@ firing in the cell.
 
 
 2. Why need activation function?
---------------------------------
+================================
 
 Neural networks compose several functions in layers: the output of a previous layer
 is the input to the next layer. If you compose linear functions, these functions are all linear.
@@ -37,7 +38,7 @@ Without activation function many layers would be equivalent to a single layer, a
 
 
 3. Commonly used activation functions
--------------------------------------
+====================================-
 
 Every activation function (or non-linearity) takes a single number and performs a
 certain fixed mathematical operation on it. There are several activation functions
@@ -45,7 +46,7 @@ you may encounter in practice:
 
 
 3.1. Sigmoid
-^^^^^^^^^^^^
+------------
 
 .. figure:: pics/sigmoid_activation_function.png
 
@@ -82,7 +83,7 @@ out of favor and it is rarely ever used. It has two major drawbacks:
 
 
 3.2. Tangent
-^^^^^^^^^^^^
+------------
 
 .. figure:: pics/tanh_activation_functions.png
 
@@ -100,7 +101,7 @@ sigmoid neuron, in particular the following holds:
 
 
 3.3. ReLU
-^^^^^^^^^
+--------^
 
 .. figure:: pics/relu_activation_functions.png
 
@@ -139,7 +140,7 @@ several pros and cons to using the ReLUs:
 
 
 3.4. Leaky ReLU
-^^^^^^^^^^^^^^^
+--------------^
 
 .. figure:: pics/leaky_relu_activation_functions.png
 
@@ -159,7 +160,7 @@ the benefit across tasks is presently unclear.
 
 
 3.5. Maxout
-^^^^^^^^^^^
+----------^
 
 Other types of units have been proposed that do not have the functional form
 
@@ -187,7 +188,7 @@ even though there is no fundamental problem with doing so.
 
 
 4. What activation should I use?
---------------------------------
+================================
 
 Use the `ReLU` non-linearity, be careful with your learning rates and possibly monitor the fraction
 of “dead” units in a network. If this concerns you, give `Leaky ReLU` or `Maxout` a try. Never use
@@ -196,7 +197,7 @@ of “dead” units in a network. If this concerns you, give `Leaky ReLU` or `Ma
 
 
 5. References
--------------
+============-
 
 .. [1] Krizhevsky, Alex, Ilya Sutskever, and Geoffrey E. Hinton.
        "Imagenet classification with deep convolutional neural networks."
