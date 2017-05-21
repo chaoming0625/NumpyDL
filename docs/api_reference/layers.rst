@@ -7,6 +7,9 @@
     :maxdepth: 2
 
     layers/base
+    layers/core
+
+
 
 .. rubric:: :doc:`layers/base`
 
@@ -15,4 +18,16 @@
 
     Layer
 
+
+
+
+.. rubric:: :doc:`layers/core`
+
+.. autosummary::
+    :nosignatures:
+
+    Linear
+    Dense
+    Softmax
+    Dropout
 
