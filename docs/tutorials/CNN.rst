@@ -2,7 +2,7 @@
 Convolution Neural Networks
 ===========================
 
-1. introduction
+1. Introduction
 ===============
 
 Inputs and Outputs
