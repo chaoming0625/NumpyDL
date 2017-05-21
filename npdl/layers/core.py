@@ -11,6 +11,18 @@ from ..initialization import GlorotUniform
 
 
 class Linear(Layer):
+    """A fully connected layer implemented as the dot product of inputs and
+    weights.
+
+    Parameters
+    ----------
+    n_out : (int, tuple)
+        Desired size or shape of layer output
+    n_in : (int, tuple) or None
+        The layer input size feeding into this layer
+    init : (Initializer, optional)
+        Initializer object to use for initializing layer weights
+    """
     def __init__(self, n_out, n_in=None, init=GlorotUniform()):
         self.n_out = n_out
         self.n_in = n_in
@@ -35,10 +47,34 @@ class Linear(Layer):
         self.b = np.zeros((self.n_out,))
 
     def forward(self, input, *args, **kwargs):
+        """ Apply the forward pass transformation to the input data.
+        
+        Parameters
+        ----------
+        input : numpy.array
+            input data
+        
+        Returns
+        -------
+        numpy.array
+            output data
+        """
         self.last_input = input
         return np.dot(input, self.W) + self.b
 
     def backward(self, pre_grad, *args, **kwargs):
+        """Apply the backward pass transformation to the input data.
+        
+        Parameters
+        ----------
+        pre_grad : numpy.array
+            deltas back propagated from the adjacent higher layer
+            
+        Returns
+        -------
+        numpy.array
+            deltas to propagate to the adjacent lower layer
+        """
         self.dW = np.dot(self.last_input.T, pre_grad)
         self.db = np.mean(pre_grad, axis=0)
         if not self.first_layer:
@@ -54,6 +90,20 @@ class Linear(Layer):
 
 
 class Dense(Layer):
+    """A fully connected layer implemented as the dot product of inputs and
+    weights. Generally used to implemenent nonlinearities for layer post activations.
+
+    Parameters
+    ----------
+    n_out : (int, tuple)
+        Desired size or shape of layer output
+    n_in : (int, tuple) or None
+        The layer input size feeding into this layer
+    activation : (Activation, optional)
+        Defaults to ``Tanh``
+    init : (Initializer, optional)
+        Initializer object to use for initializing layer weights
+    """
     def __init__(self, n_out, n_in=None, init=GlorotUniform(), activation=Tanh()):
         self.n_out = n_out
         self.n_in = n_in
@@ -77,12 +127,36 @@ class Dense(Layer):
         self.b = np.zeros((self.n_out,))
 
     def forward(self, input, *args, **kwargs):
+        """ Apply the forward pass transformation to the input data.
+
+        Parameters
+        ----------
+        input : numpy.array
+            input data
+
+        Returns
+        -------
+        numpy.array
+            output data
+        """
         self.last_input = input
         linear_out = np.dot(input, self.W) + self.b
         act_out = self.act_layer.forward(linear_out)
         return act_out
 
     def backward(self, pre_grad, *args, **kwargs):
+        """Apply the backward pass transformation to the input data.
+
+        Parameters
+        ----------
+        pre_grad : numpy.array
+            deltas back propagated from the adjacent higher layer
+
+        Returns
+        -------
+        numpy.array
+            deltas to propagate to the adjacent lower layer
+        """
         act_grad = pre_grad * self.act_layer.derivative()
         self.dW = np.dot(self.last_input.T, act_grad)
         self.db = np.mean(act_grad, axis=0)
@@ -99,11 +173,38 @@ class Dense(Layer):
 
 
 class Softmax(Dense):
+    """A fully connected layer implemented as the dot product of inputs and
+    weights.
+
+    Parameters
+    ----------
+    n_out : (int, tuple)
+        Desired size or shape of layer output
+    n_in : (int, tuple) or None
+        The layer input size feeding into this layer
+    init : (Initializer, optional)
+        Initializer object to use for initializing layer weights
+    """
     def __init__(self, n_out, n_in=None, init=GlorotUniform()):
         super(Softmax, self).__init__(n_out, n_in, init, activation=SoftmaxAct())
 
 
 class Dropout(Layer):
+    """A dropout layer.
+
+    Applies an element-wise multiplication of inputs with a keep mask.
+
+    A keep mask is a tensor of ones and zeros of the same shape as the input.
+
+    Each :meth:`forward` call generates an new keep mask stochastically where there
+    distribution of ones in the mask is controlled by the keep param.
+
+    Parameters
+    ----------
+    p : float
+        fraction of the inputs that should be stochastically kept.
+    
+    """
     def __init__(self, p=0.):
         self.p = p
 
@@ -114,6 +215,20 @@ class Dropout(Layer):
         self.out_shape = prev_layer.out_shape
 
     def forward(self, input, train=True, *args, **kwargs):
+        """Apply the forward pass transformation to the input data.
+
+        Parameters
+        ----------
+        input : numpy.array
+            input data
+        train : bool
+            is inference only
+
+        Returns
+        -------
+        numpy.array
+            output data
+        """
         if 0. < self.p < 1.:
             if train:
                 self.last_mask = get_rng().binomial(1, 1 - self.p, input.shape) / (1 - self.p)

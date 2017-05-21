@@ -1,5 +1,6 @@
-Layer base classes
-------------------
+===========
+Base Layers
+===========
 
 .. automodule:: npdl.layers.base
 
