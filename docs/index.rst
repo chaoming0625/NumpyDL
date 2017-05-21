@@ -53,7 +53,7 @@ developer.
 Tutorials
 =========
 
-This is the tutorials of `NumpDL <https://github.com/oujago/NumpyDL>`_.
+This is the tutorials of Deep Learning.
 
 .. toctree::
    :maxdepth: 2
