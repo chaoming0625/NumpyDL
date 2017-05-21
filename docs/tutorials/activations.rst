@@ -1,7 +1,7 @@
 
-====================
-Activation Functions
-====================
+==========
+Activation
+==========
 
 
 1. What is activation function?
