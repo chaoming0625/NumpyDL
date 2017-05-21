@@ -14,10 +14,8 @@ Assuming you have a simple neural network for 3-way classification:
 >>> import npdl
 >>> model = npdl.model.Model()
 >>> model.add(npdl.layers.Dense(n_out=100, n_in=50))
->>> model.add(npdl.layers.Dense(n_out=3, 
->>>           activation=npdl.activation.Softmax()))
->>> model.compile(loss=npdl.objectives.SCCE(), 
->>>           optimizer=npdl.optimizers.SGD(lr=0.005))
+>>> model.add(npdl.layers.Dense(n_out=3, activation=npdl.activation.Softmax()))
+>>> model.compile(loss=npdl.objectives.SCCE(), optimizer=npdl.optimizers.SGD(lr=0.005))
 
 """
 
@@ -30,36 +28,93 @@ class Objective(object):
     
     """
     def forward(self, outputs, targets):
+        """ Forward function.
+        """
         raise NotImplementedError()
 
     def backward(self, outputs, targets):
+        """Backward function.
+        
+        Parameters
+        ----------
+        outputs, targets : numpy.array 
+            The arrays to compute the derivatives of them.
+    
+        Returns
+        -------
+        numpy.array 
+            An array of derivative.
+        """
         raise NotImplementedError()
 
 
 class MeanSquaredError(Objective):
-    """Computes the element-wise squared difference between two tensors.
+    """Computes the element-wise squared difference between ``targets`` and ``outputs``.
 
-    .. math:: L = (p - t)^2
+    
+    In statistics, the mean squared error (MSE) or mean squared deviation (MSD) of an 
+    estimator (of a procedure for estimating an unobserved quantity) measures the 
+    average of the squares of the errors or deviations—that is, the difference between 
+    the estimator and what is estimated. MSE is a risk function, corresponding to the 
+    expected value of the squared error loss or quadratic loss. The difference occurs 
+    because of randomness or because the estimator doesn't account for information that 
+    could produce a more accurate estimate. [1]_
 
-    Parameters
-    ----------
-    a, b : Theano tensor
-        The tensors to compute the squared difference between.
+    The MSE is a measure of the quality of an estimator—it is always non-negative, 
+    and values closer to zero are better.
+    
+    The MSE is the second moment (about the origin) of the error, and thus incorporates 
+    both the variance of the estimator and its bias. For an unbiased estimator, the MSE 
+    is the variance of the estimator. Like the variance, MSE has the same units of 
+    measurement as the square of the quantity being estimated. In an analogy to standard 
+    deviation, taking the square root of MSE yields the root-mean-square error or 
+    root-mean-square deviation (RMSE or RMSD), which has the same units as the quantity 
+    being estimated; for an unbiased estimator, the RMSE is the square root of the 
+    variance, known as the standard deviation.
 
-    Returns
-    -------
-    Theano tensor
-        An expression for the element-wise squared difference.
 
     Notes
     -----
     This is the loss function of choice for many regression problems
     or auto-encoders with linear output units.
+    
+    Refernces
+    ---------
+    .. [1] Lehmann, E. L.; Casella, George (1998). Theory of Point Estimation (2nd ed.). 
+           New York: Springer. ISBN 0-387-98502-6. MR 1639875.
     """
     def forward(self, outputs, targets):
+        """MeanSquaredError forward propagation. 
+        
+        .. math:: L = (p - t)^2
+        
+        Parameters
+        ----------
+        outputs, targets : numpy.array 
+            The arrays to compute the squared difference between.
+    
+        Returns
+        -------
+        numpy.array 
+            An expression for the element-wise squared difference.
+        """
         return 0.5 * np.mean(np.sum(np.power(outputs - targets, 2), axis=1))
 
     def backward(self, outputs, targets):
+        """MeanSquaredError backward propagation. 
+        
+        .. math:: dE = p - t
+        
+        Parameters
+        ----------
+        outputs, targets : numpy.array 
+            The arrays to compute the derivative between them.
+            
+        Returns
+        -------
+        numpy.array 
+            Derivative.
+        """
         return outputs - targets
 
 
@@ -68,25 +123,8 @@ MSE = MeanSquaredError
 
 class HellingerDistance(Objective):
     """Computes the multi-class hinge loss between predictions and targets.
+    
 
-    .. math:: L_i = \\max_{j \\not = p_i} (0, t_j - t_{p_i} + \\delta)
-
-    Parameters
-    ----------
-    predictions : Theano 2D tensor
-        Predictions in (0, 1), such as softmax output of a neural network,
-        with data points in rows and class probabilities in columns.
-    targets : Theano 2D tensor or 1D tensor
-        Either a vector of int giving the correct class index per data point
-        or a 2D tensor of one-hot encoding of the correct class in the same
-        layout as predictions (non-binary targets in [0, 1] do not work!)
-    delta : scalar, default 1
-        The hinge loss margin
-
-    Returns
-    -------
-    Theano 1D tensor
-        An expression for the item-wise multi-class hinge loss
 
     Notes
     -----
@@ -94,6 +132,26 @@ class HellingerDistance(Objective):
     multi-class classification problems
     """
     def forward(self, outputs, targets):
+        """HellingerDistance forward propagation. 
+        
+        .. math:: L_i = \\max_{j \\not = p_i} (0, t_j - t_{p_i} + \\delta)
+        
+        
+        Parameters
+        ----------
+        outputs : numpy 2D array
+            outputs in (0, 1), such as softmax output of a neural network,
+            with data points in rows and class probabilities in columns.
+        targets : numpy 2D array 
+            Either a vector of int giving the correct class index per data point
+            or a 2D tensor of one-hot encoding of the correct class in the same
+            layout as predictions (non-binary targets in [0, 1] do not work!)
+    
+        Returns
+        -------
+        numpy 1D array
+            An expression for the item-wise multi-class hinge loss
+        """
         root_difference = np.sqrt(outputs) - np.sqrt(targets)
         return np.mean(np.sum(np.power(root_difference, 2), axis=1) / np.sqrt(2))
 
