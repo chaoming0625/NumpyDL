@@ -59,7 +59,8 @@ This is the tutorials of Deep Learning.
    :maxdepth: 2
 
    tutorials/activations
-   tutorials/initialization
+   tutorials/initializations
+   tutorials/objectives
    tutorials/MLP
    tutorials/CNN
    tutorials/RNN
