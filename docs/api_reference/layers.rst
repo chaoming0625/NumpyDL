@@ -10,6 +10,7 @@
     layers/core
     layers/convolution
     layers/embedding
+    layers/normalization
 
 
 .. npdl/layers/base.py
@@ -48,8 +49,20 @@
 .. npdl/layers/embedding.py
 
 .. rubric:: :doc:`layers/embedding`
+
+.. autosummary::
    :nosignatures:
 
     Embedding
 
+
+
+.. npdl/layers/nomalization.py
+
+.. rubric:: :doc:`layers/normalization`
+
+.. autosummary::
+   :nosignatures:
+
+    BatchNormal
 
