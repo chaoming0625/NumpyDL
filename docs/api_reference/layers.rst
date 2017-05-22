@@ -12,6 +12,7 @@
     layers/embedding
     layers/normalization
     layers/pooling
+    layers/recurrent
 
 
 .. npdl/layers/base.py
@@ -67,7 +68,7 @@
 
     BatchNormal
 
-.. npdl/layers/pooling
+.. npdl/layers/pooling.py
 
 .. rubric:: :doc:`layers/pooling`
 
@@ -76,3 +77,16 @@
 
     MeanPooling
     MaxPooling
+
+
+.. npdl/layers/recurrent.py
+
+.. rubric:: :doc:`layers/recurrent`
+
+.. autosummary::
+   :nosignatures:
+
+    SimpleRNN
+    GRU
+    LSTM
+
