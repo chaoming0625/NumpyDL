@@ -40,6 +40,9 @@ class Activation(object):
         """
         raise NotImplementedError
 
+    def __str__(self):
+        return self.__class__.__name__
+
 
 # activation-end
 # sigmoid-start

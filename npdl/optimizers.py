@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 
 """
 Functions to generate Theano update dictionaries for training.
@@ -47,6 +46,9 @@ class Optimizer(object):
 
     def update_params(self, ):
         raise NotImplementedError()
+
+    def __str__(self):
+        return self.__class__.__name__
 
 
 class SGD(Optimizer):
