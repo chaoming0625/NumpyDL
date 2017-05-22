@@ -77,12 +77,12 @@ method, this part of the documentation is for you.
 .. toctree::
    :maxdepth: 2
 
-   api_reference/layers
-   api_reference/activation
-   api_reference/initialization
-   api_reference/objectives
-   api_reference/optimizers
-   api_reference/model
+   api_references/layers
+   api_references/activation
+   api_references/initialization
+   api_references/objectives
+   api_references/optimizers
+   api_references/model
 
 
 
