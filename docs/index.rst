@@ -83,6 +83,7 @@ method, this part of the documentation is for you.
    api_references/objectives
    api_references/optimizers
    api_references/model
+   api_references/utils
 
 
 
