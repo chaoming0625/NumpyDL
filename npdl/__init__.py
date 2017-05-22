@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from . import activation
-from . import initialization
+from . import activations
+from . import initializations
 from . import layers
 from . import objectives
 from . import optimizers

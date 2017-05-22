@@ -78,8 +78,8 @@ method, this part of the documentation is for you.
    :maxdepth: 2
 
    api_references/layers
-   api_references/activation
-   api_references/initialization
+   api_references/activations
+   api_references/initializations
    api_references/objectives
    api_references/optimizers
    api_references/model

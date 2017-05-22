@@ -5,9 +5,9 @@ import numpy as np
 
 from npdl.utils.random import get_rng
 from .base import Layer
-from ..activation import Softmax as SoftmaxAct
-from ..activation import Tanh
-from ..initialization import GlorotUniform
+from ..activations import Softmax as SoftmaxAct
+from ..activations import Tanh
+from ..initializations import GlorotUniform
 
 
 class Linear(Layer):

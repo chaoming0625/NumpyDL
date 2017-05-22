@@ -4,10 +4,10 @@
 import numpy as np
 
 from .base import Layer
-from ..activation import Tanh
-from ..initialization import GlorotUniform
-from ..initialization import Orthogonal
-from ..initialization import Zero
+from ..activations import Tanh
+from ..initializations import GlorotUniform
+from ..initializations import Orthogonal
+from ..initializations import Zero
 
 
 class SimpleRNN(Layer):

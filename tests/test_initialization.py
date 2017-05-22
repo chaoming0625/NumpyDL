@@ -5,14 +5,14 @@ import numpy as np
 
 
 def test_initializer_sample():
-    from npdl.initialization import Initializer
+    from npdl.initializations import Initializer
 
     with pytest.raises(NotImplementedError):
         Initializer().call((100, 100))
 
 
 def test_shape():
-    from npdl.initialization import Initializer
+    from npdl.initializations import Initializer
 
     shape = (10, 20)
     # Assert that all `Initializer` sublasses return the shape that
@@ -28,10 +28,10 @@ def test_shape():
 def test_specified_rng():
     from npdl.utils.random import get_rng
     from npdl.utils.random import set_rng
-    from npdl.initialization import Normal
-    from npdl.initialization import Uniform
-    from npdl.initialization import GlorotNormal
-    from npdl.initialization import GlorotUniform
+    from npdl.initializations import Normal
+    from npdl.initializations import Uniform
+    from npdl.initializations import GlorotNormal
+    from npdl.initializations import GlorotUniform
 
     from numpy.random import RandomState
     from numpy import allclose
@@ -53,7 +53,7 @@ def test_specified_rng():
 
 
 def test_zero():
-    from npdl.initialization import Zero
+    from npdl.initializations import Zero
 
     sample = Zero().call((100, 20))
     assert sample.shape == (100, 20)
@@ -61,7 +61,7 @@ def test_zero():
 
 
 def test_one():
-    from npdl.initialization import One
+    from npdl.initializations import One
 
     sample = One().call((10, 20))
 
@@ -70,7 +70,7 @@ def test_one():
 
 
 def test_normal():
-    from npdl.initialization import Normal
+    from npdl.initializations import Normal
 
     shape = (300, 400)
     sample = Normal(std=0.01, mean=0.0).call(shape)
@@ -81,7 +81,7 @@ def test_normal():
 
 
 def test_uniform():
-    from npdl.initialization import Uniform
+    from npdl.initializations import Uniform
 
     sample = Uniform(scale=0.1).call((200, 300))
 
@@ -91,7 +91,7 @@ def test_uniform():
 
 
 def test_lecun_uniform():
-    from npdl.initialization import LecunUniform
+    from npdl.initializations import LecunUniform
 
     shape = (200, 300)
     scale = np.sqrt(3 / 200)
@@ -104,7 +104,7 @@ def test_lecun_uniform():
 
 
 def test_glorot_uniform():
-    from npdl.initialization import GlorotUniform
+    from npdl.initializations import GlorotUniform
 
     shape = (300, 400)
     scale = np.sqrt(6. / sum(shape))
@@ -117,7 +117,7 @@ def test_glorot_uniform():
 
 
 def test_glorot_normal():
-    from npdl.initialization import GlorotNormal
+    from npdl.initializations import GlorotNormal
 
     shape = (300, 400)
     std = np.sqrt(2. / sum(shape))
@@ -130,7 +130,7 @@ def test_glorot_normal():
 
 
 def test_he_uniform():
-    from npdl.initialization import HeUniform
+    from npdl.initializations import HeUniform
 
     shape = (300, 400)
     scale = np.sqrt(6. / shape[0])
@@ -143,7 +143,7 @@ def test_he_uniform():
 
 
 def test_he_normal():
-    from npdl.initialization import HeNormal
+    from npdl.initializations import HeNormal
 
     shape = (300, 400)
     std = np.sqrt(6. / shape[0])
@@ -156,13 +156,13 @@ def test_he_normal():
 
 
 def test_orthogonal_relu_gain():
-    from npdl.initialization import Orthogonal
+    from npdl.initializations import Orthogonal
 
     assert Orthogonal('relu').gain == np.sqrt(2)
 
 
 def test_orthogonal():
-    from npdl.initialization import Orthogonal
+    from npdl.initializations import Orthogonal
 
     sample = Orthogonal().call((100, 200))
     assert np.allclose(np.dot(sample, sample.T), np.eye(100), atol=1e-6)
@@ -172,7 +172,7 @@ def test_orthogonal():
 
 
 def test_orthogonal_gain():
-    from npdl.initialization import Orthogonal
+    from npdl.initializations import Orthogonal
 
     gain = 2
     sample = Orthogonal(gain).call((100, 200))
@@ -186,7 +186,7 @@ def test_orthogonal_gain():
 
 
 def test_orthoganal_multi():
-    from npdl.initialization import Orthogonal
+    from npdl.initializations import Orthogonal
 
     sample = Orthogonal().call((100, 50, 80))
     sample = sample.reshape(100, 50 * 80)
