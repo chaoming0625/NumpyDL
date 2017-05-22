@@ -17,7 +17,7 @@ from .embedding import Embedding
 
 
 # recurrent layers
-from .reccurent import SimpleRNN
+from .recurrent import SimpleRNN
 
 
 # convolution
