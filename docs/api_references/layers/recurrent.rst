@@ -6,13 +6,15 @@ Recurrent Layers
 
 .. automodule:: npdl.layers.recurrent
 
+.. currentmodule:: npdl.layers
+
 
 .. autoclass:: SimpleRNN
    :members:
 
 
 .. autoclass:: GRU
-   :memebers:
+   :members:
 
 
 .. autoclass:: LSTM
