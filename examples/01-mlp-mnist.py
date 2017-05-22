@@ -18,8 +18,8 @@ def main(max_iter):
     # model
     print("building model ...")
     model = npdl.Model()
-    model.add(npdl.layers.Dense(n_out=500, n_in=784, activation=npdl.activation.ReLU()))
-    model.add(npdl.layers.Dense(n_out=n_classes, activation=npdl.activation.Softmax()))
+    model.add(npdl.layers.Dense(n_out=500, n_in=784, activation=npdl.activations.ReLU()))
+    model.add(npdl.layers.Dense(n_out=n_classes, activation=npdl.activations.Softmax()))
     model.compile(loss=npdl.objectives.SCCE(), optimizer=npdl.optimizers.SGD(lr=0.001))
 
     # train
