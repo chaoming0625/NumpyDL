@@ -80,8 +80,9 @@ class MeanSquaredError(Objective):
     This is the loss function of choice for many regression problems
     or auto-encoders with linear output units.
     
-    Refernces
-    ---------
+    References
+    ----------
+    
     .. [1] Lehmann, E. L.; Casella, George (1998). Theory of Point Estimation (2nd ed.). 
            New York: Springer. ISBN 0-387-98502-6. MR 1639875.
     """

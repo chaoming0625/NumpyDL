@@ -5,7 +5,7 @@ Core Layers
 
 .. automodule:: npdl.layers.core
 
-
+.. currentmodule:: npdl.layers
 
 .. autoclass:: Linear
    :members:

@@ -44,7 +44,7 @@ def set_seed(seed):
 
 
 def get_dtype():
-    """Get data dtype ``numpy.dtype`.
+    """Get data dtype ``numpy.dtype``.
 
     Returns
     -------

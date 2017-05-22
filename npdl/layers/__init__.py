@@ -18,6 +18,8 @@ from .embedding import Embedding
 
 # recurrent layers
 from .recurrent import SimpleRNN
+from .recurrent import GRU
+from .recurrent import LSTM
 
 
 # convolution

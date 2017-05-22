@@ -12,27 +12,30 @@ from ..initializations import Zero
 
 class SimpleRNN(Layer):
     """Fully-connected RNN where the output is to be fed back to input.(完全连接的RNN在输出将被反馈到输入。)
+    
+    Parameters
+    ----------
+    output_dim: dimension of the internal projections and the final output.
+    init: weight initialization function.
+        Can be the name of an existing function (str),
+        or a Theano function (see: [initializations](../initializations.md)).
+    inner_init: initialization function of the inner cells.
+    activation: activation function.
+        Can be the name of an existing function (str),
+        or a Theano function (see: [activations](../activations.md)).
+    W_regularizer: instance of [WeightRegularizer](../regularizers.md)
+        (eg. L1 or L2 regularization), applied to the input weights matrices.
+    U_regularizer: instance of [WeightRegularizer](../regularizers.md)
+        (eg. L1 or L2 regularization), applied to the recurrent weights matrices.
+    b_regularizer: instance of [WeightRegularizer](../regularizers.md),
+        applied to the bias.
+    dropout_W: float between 0 and 1. Fraction of the input units to drop for input gates.
+    dropout_U: float between 0 and 1. Fraction of the input units to drop for recurrent connections.
 
-    # Arguments
-        output_dim: dimension of the internal projections and the final output.
-        init: weight initialization function.
-            Can be the name of an existing function (str),
-            or a Theano function (see: [initializations](../initializations.md)).
-        inner_init: initialization function of the inner cells.
-        activation: activation function.
-            Can be the name of an existing function (str),
-            or a Theano function (see: [activations](../activations.md)).
-        W_regularizer: instance of [WeightRegularizer](../regularizers.md)
-            (eg. L1 or L2 regularization), applied to the input weights matrices.
-        U_regularizer: instance of [WeightRegularizer](../regularizers.md)
-            (eg. L1 or L2 regularization), applied to the recurrent weights matrices.
-        b_regularizer: instance of [WeightRegularizer](../regularizers.md),
-            applied to the bias.
-        dropout_W: float between 0 and 1. Fraction of the input units to drop for input gates.
-        dropout_U: float between 0 and 1. Fraction of the input units to drop for recurrent connections.
-
-    # References
-        - [A Theoretically Grounded Application of Dropout in Recurrent Neural Networks](http://arxiv.org/abs/1512.05287)
+    References
+    ----------
+    .. [1] A Theoretically Grounded Application of Dropout in Recurrent 
+           Neural Networks. http://arxiv.org/abs/1512.05287
     """
 
     def __init__(self, n_out, n_in=None, init=GlorotUniform(), inner_init=Orthogonal(), activation=Tanh(), return_sequence=False):
