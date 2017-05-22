@@ -1,2 +1,5 @@
-[run]
-source = npdl
+[report]
+omit =
+    tests/*
+    examples/*
+    *__init__*

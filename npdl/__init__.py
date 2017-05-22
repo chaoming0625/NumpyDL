@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from . import activation
-from . import initialization
+from . import activations
+from . import initializations
 from . import layers
 from . import objectives
 from . import optimizers
@@ -9,5 +9,5 @@ from . import utils
 from .model import Model
 
 
-__version__ = "0.1.0"
+__version__ = "0.2.0"
 

@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """
 Functions to generate Theano update dictionaries for training.
 
@@ -16,8 +14,8 @@ Using :class:`SGD` to define an update dictionary for a toy
 example network:
 
 >>> import npdl
->>> from npdl.activation import ReLU
->>> from npdl.activation import Softmax
+>>> from npdl.activations import ReLU
+>>> from npdl.activations import Softmax
 >>> from npdl.objectives import SCCE
 >>> model = npdl.model.Model()
 >>> model.add(npdl.layers.Dense(n_out=100, n_in=50, activation=ReLU()))
@@ -47,6 +45,9 @@ class Optimizer(object):
 
     def update_params(self, ):
         raise NotImplementedError()
+
+    def __str__(self):
+        return self.__class__.__name__
 
 
 class SGD(Optimizer):

@@ -17,7 +17,9 @@ from .embedding import Embedding
 
 
 # recurrent layers
-from .reccurent import SimpleRNN
+from .recurrent import SimpleRNN
+from .recurrent import GRU
+from .recurrent import LSTM
 
 
 # convolution
