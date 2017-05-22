@@ -8,16 +8,16 @@ Core Layers
 
 
 .. autoclass:: Linear
-    :members:
+   :members:
 
 
 .. autoclass:: Dense
-    :members:
+   :members:
 
 .. autoclass:: Softmax
-    :members:
+   :members:
 
 .. autoclass:: Dropout
-    :members:
+   :members:
 
 

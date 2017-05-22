@@ -8,6 +8,7 @@
 
     layers/base
     layers/core
+    layers/convolution
 
 
 
@@ -30,4 +31,13 @@
     Dense
     Softmax
     Dropout
+
+
+
+.. rubric:: :doc:`layers/convolution`
+
+.. autosummary::
+    :nosignatures:
+
+    Convolution
 
