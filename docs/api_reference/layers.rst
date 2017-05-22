@@ -13,6 +13,7 @@
     layers/normalization
     layers/pooling
     layers/recurrent
+    layers/shape
 
 
 .. npdl/layers/base.py
@@ -90,3 +91,11 @@
     GRU
     LSTM
 
+.. npdl/layers/shape.py
+
+.. rubric:: :doc:`layers/shape`
+
+.. autosummary::
+   :nosignatures:
+
+    Flatten
