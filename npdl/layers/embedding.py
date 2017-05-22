@@ -2,7 +2,7 @@
 
 
 from .base import Layer
-from ..initialization import Uniform
+from ..initializations import Uniform
 
 
 class Embedding(Layer):
