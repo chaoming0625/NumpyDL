@@ -9,8 +9,10 @@
     layers/base
     layers/core
     layers/convolution
+    layers/embedding
 
 
+.. npdl/layers/base.py
 
 .. rubric:: :doc:`layers/base`
 
@@ -20,7 +22,7 @@
     Layer
 
 
-
+.. npdl/layers/core.py
 
 .. rubric:: :doc:`layers/core`
 
@@ -33,6 +35,7 @@
     Dropout
 
 
+.. npdl/layers/convolution.py
 
 .. rubric:: :doc:`layers/convolution`
 
@@ -40,4 +43,13 @@
     :nosignatures:
 
     Convolution
+
+
+.. npdl/layers/embedding.py
+
+.. rubric:: :doc:`layers/embedding`
+   :nosignatures:
+
+    Embedding
+
 
