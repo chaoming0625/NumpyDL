@@ -11,6 +11,7 @@
     layers/convolution
     layers/embedding
     layers/normalization
+    layers/pooling
 
 
 .. npdl/layers/base.py
@@ -66,3 +67,12 @@
 
     BatchNormal
 
+.. npdl/layers/pooling
+
+.. rubric:: :doc:`layers/pooling`
+
+.. autosummary::
+   :nosignatures:
+
+    MeanPooling
+    MaxPooling
