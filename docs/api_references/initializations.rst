@@ -1,5 +1,5 @@
-:mod:`npdl.initialization`
-==========================
+:mod:`npdl.initializations`
+===========================
 
 .. automodule:: npdl.initialization
 
