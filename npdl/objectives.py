@@ -14,7 +14,7 @@ Assuming you have a simple neural network for 3-way classification:
 >>> import npdl
 >>> model = npdl.model.Model()
 >>> model.add(npdl.layers.Dense(n_out=100, n_in=50))
->>> model.add(npdl.layers.Dense(n_out=3, activation=npdl.activation.Softmax()))
+>>> model.add(npdl.layers.Dense(n_out=3, activation=npdl.activations.Softmax()))
 >>> model.compile(loss=npdl.objectives.SCCE(), optimizer=npdl.optimizers.SGD(lr=0.005))
 
 """

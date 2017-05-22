@@ -3,7 +3,7 @@
 import numpy as np
 
 from .base import Layer
-from ..initialization import _zero
+from ..initializations import _zero
 
 
 class MeanPooling(Layer):
