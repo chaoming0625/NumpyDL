@@ -3,9 +3,9 @@
 import numpy as np
 
 from .base import Layer
-from ..activation import ReLU
-from ..initialization import GlorotUniform
-from ..initialization import Zero
+from ..activations import ReLU
+from ..initializations import GlorotUniform
+from ..initializations import Zero
 
 
 class Convolution(Layer):

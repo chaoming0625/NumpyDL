@@ -5,7 +5,7 @@ import numpy as np
 
 
 def test_activation():
-    from npdl.activation import Activation
+    from npdl.activations import Activation
 
     act = Activation()
 
@@ -33,7 +33,7 @@ class TestActivations(object):
         input = np.arange(24).reshape((4, 6))
 
         if activation == 'sigmoid':
-            from npdl.activation import Sigmoid
+            from npdl.activations import Sigmoid
 
             npdl_act = Sigmoid()
             f_res = npdl_act.forward(input)
@@ -41,7 +41,7 @@ class TestActivations(object):
             assert 0. <= np.all(f_res) <= 1.
 
         elif activation == 'tanh':
-            from npdl.activation import Tanh
+            from npdl.activations import Tanh
 
             npdl_act = Tanh()
             f_res = npdl_act.forward(input)
@@ -49,7 +49,7 @@ class TestActivations(object):
             assert -1. <= np.all(f_res) <= 1.0
 
         elif activation == 'relu':
-            from npdl.activation import ReLU
+            from npdl.activations import ReLU
 
             npdl_act = ReLU()
             f_res = npdl_act.forward(input)
@@ -57,7 +57,7 @@ class TestActivations(object):
             assert np.all(f_res) >= 0.
 
         elif activation == 'linear':
-            from npdl.activation import Linear
+            from npdl.activations import Linear
 
             npdl_act = Linear()
             f_res = npdl_act.forward(input)
@@ -65,7 +65,7 @@ class TestActivations(object):
             assert np.allclose(f_res, input)
 
         elif activation == 'softmax':
-            from npdl.activation import Softmax
+            from npdl.activations import Softmax
 
             npdl_act = Softmax()
             f_res = npdl_act.forward(input)

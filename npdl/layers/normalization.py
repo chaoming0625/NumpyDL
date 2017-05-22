@@ -4,8 +4,8 @@
 import numpy as np
 
 from .base import Layer
-from ..initialization import One
-from ..initialization import Zero
+from ..initializations import One
+from ..initializations import Zero
 
 
 class BatchNormal(Layer):

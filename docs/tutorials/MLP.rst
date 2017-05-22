@@ -1,5 +1,5 @@
-Multi-layer Perceptron （MLP）
-============================
+Multi-layer Perceptron
+======================
 
 
 1. Sigmoid function
