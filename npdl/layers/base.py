@@ -70,3 +70,5 @@ class Layer(object):
         """ Layer parameters and corresponding gradients. """
         return list(zip(self.params, self.grads))
 
+    def __str__(self):
+        return self.__class__.__name__

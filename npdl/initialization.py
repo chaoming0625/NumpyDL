@@ -46,6 +46,9 @@ class Initializer(object):
         """
         raise NotImplementedError()
 
+    def __str__(self):
+        return self.__class__.__name__
+
 
 class Zero(Initializer):
     """Initialize weights with zero value.

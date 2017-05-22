@@ -1,5 +1,5 @@
 :mod:`npdl.optimizers`
-======================
+=======================
 
 .. automodule:: npdl.optimizers
 
@@ -8,7 +8,7 @@ Optimizers
 ----------
 
 .. autosummary::
-    :nosignatures:
+   :nosignatures:
 
     SGD
     Momentum

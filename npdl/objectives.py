@@ -47,6 +47,9 @@ class Objective(object):
         """
         raise NotImplementedError()
 
+    def __str__(self):
+        return self.__class__.__name__
+
 
 class MeanSquaredError(Objective):
     """Computes the element-wise squared difference between ``targets`` and ``outputs``.
