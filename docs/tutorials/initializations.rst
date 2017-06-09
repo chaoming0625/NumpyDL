@@ -3,8 +3,8 @@ Initialization
 ==============
 
 
-1. Introduction
-===============
+Introduction
+=============
 
 As we all know, the solution to a non-convex optimization algorithm (like stochastic gradient descent)
 depends on the initial values of the parameters. This post is about choosing initialization parameters
@@ -87,7 +87,7 @@ time steps and can be propagated back to a much earlier time without vanishing.
 
 
 
-2. Xavier Initialization
+Xavier Initialization
 ========================
 
 Why’s Xavier initialization important?
@@ -191,9 +191,6 @@ Caffe authors used the :math:`n_{in}`-only variant. The two possibilities that c
 
 It is. But it works. Xavier initialization was one of the big enablers of the move away from per-layer
 generative pre-training.
-
-3. References
-=============
 
 .. [1] X. Glorot and Y. Bengio, “Understanding the difficulty of training deep feedforward neural
        networks,” in International conference on artificial intelligence and statistics, 2010, pp.

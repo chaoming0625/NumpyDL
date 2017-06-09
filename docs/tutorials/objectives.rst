@@ -2,7 +2,7 @@
 Objective
 =========
 
-1. What is the Objective Function?
+What is the Objective Function?
 ==================================
 
 The objective of a linear programming problem will be to maximize or to minimize
@@ -46,7 +46,7 @@ the variable as having a coefficient of zero, or you can think of the variable a
 not being in the objective function at all.
 
 
-2. Visualizing the Objective function
+Visualizing the Objective function
 =====================================
 
 The loss functions we’ll look at in this class are usually defined over very
@@ -126,9 +126,6 @@ because at these kinks the gradient is not defined. However, the subgradient sti
 is commonly used instead. In this class will use the terms subgradient [3]_ and gradient interchangeably.
 
 
-
-3. References
-=============
 
 .. [1] https://en.wikipedia.org/wiki/Convex_function
 .. [2] http://stanford.edu/~boyd/cvxbook/

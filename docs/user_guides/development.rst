@@ -15,8 +15,8 @@ be credited!
 
 .. _numpydl-philosopy:
 
-1. Philosophy
-=============
+Philosophy
+==========
 
 The development of NumpyDl is guided by a number of design goals:
 
@@ -34,11 +34,11 @@ The development of NumpyDl is guided by a number of design goals:
 * **Focus**: “Do one thing and do it well”. Do not try to provide a library
   for everything to do with deep learning.
 
-2. What to contribute
-=====================
+What to contribute
+==================
 
-2.1. Give feedback
-------------------
+Give feedback
+-------------
 
 To send us general feedback, questions or ideas for improvement, please post on
 `issue tracker on GitHub`_. Or, you can directly e-mail to `Chao-Ming Wang's Email`_.
@@ -49,16 +49,16 @@ GitHub`_:
 * Explain how it would work, and link to a scientific paper if applicable.
 * Keep the scope as narrow as possible, to make it easier to implement.
 
-2.2. Fix bugs
--------------
+Fix bugs
+--------
 
 Look through the GitHub issues for bug reports. Anything tagged with "bug" is
 open to whoever wants to implement it. If you discover a bug in NumpyDL you can
 fix yourself, by all means feel free to just implement a fix and not report it
 first.
 
-2.3. Implement features
------------------------
+Implement features
+------------------
 
 Look through the GitHub issues for feature proposals. Anything tagged with
 "feature" or "enhancement" is open to whoever wants to implement it. If you
@@ -68,27 +68,27 @@ principles <numpydl-philosopy>`, so we cannot guarantee upfront that your code
 will be included. Please do not hesitate to just propose your idea in a GitHub
 issue first, so we can discuss it and/or guide you through the implementation.
 
-2.4. Write documentation
-------------------------
+Write documentation
+-------------------
 
 Whenever you find something not explained well, misleading, glossed over or
 just wrong, please update it! The *Edit on GitHub* link on the top right of
 every documentation page and the *[source]* link for every documented entity
 in the API reference will help you to quickly locate the origin of any text.
 
-2.5. Write tutorial
--------------------
+Write tutorial
+--------------
 
 How to combine our Numpy code with live examples and detailed explanations
 about deep learning is NumpyDL's ultimate goals. So, please contribute your
 good ideas about how to make good tutorials.
 
 
-3. How to contribute
-====================
+How to contribute
+=================
 
-3.1. Edit on GitHub
--------------------
+Edit on GitHub
+--------------
 
 As a very easy way of just fixing issues in the documentation, use the *Edit
 on GitHub* link on the top right of a documentation page or the *[source]* link
@@ -99,8 +99,8 @@ and send us a Pull Request. All you need for this is a free GitHub account.
 For any more substantial changes, please follow the steps below to setup
 NumpyDL for development.
 
-3.2. Development setup
-----------------------
+Development setup
+-----------------
 
 First, follow the instructions for performing a development installation of
 NumpyDL (including forking on GitHub): :ref:`numpydl-development-install`
@@ -109,8 +109,8 @@ To be able to run the tests and build the documentation locally, install
 additional requirements with: ``pip install -r requirements-dev.txt`` (adding
 ``--user`` if you want to install to your home directory instead).
 
-3.3. Documentation
-------------------
+Documentation
+-------------
 
 The documentation is generated with `Sphinx <http://sphinx-doc.org>`_. To
 build it locally, run the following commands:
@@ -135,8 +135,8 @@ syntax and conventions used, please refer to the following documents:
 * `A Guide to NumPy/SciPy Documentation <https://github.com/numpy/numpy/blob/master/doc/HOWTO_DOCUMENT.rst.txt>`_
 
 
-3.4. Testing
-------------
+Testing
+-------
 
 NumpyDL has a code coverage of 100%, which has proven very helpful in the past,
 but also creates some duties:
@@ -172,8 +172,8 @@ Finally, for a loop-on-failing mode, do ``pip install pytest-xdist`` and run
 change and run all previously failing tests again.
 
 
-3.5. Sending Pull Requests
---------------------------
+Sending Pull Requests
+---------------------
 
 When you're satisfied with your addition, the tests pass and the documentation
 looks good without any markup errors, commit your changes to a new branch, push
