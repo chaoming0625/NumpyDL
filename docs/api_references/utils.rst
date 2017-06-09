@@ -8,7 +8,6 @@
    :maxdepth: 2
 
    utils/data
-   utils/generic
    utils/random
 
 
@@ -21,17 +20,6 @@
 
    one_hot
    unhot
-
-
-.. npdl/utils/generic.py
-
-
-.. rubric:: :doc:`utils/generic`
-
-.. autosummary::
-   :nosignatures:
-
-   get_from_module
 
 
 .. npdl/utils/random.py

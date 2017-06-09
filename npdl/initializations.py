@@ -13,7 +13,6 @@ import numpy as np
 
 from npdl.utils.random import get_rng
 from npdl.utils.random import get_dtype
-from npdl.utils.generic import get_from_module
 
 
 class Initializer(object):
@@ -258,8 +257,4 @@ def _cast_dtype(res):
 
 _zero = Zero()
 _one = One()
-
-
-def get(identifier):
-    get_from_module(identifier, globals(), 'initialization')
 
