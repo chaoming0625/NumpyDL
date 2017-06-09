@@ -50,10 +50,7 @@ class Model(object):
             validation_split=0., validation_data=None, file=sys.stdout):
 
         # prepare data
-        if np.issubdtype(X.dtype, np.dtype(get_dtype())):
-            train_X, train_Y = X.astype(get_dtype()), Y.astype(get_dtype())
-        else:
-            train_X, train_Y = X, Y
+        train_X, train_Y = X.astype(get_dtype()), Y.astype(get_dtype())
 
         if 1. > validation_split > 0.:
             split = int(train_Y.shape[0] * validation_split)
