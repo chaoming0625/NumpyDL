@@ -27,7 +27,7 @@ created by the objective function downhill until we reach a valley. If you are u
 with gradient descent, you can find a good introduction on optimizing neural networks here [28]_.
 
 
-1. Gradient descent variants
+Gradient descent variants
 ============================
 There are three variants of gradient descent, which differ in how much data we use to compute
 the gradient of the objective function. Depending on the amount of data, we make a trade-off
@@ -141,7 +141,7 @@ In code, instead of iterating over examples, we now iterate over mini-batches of
             params = params - learning_rate * params_grad
 
 
-2. Challenges
+Challenges
 =============
 
 Vanilla mini-batch gradient descent, however, does not guarantee good convergence,
@@ -501,7 +501,7 @@ complex neural network, you should choose one of the adaptive learning rate meth
 
 
 
-3. Parallelizing and distributing SGD
+Parallelizing and distributing SGD
 =====================================
 
 Given the ubiquity of large-scale data solutions and the availability of low-commodity
@@ -570,7 +570,7 @@ empirically that this increased capacity for exploration leads to improved perfo
 finding new local optima.
 
 
-4. Additional strategies for optimizing SGD
+Additional strategies for optimizing SGD
 ===========================================
 
 Finally, we introduce additional strategies that can be used alongside any of the
@@ -641,8 +641,7 @@ helps training particularly deep and complex networks. They suspect that the add
 gives the model more chances to escape and find new local minima, which are more frequent
 for deeper models.
 
-
-5. Conclusion
+Conclusion
 =============
 
 In this blog post, we have initially looked at the three variants of gradient descent,
@@ -653,8 +652,6 @@ asynchronous SGD. Finally, we've considered other strategies to improve SGD such
 and curriculum learning, batch normalization, and early stopping.
 
 
-6. References
-=============
 
 .. [1] Sutton, R. S. (1986). Two problems with backpropagation and other steepest-descent
         learning procedures for networks. Proc. 8th Annual Conf. Cognitive Science Society.
