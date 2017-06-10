@@ -17,9 +17,9 @@ class Embedding(Layer):
 
         else:
             if static is None:
-                self.static = True
-            else:
                 self.static = False
+            else:
+                self.static = static
 
             self.embed_words = embed_words
 
@@ -36,18 +36,18 @@ class Embedding(Layer):
         if self.static:
             return []
         else:
-            return self.embed_words
+            return [self.embed_words, ]
 
     @property
     def grads(self):
         if self.static:
             return []
         else:
-            return self.d_embed_words
+            return [self.d_embed_words, ]
 
     @property
     def param_grads(self):
         if self.static:
             return []
         else:
-            return [(self.embed_words, self.d_embed_words)]
+            return [(self.embed_words, self.d_embed_words), ]
