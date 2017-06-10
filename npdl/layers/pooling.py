@@ -3,34 +3,22 @@
 import numpy as np
 
 from .base import Layer
-from ..initialization import _zero
+from ..initializations import _zero
 
 
 class MeanPooling(Layer):
     """Average pooling operation for spatial data.
 
-    # Arguments
-        pool_size: tuple of 2 integers,
-            factors by which to downscale (vertical, horizontal).
-            (2, 2) will halve the image in each dimension.
-        strides: tuple of 2 integers, or None. Strides values.
-            If None, it will default to `pool_size`.
-        border_mode: 'valid' or 'same'.
-        dim_ordering: 'th' or 'tf'. In 'th' mode, the channels dimension
-            (the depth) is at index 1, in 'tf' mode is it at index 3.
-            It defaults to the `image_dim_ordering` value found in your
-            Keras config file at `~/.keras/keras.json`.
-            If you never set it, then it will be "tf".
+    Parameters
+    ----------
+    pool_size : tuple of 2 integers,
+        factors by which to downscale (vertical, horizontal).
+        (2, 2) will halve the image in each dimension.
 
-    # Input shape
-        4D tensor with shape:
-        `(samples, channels, rows, cols)` if dim_ordering='th'
-        or 4D tensor with shape:
-        `(samples, rows, cols, channels)` if dim_ordering='tf'.
-
-    # Output shape
-        4D tensor with shape:
-        `(nb_samples, channels, pooled_rows, pooled_cols)` if dim_ordering='th'
+    Returns
+    -------
+    4D numpy.array 
+        with shape `(nb_samples, channels, pooled_rows, pooled_cols)` if dim_ordering='th'
         or 4D tensor with shape:
         `(samples, pooled_rows, pooled_cols, channels)` if dim_ordering='tf'.
     """
@@ -122,28 +110,16 @@ class MeanPooling(Layer):
 class MaxPooling(Layer):
     """Max pooling operation for spatial data.
 
-    # Arguments
-        pool_size: tuple of 2 integers,
-            factors by which to downscale (vertical, horizontal).
-            (2, 2) will halve the image in each dimension.
-        strides: tuple of 2 integers, or None. Strides values.
-            If None, it will default to `pool_size`.
-        border_mode: 'valid' or 'same'.
-        dim_ordering: 'th' or 'tf'. In 'th' mode, the channels dimension
-            (the depth) is at index 1, in 'tf' mode is it at index 3.
-            It defaults to the `image_dim_ordering` value found in your
-            Keras config file at `~/.keras/keras.json`.
-            If you never set it, then it will be "tf".
+    Parameters
+    ----------
+    pool_size : tuple of 2 integers,
+        factors by which to downscale (vertical, horizontal).
+        (2, 2) will halve the image in each dimension.
 
-    # Input shape
-        4D tensor with shape:
-        `(samples, channels, rows, cols)` if dim_ordering='th'
-        or 4D tensor with shape:
-        `(samples, rows, cols, channels)` if dim_ordering='tf'.
-
-    # Output shape
-        4D tensor with shape:
-        `(nb_samples, channels, pooled_rows, pooled_cols)` if dim_ordering='th'
+    Returns
+    -------
+    4D numpy.array 
+        with shape `(nb_samples, channels, pooled_rows, pooled_cols)` if dim_ordering='th'
         or 4D tensor with shape:
         `(samples, pooled_rows, pooled_cols, channels)` if dim_ordering='tf'.
     """
@@ -211,7 +187,7 @@ class MaxPooling(Layer):
                 for b in np.arange(nb_axis):
                     for h in np.arange(new_h):
                         for w in np.arange(new_w):
-                            patch = input[a, b, h:h + pool_h, w:w + pool_w]
+                            patch = self.last_input[a, b, h:h + pool_h, w:w + pool_w]
                             max_idx = np.unravel_index(patch.argmax(), patch.shape)
                             h_shift, w_shift = h * pool_h + max_idx[0], w * pool_w + max_idx[1]
                             layer_grads[a, b, h_shift, w_shift] = pre_grad[a, b, a, w]
@@ -222,7 +198,7 @@ class MaxPooling(Layer):
             for a in np.arange(nb_batch):
                 for h in np.arange(new_h):
                     for w in np.arange(new_w):
-                        patch = input[a, h:h + pool_h, w:w + pool_w]
+                        patch = self.last_input[a, h:h + pool_h, w:w + pool_w]
                         max_idx = np.unravel_index(patch.argmax(), patch.shape)
                         h_shift, w_shift = h * pool_h + max_idx[0], w * pool_w + max_idx[1]
                         layer_grads[a, h_shift, w_shift] = pre_grad[a, a, w]

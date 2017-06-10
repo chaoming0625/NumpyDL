@@ -17,7 +17,7 @@
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
-# import os
+import os
 import sys
 
 # sys.path.insert(0, os.path.abspath('.'))
@@ -99,7 +99,7 @@ numpydoc_show_class_members = False
 # a list of builtin themes.
 #
 # html_theme = 'alabaster'
-html_theme = "sphinxdoc"
+# html_theme = "sphinxdoc"
 # html_theme = "haiku"
 # html_theme = "pyramid"
 # html_theme = "nature"
@@ -109,16 +109,32 @@ html_theme = "sphinxdoc"
 #     "relbarbgcolor": "black"
 # }
 
+if os.environ.get('READTHEDOCS') != 'True':
+    try:
+        import sphinx_rtd_theme
+    except ImportError:
+        pass  # assume we have sphinx >= 1.3
+    else:
+        html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
+    html_theme = 'sphinx_rtd_theme'
+
+def setup(app):
+    app.add_stylesheet("fix_rtd.css")
+
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
 # documentation.
 #
-# html_theme_options = {}
+html_theme_options = {
+    'collapse_navigation': False,
+    'display_version': False,
+    'navigation_depth': 3,
+}
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
-# html_static_path = ['_static']
+html_static_path = ['_static']
 
 # -- Options for HTMLHelp output ------------------------------------------
 
@@ -149,8 +165,11 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'numpydl.tex', 'numpydl Documentation',
-     'NumpyDL', 'manual'),
+    (master_doc,
+     'numpydl.tex',
+     'numpydl Documentation',
+     'NumpyDL',
+     'manual'),
 ]
 
 # -- Options for manual page output ---------------------------------------
@@ -158,8 +177,11 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, 'numpydl', 'numpydl Documentation',
-     [author], 1)
+    (master_doc,
+     'numpydl',
+     'numpydl Documentation',
+     [author],
+     1)
 ]
 
 # -- Options for Texinfo output -------------------------------------------
@@ -168,8 +190,12 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    (master_doc, 'numpydl', 'numpydl Documentation',
-     author, 'numpydl', 'One line description of project.',
+    (master_doc,
+     'numpydl',
+     'numpydl Documentation',
+     author,
+     'numpydl',
+     'One line description of project.',
      'Miscellaneous'),
 ]
 

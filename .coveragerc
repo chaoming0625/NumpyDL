@@ -1,2 +1,5 @@
-[run]
-omit = tests/*
+[report]
+omit =
+    tests/*
+    examples/*
+    *__init__*
