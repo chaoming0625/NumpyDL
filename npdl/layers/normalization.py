@@ -9,38 +9,31 @@ from ..initializations import Zero
 
 
 class BatchNormal(Layer):
-    """Batch normalization layer (Ioffe and Szegedy, 2014).
+    """Batch normalization layer (Ioffe and Szegedy, 2014) [1]_ .
 
     Normalize the activations of the previous layer at each batch,
     i.e. applies a transformation that maintains the mean activation
     close to 0 and the activation standard deviation close to 1.
-
-    # Arguments
-        epsilon: small float > 0. Fuzz parameter.
-            Theano expects epsilon >= 1e-5.
-        axis: integer, axis along which to normalize in mode 0. For instance,
-            if your input tensor has shape (samples, channels, rows, cols),
-            set axis to 1 to normalize per feature map (channels axis).
-        momentum: momentum in the computation of the
-            exponential average of the mean and standard deviation
-            of the data, for feature-wise normalization.
-        weights: Initialization weights.
-            List of 2 Numpy arrays, with shapes:
-            `[(input_shape,), (input_shape,)]`
-            Note that the order of this list is [gamma, beta, mean, std]
-        beta_init: name of initialization function for shift parameter
-            (see [initializations](../initializations.md)), or alternatively,
-            Theano/TensorFlow function to use for weights initialization.
-            This parameter is only relevant if you don't pass a `weights` argument.
-        gamma_init: name of initialization function for scale parameter (see
-            [initializations](../initializations.md)), or alternatively,
-            Theano/TensorFlow function to use for weights initialization.
-            This parameter is only relevant if you don't pass a `weights` argument.
-        gamma_regularizer: instance of [WeightRegularizer](../regularizers.md)
-            (eg. L1 or L2 regularization), applied to the gamma vector.
-        beta_regularizer: instance of [WeightRegularizer](../regularizers.md),
-            applied to the beta vector.
-
+    
+    Parameters
+    ----------
+    epsilon ： small float > 0 
+        Fuzz parameter. npdl expects epsilon >= 1e-5.
+    axis : integer
+        axis along which to normalize in mode 0. For instance,
+        if your input tensor has shape (samples, channels, rows, cols),
+        set axis to 1 to normalize per feature map (channels axis).
+    momentum : float
+        momentum in the computation of the
+        exponential average of the mean and standard deviation
+        of the data, for feature-wise normalization.
+    beta_init : npdl.initializations.Initializer
+        name of initialization function for shift parameter, or alternatively,
+        npdl function to use for weights initialization.
+    gamma_init : npdl.initializations.Initializer
+        name of initialization function for scale parameter, or alternatively,
+        npdl function to use for weights initialization.
+    
     # Input shape
         Arbitrary. Use the keyword argument `input_shape`
         (tuple of integers, does not include the samples axis)
@@ -49,8 +42,10 @@ class BatchNormal(Layer):
     # Output shape
         Same shape as input.
 
-    # References
-        - [Batch Normalization: Accelerating Deep Network Training by Reducing Internal Covariate Shift](https://arxiv.org/abs/1502.03167)
+    References
+    ----------
+    ..[1] [Batch Normalization: Accelerating Deep Network Training 
+          by Reducing Internal Covariate Shift](https://arxiv.org/abs/1502.03167)
     """
 
     def __init__(self, epsilon=1e-6, momentum=0.9, axis=0,
