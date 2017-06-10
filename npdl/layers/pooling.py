@@ -187,7 +187,7 @@ class MaxPooling(Layer):
                 for b in np.arange(nb_axis):
                     for h in np.arange(new_h):
                         for w in np.arange(new_w):
-                            patch = input[a, b, h:h + pool_h, w:w + pool_w]
+                            patch = self.last_input[a, b, h:h + pool_h, w:w + pool_w]
                             max_idx = np.unravel_index(patch.argmax(), patch.shape)
                             h_shift, w_shift = h * pool_h + max_idx[0], w * pool_w + max_idx[1]
                             layer_grads[a, b, h_shift, w_shift] = pre_grad[a, b, a, w]
@@ -198,7 +198,7 @@ class MaxPooling(Layer):
             for a in np.arange(nb_batch):
                 for h in np.arange(new_h):
                     for w in np.arange(new_w):
-                        patch = input[a, h:h + pool_h, w:w + pool_w]
+                        patch = self.last_input[a, h:h + pool_h, w:w + pool_w]
                         max_idx = np.unravel_index(patch.argmax(), patch.shape)
                         h_shift, w_shift = h * pool_h + max_idx[0], w * pool_w + max_idx[1]
                         layer_grads[a, h_shift, w_shift] = pre_grad[a, a, w]
