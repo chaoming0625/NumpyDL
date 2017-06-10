@@ -10,6 +10,8 @@ def test_initializer_sample():
     with pytest.raises(NotImplementedError):
         Initializer().call((100, 100))
 
+    assert str(Initializer()) == 'Initializer'
+
 
 def test_shape():
     from npdl.initializations import Initializer
@@ -191,3 +193,22 @@ def test_orthoganal_multi():
     sample = Orthogonal().call((100, 50, 80))
     sample = sample.reshape(100, 50 * 80)
     assert np.allclose(np.dot(sample, sample.T), np.eye(100), atol=1e-6)
+
+
+def test_decompose_size():
+    from npdl.initializations import decompose_size
+
+    size = (10, 20)
+    assert decompose_size(size)[0] == size[0]
+    assert decompose_size(size)[1] == size[1]
+
+    size = (10, 20, 30)
+    dsize = decompose_size(size)
+    assert dsize[0] == dsize[1]
+    assert dsize[0] == int(np.sqrt(np.prod(size)))
+
+    size = (10, 20, 30, 40)
+    dsize = decompose_size(size)
+    assert dsize[0] == size[1] * np.prod(size[2:])
+    assert dsize[1] == size[0] * np.prod(size[2:])
+

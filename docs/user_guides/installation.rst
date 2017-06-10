@@ -17,11 +17,11 @@ or a bigger installer `Anaconda <https://www.continuum.io/downloads>`_ which is 
 leading open data science platform powered by Python and well integrated the efficient
 scientific computing platform `MKL <https://software.intel.com/en-us/forums/intel-math-kernel-library>`_.
 
-1. Prerequisites
-================
+Prerequisites
+=============
 
-1.1. Python + pip
------------------
+Python + pip
+------------
 
 NumpyDL currently requires Python 3.3 or higher to run. Please install Python via
 the package manager of your operating system if it is not included already.
@@ -33,8 +33,8 @@ via ``--user``, or into a `virtual environment
 <http://www.dabapps.com/blog/introduction-to-pip-and-virtualenv-python/>`_
 via ``virtualenv``.
 
-1.2. C compiler
----------------
+C compiler
+----------
 
 Numpy/scipy require a C compiler if you install them via ``pip``. On Linux,
 the default compiler is usually``gcc``, and on Mac OS, it's ``clang``. On
@@ -42,8 +42,8 @@ Windows, we recommend you to install the `Miniconda <https://conda.io/miniconda.
 or `Anaconda <https://www.continuum.io/downloads>`_. Again, please install them via the
 package manager of your operating system.
 
-1.3. numpy/scipy + BLAS
------------------------
+numpy/scipy + BLAS
+------------------
 
 NumpyDL requires numpy of version 1.6.2 or above, and sometimes also requires
 scipy 0.11 or above. Numpy/scipy rely on a BLAS library to provide fast linear
@@ -61,8 +61,8 @@ command. Please refer to the `numpy/scipy build instructions
 .. _numpydl-stable-release:
 
 
-2. Stable NumpyDL release
-=========================
+Stable NumpyDL release
+======================
 
 To install a version that is known to work, run the following command:
 
@@ -82,11 +82,11 @@ into your home directory instead. To upgrade from an earlier installation, add
 .. _numpydl-development-install:
 
 
-3.Development installation
-==========================
+Development installation
+========================
 
-3.1. install from source
-------------------------
+install from source
+-------------------
 
 Alternatively, you can install NumpyDL from source,
 in a way that any changes to your local copy of the source tree take effect
@@ -115,8 +115,8 @@ To install the NumpyDL package itself, in editable mode, run:
 
 As always, add ``--user`` to install it to your home directory instead.
 
-3.2. contribute
----------------
+contribute
+----------
 
 **Optional**: If you plan to contribute to NumpyDL, you will need to fork the
 NumpyDL repository on GitHub. This will create a repository under your user

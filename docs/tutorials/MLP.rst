@@ -1,8 +1,7 @@
 Multi-layer Perceptron
 ======================
 
-
-1. Sigmoid function
+Sigmoid function
 -------------------
 
 BP algorithm is mainly due to the emergence of Sigmoid function, instead of the previous threshold function to construct neurons.
@@ -23,8 +22,8 @@ The value range is (-1,1), which can be used instead of the neuron step function
 Due to the complexity of the network structure, the Sigmoid function is used as the transfer function of the neuron. This is the basic idea of multilayer perceptron backpropagation algorithm.
 
 
-2. BP
------
+BP
+----
 
 BP algorithm is the optimization of the network through the iterative weights makes the actual mapping relationship between input and output and the desired mapping, descent algorithm by adjusting the layer weights for the objective function to minimize the gradient. The sum of the squared error between the predicted output and the expected output of the network on one or all training samples：
 
@@ -51,7 +50,7 @@ For example, a three tier BPN structure is as follows:
 It consists of three layers: input layer, hidden layer and output layer. The unit of each layer is connected with all the units of the adjacent layer, and there is no connection between the units in the same layer. When a pair of learning samples are provided to the network, the activation value of the neuron is transmitted from the input layer to the output layer through the intermediate layers, and the input response of the network is obtained by the neurons in the output layer. Next, according to the direction of reducing the output of the target and the direction of the actual error, the weights of each link are modified from the output layer to the input layer.
 
  
-3. Example
+Example
 ----------
 
 Suppose you have such a network layer:
@@ -67,7 +66,7 @@ Among them, Input data :math:`i1=0.05, i2=0.10`; Output data :math:`o1=0.01, o2=
 Objective: to give input data i1, i2 (0.05 and 0.10), so that the output is as close as possible to the original output o1, o2 (0.01 and 0.99).
 
 
-3.1. Step 1 Forward Propagation
+Step 1 Forward Propagation
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 1. Input layer ----> Hidden layer:
@@ -95,7 +94,7 @@ The values of o1 and o2 in the output layer are calculated:
 This propagation process is finished, we get the output value of [0.75136079, 0.772928465], and the actual value of [0.01, 0.99] far from now, we for the error back-propagation, update the weights, to calculate the output.
 
 
-3.2. Step 2 Back Propagation
+Step 2 Back Propagation
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 1. Calculate the total error

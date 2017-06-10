@@ -2,7 +2,7 @@
 Convolution Neural Networks
 ===========================
 
-1. Introduction
+Introduction
 ===============
 
 Inputs and Outputs
@@ -134,7 +134,7 @@ While this post should be a good start to understanding CNNs, it is by no means 
 
 
 
-2. Understanding
+Understanding
 ================
 
 
@@ -215,8 +215,6 @@ Finally, we also have object segmentation where the task is to output a class la
 
 
 
-3. Reference
-============
 
-https://adeshpande3.github.io/adeshpande3.github.io/A-Beginner's-Guide-To-Understanding-Convolutional-Neural-Networks/
+.. [1] https://adeshpande3.github.io/adeshpande3.github.io/A-Beginner's-Guide-To-Understanding-Convolutional-Neural-Networks/
   

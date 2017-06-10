@@ -45,6 +45,7 @@ developer.
 
 .. toctree::
    :maxdepth: 2
+   :numbered:
 
    user_guides/installation
    user_guides/development
@@ -57,6 +58,7 @@ This is the tutorials of Deep Learning.
 
 .. toctree::
    :maxdepth: 2
+   :numbered:
 
    tutorials/activations
    tutorials/initializations
