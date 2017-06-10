@@ -83,7 +83,39 @@ class TestActivations(object):
             assert np.all(npdl_act.derivative()) == 1.
 
         elif activation == 'elliot':
+            from npdl.activations import Elliot
 
-            pass
+            npdl_act = Elliot()
+            f_res = npdl_act.forward(input)
+
+            assert f_res.shape == input.shape
+            assert npdl_act.derivative().shape == input.shape
+
+        elif activation == 'SymmetricElliot':
+            from npdl.activations import SymmetricElliot
+
+            npdl_act = SymmetricElliot()
+            f_res = npdl_act.forward(input)
+
+            assert f_res.shape == input.shape
+            assert npdl_act.derivative().shape == input.shape
+
+        elif activation == 'SoftPlus':
+            from npdl.activations import SoftPlus
+
+            npdl_act = SoftPlus()
+            f_res = npdl_act.forward(input)
+
+            assert f_res.shape == input.shape
+            assert npdl_act.derivative().shape == input.shape
+
+        elif activation == 'SoftSign':
+            from npdl.activations import SoftSign
+
+            npdl_act = SoftSign()
+            f_res = npdl_act.forward(input)
+
+            assert f_res.shape == input.shape
+            assert npdl_act.derivative().shape == input.shape
 
 
