@@ -33,8 +33,8 @@
 
 
 
-NumpyDL: Deep Learning Library based on Pure Numpy
-==================================================
+NumpyDL: Deep Learning Library based on Pure Numpy, for Education
+=================================================================
 
 NumpyDL is a simple deep learning library based on pure Python/Numpy.Its main features are:
 
