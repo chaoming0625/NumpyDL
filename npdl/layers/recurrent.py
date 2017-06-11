@@ -113,12 +113,10 @@ class SimpleRNN(Recurrent):
         # hiddens.shape == (nb_timesteps, nb_batch, nb_out)
         hiddens = np.transpose(self.last_outputs, (1, 0, 2))
         if self.return_sequence:
-            # check shape #
-            # self.outputs.shape == (nb_batch, nb_timesteps, nb_out)
+            # check shape
             assert hiddens.shape == pre_grad.shape
             nb_timesteps = pre_grad.shape[0]
-            if not self.first_layer:
-                layer_grad = Zero()(pre_grad.shape)
+            layer_grad = Zero()(pre_grad.shape)
 
             for timestep1 in np.arange(nb_timesteps)[::-1]:
                 delta = pre_grad[timestep1] * self.activations[timestep1].derivative()
@@ -140,8 +138,7 @@ class SimpleRNN(Recurrent):
             nb_timesteps = self.last_outputs.shape[1]
             nb_batchs = self.last_outputs.shape[0]
             assert (nb_batchs, self.last_outputs.shape[2]) == pre_grad.shape
-            if not self.first_layer:
-                layer_grad = Zero()(hiddens.shape)
+            layer_grad = Zero()(hiddens.shape)
 
             delta = pre_grad * self.activations[nb_timesteps - 1].derivative()
             for timestep2 in np.arange(nb_timesteps - 1)[::-1]:
@@ -199,13 +196,14 @@ class GRU(Recurrent):
         self.gate_activation_cls = gate_activation.__class__
         self.need_grad = need_grad
 
-        self.U_r, self.U_z, self.U_h = None, None, None
-        self.W_r, self.W_z, self.W_h = None, None, None
-        self.b_r, self.b_z, self.b_h = None, None, None
+        # parameters
+        self.U, self.W, self.b = None, None, None
 
-        self.grad_U_r, self.grad_U_z, self.grad_U_h = None, None, None
-        self.grad_W_r, self.grad_W_z, self.grad_W_h = None, None, None
-        self.grad_b_r, self.grad_b_z, self.grad_b_h = None, None, None
+        # gradients
+        self.grad_U, self.grad_W, self.grad_b = None, None, None
+
+        # cell state
+        self.c = None
 
         self.block_list = []
 
@@ -213,49 +211,43 @@ class GRU(Recurrent):
         n_in = super(GRU, self).connect_to(prev_layer)
 
         # Weights matrices for input x
-        self.U_r = self.init((n_in, self.n_out))
-        self.U_z = self.init((n_in, self.n_out))
-        self.U_h = self.init((n_in, self.n_out))
+        self.U = zero((3, n_in, self.n_out))
+        self.U[0] = self.init((n_in, self.n_out))
+        self.U[1] = self.init((n_in, self.n_out))
+        self.U[2] = self.init((n_in, self.n_out))
 
         # Weights matrices for memory cell
-        self.W_r = self.inner_init((n_in, self.n_out))
-        self.W_z = self.inner_init((n_in, self.n_out))
-        self.W_h = self.inner_init((n_in, self.n_out))
+        self.W = zero((3, self.n_out, self.n_out))
+        self.W_r = self.inner_init((self.n_out, self.n_out))
+        self.W_z = self.inner_init((self.n_out, self.n_out))
+        self.W_h = self.inner_init((self.n_out, self.n_out))
 
         # Biases
+        self.b = zero((3, self.n_out))
         self.b_r = zero((self.n_out,))
         self.b_z = zero((self.n_out,))
         self.b_h = zero((self.n_out,))
 
-        # self.grad_b_v = np.zeros_like(self.b_v)
-        self.grad_W_r = np.zeros_like(self.W_r)
-        self.grad_W_z = np.zeros_like(self.W_z)
-        self.grad_W_h = np.zeros_like(self.W_h)
-        self.grad_U_r = np.zeros_like(self.U_r)
-        self.grad_U_z = np.zeros_like(self.U_z)
-        self.grad_U_h = np.zeros_like(self.U_h)
-        self.grad_b_r = np.zeros_like(self.b_r)
-        self.grad_b_z = np.zeros_like(self.b_z)
-        self.grad_b_h = np.zeros_like(self.b_h)
+        # cell state
+        self.c = zero((self.n_out, ))
 
     def forward(self, input, *args, **kwargs):
-        # reset
-        self.block_list = []
+        # The total number of time steps
+        T = len(x)
+        z = np.zeros((T + 1, self.hidden_dim))
+        r = np.zeros((T + 1, self.hidden_dim))
+        h = np.zeros((T + 1, self.hidden_dim))
+        s = np.zeros((T + 1, self.hidden_dim))
 
-        # record
-        self.last_input = input
+        o = np.zeros((T, self.word_dim))
 
-        # forward
-
-        self.block_list.append(GRUBlock(self, input[0]))
-        self.block_list[-1].forward_propagation()
-
-        for x in input[1:]:
-            self.x_list.append(x)
-            self.block_list.append(GRUBlock(self, x))
-
-            s_old = self.block_list[-2].s
-            self.block_list[-1].forward_propagation(s_old)
+        for t in range(T):
+            z[t] = sigmoid(self.U[0, :, x[t]] + self.W[0].dot(s[t - 1]) + self.b[2])
+            r[t] = sigmoid(self.U[1, :, x[t]] + self.W[1].dot(s[t - 1]) + self.b[1])
+            h[t] = np.tanh(self.U[2, :, x[t]] + self.W[2].dot(s[t - 1] * r[t]) + self.b[0])
+            s[t] = (1 - z[t]) * h[t] + z[t] * s[t - 1]
+            o[t] = softmax(self.V.dot(h[t]) + self.c)
+        return [z, r, h, s, o]
 
     def back_propagation(self, X, Y):
         T = len(Y)
@@ -266,39 +258,6 @@ class GRU(Recurrent):
 
             self.grad_V = np.outer(delta_y, block.s.T)
 
-
-class GRUBlock:
-    def __init__(self, x, gru_net, activation, gate_activation, s_old=None):
-        # init parameter
-        self.x = x
-        self.gru_net = gru_net
-        self.activation_z = activation()
-        self.activation_r = activation()
-        self.activation_h = gate_activation()
-
-        # old params
-        if s_old is None:
-            self.s_old = zero(gru_net.n_out)
-        else:
-            self.s_old = s_old
-
-        # gradients
-        self.grad_z = None
-        self.grad_r = None
-        self.grad_h = None
-        self.grad_s = None
-
-        # forward propagation
-        self.z = self.activation_z(np.dot(self.gru_net.U_z, self.x) +
-                                   np.dot(self.gru_net.W_z, self.s_old) +
-                                   self.gru_net.b_z)
-        self.r = self.activation_r(np.dot(self.gru_net.U_r, self.x) +
-                                   np.dot(self.gru_net.W_r, self.s_old) +
-                                   self.gru_net.b_r)
-        self.h = self.activation_h(np.dot(self.gru_net.U_h, self.x) +
-                                   np.dot(self.gru_net.W_h, self.s_old) * self.r +
-                                   self.gru_net.b_h)
-        self.s = (1 - self.z) * self.h + self.z * self.s_old
 
 
 class LSTM(Recurrent):

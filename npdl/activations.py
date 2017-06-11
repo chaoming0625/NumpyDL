@@ -34,9 +34,14 @@ class Activation(object):
         """
         raise NotImplementedError
 
-    def derivative(self):
+    def derivative(self, input=None):
         """Backward step.
         
+        Parameters
+        ----------
+        input : numpy.array, optional.
+            If provide `input`, this function will not use `last_forward`.
+            
         """
         raise NotImplementedError
 
@@ -76,7 +81,7 @@ class Sigmoid(Activation):
         self.last_forward = 1.0 / (1.0 + np.exp(-input))
         return self.last_forward
 
-    def derivative(self):
+    def derivative(self, input=None):
         """The derivative of sigmoid is 
         
         .. math:: \\frac{dy}{dx} & = (1-\\varphi(x)) \\otimes \\varphi(x)  \\\\
@@ -88,7 +93,8 @@ class Sigmoid(Activation):
         float32
             The derivative of sigmoid function.
         """
-        return np.multiply(self.last_forward, 1 - self.last_forward)
+        last_forward = self.forward(input) if input else self.last_forward
+        return np.multiply(last_forward, 1 - last_forward)
 
 
 # sigmoid-end
@@ -130,7 +136,7 @@ class Tanh(Activation):
         self.last_forward = np.tanh(input)
         return self.last_forward
 
-    def derivative(self):
+    def derivative(self, input=None):
         """The derivative of :meth:`tanh` functions is 
         
         .. math:: \\frac{d}{dx} tanh(x) & = \\frac{d}{dx} \\frac{sinh(x)}{cosh(x)} \\\\
@@ -143,7 +149,8 @@ class Tanh(Activation):
         float32 
             The derivative of tanh function.
         """
-        return 1 - np.power(self.last_forward, 2)
+        last_forward = self.forward(input) if input else self.last_forward
+        return 1 - np.power(last_forward, 2)
 
 
 # tanh-end
@@ -192,7 +199,7 @@ class ReLU(Activation):
         self.last_forward = input
         return np.maximum(0.0, input)
 
-    def derivative(self):
+    def derivative(self, input=None):
         """The point-wise derivative for ReLU is :math:`\\frac{dy}{dx} = 1`, if 
         :math:`x>0`, or :math:`\\frac{dy}{dx} = 0`, if :math:`x<=0`.
         
@@ -201,8 +208,9 @@ class ReLU(Activation):
         float32 
             The derivative of ReLU function.
         """
-        res = np.zeros(self.last_forward.shape, dtype=get_dtype())
-        res[self.last_forward > 0] = 1.
+        last_forward = input if input else self.last_forward
+        res = np.zeros(last_forward.shape, dtype=get_dtype())
+        res[last_forward > 0] = 1.
         return res
 
 
@@ -234,7 +242,7 @@ class Linear(Activation):
         self.last_forward = input
         return input
 
-    def derivative(self):
+    def derivative(self, input=None):
         """The backward also return identity matrix.
         
         Returns
@@ -242,7 +250,8 @@ class Linear(Activation):
         float32 
             The derivative of linear function.
         """
-        return np.ones(self.last_forward.shape, dtype=get_dtype())
+        last_forward = input if input else self.last_forward
+        return np.ones(last_forward.shape, dtype=get_dtype())
 
 
 # linear-end
@@ -279,7 +288,7 @@ class Softmax(Activation):
         s = exp_x / np.sum(exp_x, axis=1, keepdims=True)
         return s
 
-    def derivative(self):
+    def derivative(self, input=None):
         """
         
         Returns
@@ -287,7 +296,8 @@ class Softmax(Activation):
         float32 
             The derivative of Softmax function.
         """
-        return np.ones(self.last_forward.shape, dtype=get_dtype())
+        last_forward = input if input else self.last_forward
+        return np.ones(last_forward.shape, dtype=get_dtype())
 
 # softmax-end
 # elliot-start
@@ -315,7 +325,7 @@ class Elliot(Activation):
         self.last_forward = 1 + np.abs(input * self.steepness)
         return 0.5 * self.steepness * input / self.last_forward + 0.5
 
-    def derivative(self):
+    def derivative(self, input=None):
         """
         
         Returns
@@ -323,7 +333,8 @@ class Elliot(Activation):
         float32 
             The derivative of Elliot function. 
         """
-        return 0.5 * self.steepness / np.power(self.last_forward, 2)
+        last_forward = 1 + np.abs(input * self.steepness) if input else self.last_forward
+        return 0.5 * self.steepness / np.power(last_forward, 2)
 
 
 # elliot-end
@@ -342,7 +353,7 @@ class SymmetricElliot(Activation):
         self.last_forward = 1 + np.abs(input * self.steepness)
         return input * self.steepness / self.last_forward
 
-    def derivative(self):
+    def derivative(self, input=None):
         """
         
         Returns
@@ -350,7 +361,8 @@ class SymmetricElliot(Activation):
         float32 
             The derivative of SymmetricElliot function.
         """
-        return self.steepness / np.power(self.last_forward, 2)
+        last_forward = 1 + np.abs(input * self.steepness) if input else self.last_forward
+        return self.steepness / np.power(last_forward, 2)
 
 # symmetric-elliot-end
 # softplus-start
@@ -379,7 +391,7 @@ class SoftPlus(Activation):
         self.last_forward = np.exp(input)
         return np.log(1 + self.last_forward)
 
-    def derivative(self):
+    def derivative(self, input=None):
         """
         
         Returns
@@ -387,7 +399,8 @@ class SoftPlus(Activation):
         float32 
             The derivative of Softplus function.
         """
-        return self.last_forward / (1 + self.last_forward)
+        last_forward = np.exp(input) if input else self.last_forward
+        return last_forward / (1 + last_forward)
 
 
 # softplus-end
@@ -417,7 +430,7 @@ class SoftSign(Activation):
         self.last_forward = np.abs(input) + 1
         return input / self.last_forward
 
-    def derivative(self):
+    def derivative(self, input=None):
         """
         
         Returns
@@ -425,6 +438,7 @@ class SoftSign(Activation):
         float32 
             The derivative of SoftSign function.
         """
-        return 1. / np.power(self.last_forward, 2)
+        last_forward = np.abs(input) + 1 if input else self.last_forward
+        return 1. / np.power(last_forward, 2)
 
 # softsign-end
