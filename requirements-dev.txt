@@ -10,3 +10,6 @@ python-coveralls
 requests
 six
 
+# application requirements
+flask
+
