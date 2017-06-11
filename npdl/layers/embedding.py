@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 
 
+import numpy as np
+
 from .base import Layer
 from ..initializations import Uniform
 
@@ -26,10 +28,11 @@ class Embedding(Layer):
         self.d_embed_words = None
 
     def forward(self, input, *args, **kwargs):
-        raise NotImplementedError()
+        assert np.ndim(input) == 2
+        return self.embed_words[input]
 
     def backward(self, pre_grad, *args, **kwargs):
-        raise NotImplementedError()
+        raise NotImplementedError
 
     @property
     def params(self):

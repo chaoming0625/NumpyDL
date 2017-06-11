@@ -688,9 +688,9 @@ class BatchLSTM(Recurrent):
 
     @property
     def params(self):
-        return (self.AllW,)
+        return [self.AllW,]
 
     @property
     def grads(self):
-        return (self.d_AllW,)
+        return [self.d_AllW,]
 
