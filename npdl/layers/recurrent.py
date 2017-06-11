@@ -33,6 +33,7 @@ class Recurrent(Layer):
             modeling. Proc. Interspeech, pp338-342, Singapore, Sept. 2010
        
     """
+
     def __init__(self, n_out, n_in=None, init=GlorotUniform(), inner_init=Orthogonal(),
                  activation=Tanh(), return_sequence=False):
         self.n_out = n_out
@@ -323,7 +324,6 @@ class LSTM(Recurrent):
     .. math:: g_t = tanh(U_g x_t + W_g h_{t-1} + b_g)
     .. math:: c_t = f_t \odot c_{t-1} + i_t \odot g_t
     .. math:: h_t = o_t \odot tanh(c_t)
-        
     
     Parameters
     ----------
@@ -413,3 +413,248 @@ class LSTM(Recurrent):
         return self.grad_U_g, self.grad_U_i, self.grad_U_f, self.grad_U_o, \
                self.grad_W_g, self.grad_W_i, self.grad_W_f, self.grad_W_o, \
                self.grad_b_g, self.grad_b_i, self.grad_b_f, self.grad_b_o
+
+
+class BatchLSTM(Recurrent):
+    """Long short-term memory (LSTM) is a special kind of RNN.
+    It is a recurrent neural network (RNN) architecture (an artificial 
+    neural network) proposed in 1997 by Sepp Hochreiter and Jürgen 
+    Schmidhuber [1]_ and further improved in 2000 by Felix Gers et 
+    al.[2]_ Like most RNNs, a LSTM network is universal in the sense 
+    that given enough network units it can compute anything a conventional 
+    computer can compute, provided it has the proper weight matrix, which 
+    may be viewed as its program. 
+
+    .. math:: f_t = \sigma(U_f x_t + W_f h_{t-1} + b_f)
+    .. math:: i_t = \sigma(U_i x_t + W_i h_{t-1} + b_f)
+    .. math:: o_t = \sigma(U_o x_t + W_o h_{t-1} + b_h)
+    .. math:: g_t = tanh(U_g x_t + W_g h_{t-1} + b_g)
+    .. math:: c_t = f_t \odot c_{t-1} + i_t \odot g_t
+    .. math:: h_t = o_t \odot tanh(c_t)
+
+    Parameters
+    ----------
+    gate_activation : npdl.activations.Activation
+        Gate activation.
+    need_grad ： bool
+        If `True`, will calculate gradients.
+    forget_bias_num : int
+        integer.
+
+    References
+    ----------
+    .. [1] Sepp Hochreiter; Jürgen Schmidhuber (1997). "Long short-term 
+          memory". Neural Computation. 9 (8): 1735–1780. doi:10.1162/ne
+          co.1997.9.8.1735. PMID 9377276.
+    .. [2] Felix A. Gers; Jürgen Schmidhuber; Fred Cummins (2000). "Learning 
+          to Forget: Continual Prediction with LSTM". Neural Computation. 12 
+          (10): 2451–2471. doi:10.1162/089976600300015015.
+    """
+
+    def __init__(self, gate_activation=Sigmoid(), need_grad=True,
+                 forget_bias_num=1, **kwargs):
+        super(BatchLSTM, self).__init__(**kwargs)
+
+        self.gate_activation_cls = gate_activation.__class__
+        self.need_grad = need_grad
+        self.forget_bias_num = forget_bias_num
+
+        self.AllW, self.d_AllW = None, None
+        self.c0, self.d_c0 = None, None
+        self.h0, self.d_h0 = None, None
+        self.IFOGf = None
+        self.IFOG = None
+        self.Hin = None
+        self.Ct = None
+        self.C = None
+
+    def connect_to(self, prev_layer=None):
+        """Connection to the previous layer.
+        
+        :param AllW: numpy.array
+                    i   f   o   g
+            bias    
+            x2h
+            h2h
+            
+        """
+        n_in = super(BatchLSTM, self).connect_to(prev_layer)
+        n_out = self.n_out
+
+        # init weights
+        self.AllW = zero((n_in + n_out + 1, 4 * n_out))
+
+        # bias
+        if self.forget_bias_num != 0:
+            self.AllW[0, self.n_out: 2 * self.n_out] = self.forget_bias_num
+        # Weights matrices for input x
+        self.AllW[1:n_in + 1, n_out * 0:n_out * 1] = self.init((n_in, self.n_out))
+        self.AllW[1:n_in + 1, n_out * 1:n_out * 2] = self.init((n_in, self.n_out))
+        self.AllW[1:n_in + 1, n_out * 2:n_out * 3] = self.init((n_in, self.n_out))
+        self.AllW[1:n_in + 1, n_out * 3:n_out * 4] = self.init((n_in, self.n_out))
+        # Weights matrices for memory cell
+        self.AllW[n_in + 1:, n_out * 0:n_out * 1] = self.inner_init((self.n_out, self.n_out))
+        self.AllW[n_in + 1:, n_out * 1:n_out * 2] = self.inner_init((self.n_out, self.n_out))
+        self.AllW[n_in + 1:, n_out * 2:n_out * 3] = self.inner_init((self.n_out, self.n_out))
+        self.AllW[n_in + 1:, n_out * 3:n_out * 4] = self.inner_init((self.n_out, self.n_out))
+
+    def forward(self, input, c0=None, h0=None):
+        """Forward propagation.
+        
+        Parameters
+        ----------
+        input : numpy.array
+            input should be of shape (nb_batch,nb_seq,n_in)
+        c0 : numpy.array or None
+            init cell state
+        h0 : numpy.array or None
+            init hidden state
+        
+        Returns
+        -------
+        numpy.array
+            Forward results.
+        """
+
+        # checking
+        assert np.ndim(input) == 3, 'Only support batch training.'
+        assert input.shape[2] == self.n_in
+
+        # shape
+        nb_batch, nb_seq, n_in = input.shape
+
+        # data
+        input = np.transpose(input, (1, 0, 2))
+        self.c0 = np.zeros((nb_batch, self.n_out)) if c0 is None else c0
+        self.h0 = np.zeros((nb_batch, self.n_out)) if h0 is None else h0
+
+        # Perform the LSTM forward pass with X as the input #
+        # x plus h plus bias, lol
+        xphpb = self.AllW.shape[0]
+        # input [1, xt, ht-1] to each tick of the LSTM
+        Hin = np.zeros((nb_seq, nb_batch, xphpb))
+        # hidden representation of the LSTM (gated cell content)
+        Hout = np.zeros((nb_seq, nb_batch, self.n_out))
+        # input, forget, output, gate (IFOG)
+        IFOG = np.zeros((nb_seq, nb_batch, self.n_out * 4))
+        # after nonlinearity
+        IFOGf = np.zeros((nb_seq, nb_batch, self.n_out * 4))
+        # cell content
+        C = np.zeros((nb_seq, nb_batch, self.n_out))
+        # tanh of cell content
+        Ct = np.zeros((nb_seq, nb_batch, self.n_out))
+        for t in range(nb_seq):
+            # concat [x,h] as input to the LSTM
+            prevh = Hout[t - 1] if t > 0 else self.h0
+            # bias
+            Hin[t, :, 0] = 1
+            Hin[t, :, 1:n_in + 1] = input[t]
+            Hin[t, :, n_in + 1:] = prevh
+            # compute all gate activations. dots: (most work is this line)
+            IFOG[t] = Hin[t].dot(self.AllW)
+            # non-linearities
+            # sigmoids; these are the gates
+            IFOGf[t, :, :3 * self.n_out] = 1.0 / (1.0 + np.exp(-IFOG[t, :, :3 * self.n_out]))
+            # tanh
+            IFOGf[t, :, 3 * self.n_out:] = np.tanh(IFOG[t, :, 3 * self.n_out:])
+            # compute the cell activation
+            prevc = C[t - 1] if t > 0 else self.c0
+            C[t] = IFOGf[t, :, :self.n_out] * IFOGf[t, :, 3 * self.n_out:] + \
+                   IFOGf[t, :, self.n_out:2 * self.n_out] * prevc
+            Ct[t] = np.tanh(C[t])
+            Hout[t] = IFOGf[t, :, 2 * self.n_out:3 * self.n_out] * Ct[t]
+
+        # record
+        self.last_output = np.transpose(Hout, (1, 0, 2))
+        self.IFOGf = IFOGf
+        self.IFOG = IFOG
+        self.Hin = Hin
+        self.Ct = Ct
+        self.C = C
+
+        if self.return_sequence:
+            return self.last_output
+        else:
+            return self.last_output[:, -1, :]
+
+    def backward(self, pre_grad, dcn=None, dhn=None):
+        """Backward propagation.
+        
+        Parameters
+        ----------
+        pre_grad : numpy.array
+            Gradients propagated to this layer.
+        dcn : numpy.array
+            Gradients of cell state at `n` time step.
+        dhn : numpy.array
+            Gradients of hidden state at `n` time step.
+            
+        Returns
+        -------
+        numpy.array
+            The gradients propagated to previous layer.
+        """
+
+        Hout = np.transpose(self.last_output, (1, 0 , 2))
+        nb_seq, batch_size, n_out = Hout.shape
+        input_size = self.AllW.shape[0] - n_out - 1  # -1 due to bias
+
+        self.d_AllW = zero(self.AllW.shape)
+        self.d_h0 = zero((batch_size, n_out))
+
+        # backprop the LSTM
+        dIFOG = zero(self.IFOG.shape)
+        dIFOGf = zero(self.IFOGf.shape)
+        dHin = zero(self.Hin.shape)
+        dC = zero(self.C.shape)
+        layer_grad = zero((nb_seq, batch_size, input_size))
+        # make a copy so we don't have any funny side effects
+        dHout = pre_grad.copy()
+
+        # carry over gradients from later
+        if dcn is not None: dC[nb_seq - 1] += dcn.copy()  
+        if dhn is not None: dHout[nb_seq - 1] += dhn.copy()
+
+        for t in reversed(range(nb_seq)):
+
+            tanhCt = self.Ct[t]
+            dIFOGf[t, :, 2 * n_out:3 * n_out] = tanhCt * dHout[t]
+            # backprop tanh non-linearity first then continue backprop
+            dC[t] += (1 - tanhCt ** 2) * (self.IFOGf[t, :, 2 * n_out:3 * n_out] * dHout[t])
+
+            if t > 0:
+                dIFOGf[t, :, n_out:2 * n_out] = self.C[t - 1] * dC[t]
+                dC[t - 1] += self.IFOGf[t, :, n_out:2 * n_out] * dC[t]
+            else:
+                dIFOGf[t, :, n_out:2 * n_out] = self.c0 * dC[t]
+                self.d_c0 = self.IFOGf[t, :, n_out:2 * n_out] * dC[t]
+            dIFOGf[t, :, :n_out] = self.IFOGf[t, :, 3 * n_out:] * dC[t]
+            dIFOGf[t, :, 3 * n_out:] = self.IFOGf[t, :, :n_out] * dC[t]
+
+            # backprop activation functions
+            dIFOG[t, :, 3 * n_out:] = (1 - self.IFOGf[t, :, 3 * n_out:] ** 2) * dIFOGf[t, :, 3 * n_out:]
+            y = self.IFOGf[t, :, :3 * n_out]
+            dIFOG[t, :, :3 * n_out] = (y * (1.0 - y)) * dIFOGf[t, :, :3 * n_out]
+
+            # backprop matrix multiply
+            self.d_AllW += np.dot(self.Hin[t].transpose(), dIFOG[t])
+            dHin[t] = dIFOG[t].dot(self.AllW.transpose())
+
+            # backprop the identity transforms into Hin
+            layer_grad[t] = dHin[t, :, 1:input_size + 1]
+            if t > 0:
+                dHout[t - 1, :] += dHin[t, :, input_size + 1:]
+            else:
+                self.d_h0 += dHin[t, :, input_size + 1:]
+
+        layer_grad = np.transpose(layer_grad, (1, 0, 2))
+        return layer_grad
+
+    @property
+    def params(self):
+        return (self.AllW,)
+
+    @property
+    def grads(self):
+        return (self.d_AllW,)
+
