@@ -119,6 +119,7 @@ Layers
     * MaxPooling Layer
     * MeanPooling Layer
 * `reccurent.py <npdl/layers/reccurent.py>`_
+    * Recurrent Layer
     * SimpleRNN Layer
 * `shape.py <npdl/layers/shape.py>`_
     * Flatten Layer
@@ -126,40 +127,44 @@ Layers
 Activations
 -----------
 
-* Sigmoid
-* Tanh
-* ReLU
-* Softmax
-* Elliot
-* SymmetricElliot
-* LReLU
-* SoftPlus
-* SoftSign
+* `acitvations <npdl/activations.py>`_
+    * Sigmoid
+    * Tanh
+    * ReLU
+    * Softmax
+    * Elliot
+    * SymmetricElliot
+    * LReLU
+    * SoftPlus
+    * SoftSign
 
 Initializations
 ---------------
 
-* Uniform
-* Normal
-* LecunUniform
-* GlorotUniform
-* GlorotNormal
-* HeNormal
-* HeUniform
-* Orthogonal
+* `initializations <npdl/initializations.py>`_
+    * Uniform
+    * Normal
+    * LecunUniform
+    * GlorotUniform
+    * GlorotNormal
+    * HeNormal
+    * HeUniform
+    * Orthogonal
 
 Objectives
 ----------
 
-* MeanSquaredError
-* HellingerDistance
-* BinaryCrossEntropy
-* SoftmaxCategoricalCrossEntropy
+* `objectives <npdl/objectives.py>`_
+    * MeanSquaredError
+    * HellingerDistance
+    * BinaryCrossEntropy
+    * SoftmaxCategoricalCrossEntropy
 
 
 Optimizers
 ----------
 
-* SGD
+* `optimizers <npdl/optimizers.py>`_
+    * SGD
 
 
