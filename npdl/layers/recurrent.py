@@ -22,6 +22,25 @@ class Recurrent(Layer):
     inputs. This makes them applicable to tasks such as unsegmented 
     connected handwriting recognition[1]_ or speech recognition.[2]_
     
+    Parameters
+    ----------
+    n_out : int
+        hidden number
+    n_in : int or None
+        input dimension
+    nb_batch : int or None
+        batch size
+    nb_seq : int or None
+        sequent length
+    init : npdl.intializations.Initliazer
+        init function
+    inner_init : npdl.intializations.Initliazer
+        inner init function, between hidden to hidden
+    activation : npdl.activations.Activation
+        activation function
+    return_sequence : bool
+        return total sequence or not.
+    
     References
     ----------
     .. [1] A. Graves, M. Liwicki, S. Fernandez, R. Bertolami, H. Bunke, 
@@ -34,10 +53,13 @@ class Recurrent(Layer):
        
     """
 
-    def __init__(self, n_out, n_in=None, init=GlorotUniform(), inner_init=Orthogonal(),
+    def __init__(self, n_out, n_in=None, nb_batch=None, nb_seq=None,
+                 init=GlorotUniform(), inner_init=Orthogonal(),
                  activation=Tanh(), return_sequence=False):
         self.n_out = n_out
         self.n_in = n_in
+        self.nb_batch = nb_batch
+        self.nb_seq = nb_seq
         self.init = init
         self.inner_init = inner_init
         self.activation_cls = activation.__class__
@@ -57,9 +79,9 @@ class Recurrent(Layer):
             n_in = self.n_in
 
         if self.return_sequence:
-            self.out_shape = (None, None, self.n_out)
+            self.out_shape = (self.nb_batch, self.nb_seq, self.n_out)
         else:
-            self.out_shape = (None, self.n_out)
+            self.out_shape = (self.nb_batch, self.n_out)
 
         return n_in
 
@@ -488,15 +510,15 @@ class BatchLSTM(Recurrent):
         if self.forget_bias_num != 0:
             self.AllW[0, self.n_out: 2 * self.n_out] = self.forget_bias_num
         # Weights matrices for input x
-        self.AllW[1:n_in + 1, n_out * 0:n_out * 1] = self.init((n_in, self.n_out))
-        self.AllW[1:n_in + 1, n_out * 1:n_out * 2] = self.init((n_in, self.n_out))
-        self.AllW[1:n_in + 1, n_out * 2:n_out * 3] = self.init((n_in, self.n_out))
-        self.AllW[1:n_in + 1, n_out * 3:n_out * 4] = self.init((n_in, self.n_out))
+        self.AllW[1:n_in + 1, n_out * 0:n_out * 1] = self.init((n_in, n_out))
+        self.AllW[1:n_in + 1, n_out * 1:n_out * 2] = self.init((n_in, n_out))
+        self.AllW[1:n_in + 1, n_out * 2:n_out * 3] = self.init((n_in, n_out))
+        self.AllW[1:n_in + 1, n_out * 3:n_out * 4] = self.init((n_in, n_out))
         # Weights matrices for memory cell
-        self.AllW[n_in + 1:, n_out * 0:n_out * 1] = self.inner_init((self.n_out, self.n_out))
-        self.AllW[n_in + 1:, n_out * 1:n_out * 2] = self.inner_init((self.n_out, self.n_out))
-        self.AllW[n_in + 1:, n_out * 2:n_out * 3] = self.inner_init((self.n_out, self.n_out))
-        self.AllW[n_in + 1:, n_out * 3:n_out * 4] = self.inner_init((self.n_out, self.n_out))
+        self.AllW[n_in + 1:, n_out * 0:n_out * 1] = self.inner_init((n_out, n_out))
+        self.AllW[n_in + 1:, n_out * 1:n_out * 2] = self.inner_init((n_out, n_out))
+        self.AllW[n_in + 1:, n_out * 2:n_out * 3] = self.inner_init((n_out, n_out))
+        self.AllW[n_in + 1:, n_out * 3:n_out * 4] = self.inner_init((n_out, n_out))
 
     def forward(self, input, c0=None, h0=None):
         """Forward propagation.
@@ -609,7 +631,7 @@ class BatchLSTM(Recurrent):
         dC = zero(self.C.shape)
         layer_grad = zero((nb_seq, batch_size, input_size))
         # make a copy so we don't have any funny side effects
-        dHout = pre_grad.copy()
+        dHout = np.transpose(pre_grad, (1, 0, 2)).copy()
 
         # carry over gradients from later
         if dcn is not None: dC[nb_seq - 1] += dcn.copy()  

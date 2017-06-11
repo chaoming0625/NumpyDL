@@ -16,11 +16,11 @@ class Layer(object):
 
     def forward(self, input, *args, **kwargs):
         """ Calculate layer output for given input (forward propagation). """
-        raise NotImplementedError()
+        raise NotImplementedError
 
     def backward(self, pre_grad, *args, **kwargs):
         """ calculate the input gradient """
-        raise NotImplementedError()
+        raise NotImplementedError
 
     def connect_to(self, prev_layer):
         """Propagates the given input through this layer (and only this layer).
@@ -31,11 +31,11 @@ class Layer(object):
             The previous layer to propagate through this layer.
 
         """
-        raise NotImplementedError()
+        raise NotImplementedError
 
     def to_json(self):
         """ To configuration """
-        raise NotImplementedError()
+        raise NotImplementedError
 
     @classmethod
     def from_json(cls, config):
