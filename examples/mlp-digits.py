@@ -10,7 +10,6 @@ def main(max_iter):
     # prepare
     npdl.utils.random.set_seed(1234)
 
-	# 
     # data
     digits = load_digits()
 
@@ -32,5 +31,3 @@ def main(max_iter):
 
 if __name__ == '__main__':
     main(150)
-
-

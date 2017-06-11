@@ -160,7 +160,8 @@ class SimpleRNN(Recurrent):
         # hiddens.shape == (nb_timesteps, nb_batch, nb_out)
         hiddens = np.transpose(self.last_output, (1, 0, 2))
         if self.return_sequence:
-            # check shape #
+            # check shape
+            pre_grad = np.transpose(pre_grad, (1, 0, 2))
             assert hiddens.shape == pre_grad.shape
             nb_timesteps = pre_grad.shape[0]
             layer_grad = Zero()(pre_grad.shape)
