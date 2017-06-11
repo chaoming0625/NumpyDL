@@ -21,11 +21,12 @@ class Recurrent(Layer):
         self.init = init
         self.inner_init = inner_init
         self.activation_cls = activation.__class__
-        self.activations = []
+        self.activation = activation
         self.return_sequence = return_sequence
 
         self.out_shape = None
         self.last_input = None
+        self.last_output = None
 
     def connect_to(self, prev_layer=None):
         if prev_layer is not None:
@@ -72,7 +73,7 @@ class SimpleRNN(Recurrent):
         self.W, self.dW = None, None
         self.U, self.dU = None, None
         self.b, self.db = None, None
-        self.last_outputs = None
+        self.activations = []
 
     def connect_to(self, prev_layer=None):
         n_in = super(SimpleRNN, self).connect_to(prev_layer)
@@ -86,23 +87,23 @@ class SimpleRNN(Recurrent):
 
         self.last_input = input
         nb_batch, nb_timestep, nb_in = input.shape
-        outputs = Zero()((nb_batch, nb_timestep, self.n_out))
+        output = zero((nb_batch, nb_timestep, self.n_out))
 
         if len(self.activations) == 0:
             self.activations = [self.activation_cls() for _ in range(nb_timestep)]
 
-        outputs[:, 0, :] = self.activations[0].forward(np.dot(input[:, 0, :], self.W) + self.b)
+        output[:, 0, :] = self.activations[0].forward(np.dot(input[:, 0, :], self.W) + self.b)
 
         for i in range(1, nb_timestep):
-            outputs[:, i, :] = self.activations[i].forward(
+            output[:, i, :] = self.activations[i].forward(
                 np.dot(input[:, i, :], self.W) +
-                np.dot(outputs[:, i - 1, :], self.U) + self.b)
+                np.dot(output[:, i - 1, :], self.U) + self.b)
 
-        self.last_outputs = outputs
+        self.last_output = output
         if self.return_sequence:
-            return self.last_outputs
+            return self.last_output
         else:
-            return self.last_outputs[:, -1, :]
+            return self.last_output[:, -1, :]
 
     def backward(self, pre_grad, *args, **kwargs):
         zero = Zero()
@@ -111,9 +112,9 @@ class SimpleRNN(Recurrent):
         self.db = zero(self.b.shape)
 
         # hiddens.shape == (nb_timesteps, nb_batch, nb_out)
-        hiddens = np.transpose(self.last_outputs, (1, 0, 2))
+        hiddens = np.transpose(self.last_output, (1, 0, 2))
         if self.return_sequence:
-            # check shape
+            # check shape #
             assert hiddens.shape == pre_grad.shape
             nb_timesteps = pre_grad.shape[0]
             layer_grad = Zero()(pre_grad.shape)
@@ -135,9 +136,9 @@ class SimpleRNN(Recurrent):
                         layer_grad[0] += np.dot(delta, self.W.T)
 
         else:
-            nb_timesteps = self.last_outputs.shape[1]
-            nb_batchs = self.last_outputs.shape[0]
-            assert (nb_batchs, self.last_outputs.shape[2]) == pre_grad.shape
+            nb_timesteps = self.last_output.shape[1]
+            nb_batchs = self.last_output.shape[0]
+            assert (nb_batchs, self.last_output.shape[2]) == pre_grad.shape
             layer_grad = Zero()(hiddens.shape)
 
             delta = pre_grad * self.activations[nb_timesteps - 1].derivative()
@@ -174,6 +175,13 @@ class GRU(Recurrent):
     memory.[1]_ They have fewer parameters than LSTM, as they lack an output 
     gate.[2]_
     
+    .. math::
+        
+        & z_t = \sigmoid(U_z x_t + W_z h_{t-1} + b_z) \\
+        & r_t = \sigmoid(U_r x_t + W_r h_{t-1} + b_r) \\
+        & h_t = tanh(U_h x_t + W_h (s_{t-1} \times r_t) + b_h)
+        & s_t = (1- z_t) \times h_t + z_t \times s_{t-1}
+    
     Parameters
     ----------
     gate_activation : npdl.activations.Activation
@@ -190,74 +198,93 @@ class GRU(Recurrent):
           RNN with Python and Theano – WildML". Wildml.com. Retrieved 
           May 18, 2016.
     """
+
     def __init__(self, gate_activation=Sigmoid(), need_grad=True, **kwargs):
         super(GRU, self).__init__(**kwargs)
 
         self.gate_activation_cls = gate_activation.__class__
+        self.gate_activation = gate_activation
         self.need_grad = need_grad
 
-        # parameters
-        self.U, self.W, self.b = None, None, None
+        self.U_r, self.U_z, self.U_h = None, None, None
+        self.W_r, self.W_z, self.W_h = None, None, None
+        self.b_r, self.b_z, self.b_h = None, None, None
 
-        # gradients
-        self.grad_U, self.grad_W, self.grad_b = None, None, None
-
-        # cell state
-        self.c = None
-
-        self.block_list = []
+        self.grad_U_r, self.grad_U_z, self.grad_U_h = None, None, None
+        self.grad_W_r, self.grad_W_z, self.grad_W_h = None, None, None
+        self.grad_b_r, self.grad_b_z, self.grad_b_h = None, None, None
 
     def connect_to(self, prev_layer=None):
         n_in = super(GRU, self).connect_to(prev_layer)
 
         # Weights matrices for input x
-        self.U = zero((3, n_in, self.n_out))
-        self.U[0] = self.init((n_in, self.n_out))
-        self.U[1] = self.init((n_in, self.n_out))
-        self.U[2] = self.init((n_in, self.n_out))
+        self.U_r = self.init((n_in, self.n_out))
+        self.U_z = self.init((n_in, self.n_out))
+        self.U_h = self.init((n_in, self.n_out))
 
         # Weights matrices for memory cell
-        self.W = zero((3, self.n_out, self.n_out))
         self.W_r = self.inner_init((self.n_out, self.n_out))
         self.W_z = self.inner_init((self.n_out, self.n_out))
         self.W_h = self.inner_init((self.n_out, self.n_out))
 
         # Biases
-        self.b = zero((3, self.n_out))
         self.b_r = zero((self.n_out,))
         self.b_z = zero((self.n_out,))
         self.b_h = zero((self.n_out,))
 
-        # cell state
-        self.c = zero((self.n_out, ))
-
     def forward(self, input, *args, **kwargs):
-        # The total number of time steps
-        T = len(x)
-        z = np.zeros((T + 1, self.hidden_dim))
-        r = np.zeros((T + 1, self.hidden_dim))
-        h = np.zeros((T + 1, self.hidden_dim))
-        s = np.zeros((T + 1, self.hidden_dim))
+        assert np.ndim(input) == 3, 'Only support batch training.'
 
-        o = np.zeros((T, self.word_dim))
+        # record
+        self.last_input = input
 
-        for t in range(T):
-            z[t] = sigmoid(self.U[0, :, x[t]] + self.W[0].dot(s[t - 1]) + self.b[2])
-            r[t] = sigmoid(self.U[1, :, x[t]] + self.W[1].dot(s[t - 1]) + self.b[1])
-            h[t] = np.tanh(self.U[2, :, x[t]] + self.W[2].dot(s[t - 1] * r[t]) + self.b[0])
-            s[t] = (1 - z[t]) * h[t] + z[t] * s[t - 1]
-            o[t] = softmax(self.V.dot(h[t]) + self.c)
-        return [z, r, h, s, o]
+        # dim
+        nb_batch, nb_timesteps, nb_in = input.shape
 
-    def back_propagation(self, X, Y):
-        T = len(Y)
+        # outputs
+        output = zero((nb_batch, nb_timesteps, self.n_out))
 
-        for t in np.arange(T)[::-1]:
-            block = self.block_list[t]
-            delta_y = block.o - Y[t]
+        # forward
+        for i in range(nb_timesteps):
+            # data
+            s_pre = zero((nb_batch, self.n_out)) if i == 0 else output[:, i - 1, :]
+            x_now = input[:, i, :]
 
-            self.grad_V = np.outer(delta_y, block.s.T)
+            # computation
+            z_now = self.gate_activation.forward(np.dot(x_now, self.U_z) +
+                                                 np.dot(s_pre, self.W_z) +
+                                                 self.b_z)
+            r_now = self.gate_activation.forward(np.dot(x_now, self.U_r) +
+                                                 np.dot(s_pre, self.W_r) +
+                                                 self.b_r)
+            h_now = self.activation.forward(np.dot(x_now, self.U_h) +
+                                            np.dot(s_pre * r_now, self.W_h) +
+                                            self.b_h)
+            output[:, i, :] = (1 - z_now) * h_now + z_now * s_pre
 
+        # record
+        self.last_output = output
+
+        # return
+        if self.return_sequence:
+            return self.last_output
+        else:
+            return self.last_output[:, -1, :]
+
+    def backward(self, pre_grad, *args, **kwargs):
+        raise NotImplementedError
+
+    @property
+    def params(self):
+        return self.U_r, self.U_z, self.U_h, \
+               self.W_r, self.W_z, self.W_h, \
+               self.b_r, self.b_z, self.b_h
+
+    @property
+    def grads(self):
+        return self.grad_U_r, self.grad_U_z, self.grad_U_h, \
+               self.grad_W_r, self.grad_W_z, self.grad_W_h, \
+               self.grad_b_r, self.grad_b_z, self.grad_b_h
 
 
 class LSTM(Recurrent):
@@ -268,6 +295,16 @@ class LSTM(Recurrent):
     in the sense that given enough network units it can compute anything 
     a conventional computer can compute, provided it has the proper weight 
     matrix, which may be viewed as its program. 
+    
+    .. math::
+        
+        & f_t = \sigmoid(U_f x_t + W_f h_{t-1} + b_f) \
+        & i_t = \sigmoid(U_i x_t + W_i h_{t-1} + b_f) \
+        & o_t = \sigmoid(U_o x_t + W_o h_{t-1} + b_h) \
+        & g_t = tanh(U_g x_t + W_g h_{t-1} + b_g) \
+        & c_t = f_t \times c_{t-1} + i_t \times g_t \
+        & h_t = o_t * tanh(c_t)
+        
     
     Parameters
     ----------
@@ -324,24 +361,7 @@ class LSTM(Recurrent):
         self.b_o = zero((self.n_out,))
 
     def forward(self, input, *args, **kwargs):
-        # reset
-        self.block_list = []
-
-        # record
-        self.last_input = input
-
-        # forward
-        self.block_list.append(LSTMBlock(x=input[0],
-                                         lstm_net=self,
-                                         activation=self.activation_cls,
-                                         gate_activation=self.gate_activation_cls))
-        for x in input[1:]:
-            self.block_list.append(LSTMBlock(x=x,
-                                             lstm_net=self,
-                                             activation=self.activation_cls(),
-                                             gate_activation=self.gate_activation_cls(),
-                                             s_old=self.block_list[-1].s,
-                                             c_old=self.block_list[-1].c))
+        raise NotImplementedError
 
     def backward(self, pre_grad, *args, **kwargs):
         # reset
@@ -361,48 +381,7 @@ class LSTM(Recurrent):
         self.grad_b_o = zero(self.b_o.shape)
 
         # backward
-        x = self.last_input
-        T = len(pre_grad)
-        dc_next = zero((self.n_out,))
-
-        for t in np.arange(T)[::-1]:
-            block = self.block_list[t]
-            block.grad_s = pre_grad[t]
-
-            if t != T - 1:
-                next_block = self.block_list[t + 1]
-                dc_next = next_block.grad_c * next_block.f
-                ds = np.dot(self.W_i.T, tmp_i)
-                ds += np.dot(self.W_f.T, tmp_f)
-                ds += np.dot(self.W_o.T, tmp_o)
-                ds += np.dot(self.W_g.T, tmp_g)
-                block.grad_s += ds
-
-            block.grad_c = block.o * block.grad_s + dc_next
-            block.grad_o = block.grad_s * block.c
-            block.grad_i = block.grad_c * block.g
-            block.grad_f = block.grad_c * block.c_old
-            block.grad_g = block.grad_s * block.i
-
-            tmp_i = block.activation_i.derivative()
-            tmp_f = block.activation_f.derivative()
-            tmp_o = block.activation_o.derivative()
-            tmp_g = block.activation_g.derivative()
-
-            self.grad_U_i += np.outer(tmp_i, x[t])
-            self.grad_U_f += np.outer(tmp_f, x[t])
-            self.grad_U_g += np.outer(tmp_g, x[t])
-            self.grad_U_o += np.outer(tmp_o, x[t])
-
-            self.grad_b_g = tmp_g
-            self.grad_b_i = tmp_i
-            self.grad_b_f = tmp_f
-            self.grad_b_o = tmp_o
-
-            self.grad_W_i += np.outer(tmp_i, block.s_old)
-            self.grad_W_f += np.outer(tmp_f, block.s_old)
-            self.grad_W_g += np.outer(tmp_g, block.s_old)
-            self.grad_W_o += np.outer(tmp_o, block.s_old)
+        raise NotImplementedError
 
     @property
     def params(self):
@@ -415,46 +394,3 @@ class LSTM(Recurrent):
         return self.grad_U_g, self.grad_U_i, self.grad_U_f, self.grad_U_o, \
                self.grad_W_g, self.grad_W_i, self.grad_W_f, self.grad_W_o, \
                self.grad_b_g, self.grad_b_i, self.grad_b_f, self.grad_b_o
-
-
-class LSTMBlock:
-    def __init__(self, x, lstm_net, activation, gate_activation, s_old=None, c_old=None):
-        # init parameters
-        self.x = x
-        self.lstm_net = lstm_net
-        self.activation_g = activation()
-        self.activation_i = gate_activation()
-        self.activation_f = gate_activation()
-        self.activation_o = gate_activation()
-
-        # old params
-        if s_old is None:
-            s_old = zero((self.lstm_net.n_out,))
-        if c_old is None:
-            c_old = zero((self.lstm_net.n_out,))
-        self.s_old = s_old
-        self.c_old = c_old
-
-        # gradients
-        self.grad_s = None
-        self.grad_c = None
-        self.grad_o = None
-        self.grad_i = None
-        self.grad_f = None
-
-        # forward propagation
-        self.i = self.activation_i(np.dot(self.lstm_net.U_i, self.x) +
-                                   np.dot(self.lstm_net.W_i, s_old) +
-                                   self.lstm_net.b_i)
-        self.o = self.activation_o(np.dot(self.lstm_net.U_o, self.x) +
-                                   np.dot(self.lstm_net.W_o, s_old) +
-                                   self.lstm_net.b_o)
-        self.f = self.activation_f(np.dot(self.lstm_net.U_f, self.x) +
-                                   np.dot(self.lstm_net.W_f, s_old) +
-                                   self.lstm_net.b_f)
-        self.g = self.activation_g(np.dot(self.lstm_net.U_g, self.x) +
-                                   np.dot(self.lstm_net.W_g, s_old) +
-                                   self.lstm_net.b_g)
-        self.c = self.c_old * self.f + self.g * self.i
-        self.s = self.c * self.o
-
