@@ -14,6 +14,25 @@ zero = Zero()
 
 
 class Recurrent(Layer):
+    """A recurrent neural network (RNN) is a class of artificial neural 
+    network where connections between units form a directed cycle. 
+    This creates an internal state of the network which allows it to 
+    exhibit dynamic temporal behavior. Unlike feedforward neural networks, 
+    RNNs can use their internal memory to process arbitrary sequences of 
+    inputs. This makes them applicable to tasks such as unsegmented 
+    connected handwriting recognition[1]_ or speech recognition.[2]_
+    
+    References
+    ----------
+    .. [1] A. Graves, M. Liwicki, S. Fernandez, R. Bertolami, H. Bunke, 
+            J. Schmidhuber. A Novel Connectionist System for Improved 
+            Unconstrained Handwriting Recognition. IEEE Transactions on 
+            Pattern Analysis and Machine Intelligence, vol. 31, no. 5, 2009.
+    .. [2] H. Sak and A. W. Senior and F. Beaufays. Long short-term memory 
+            recurrent neural network architectures for large scale acoustic 
+            modeling. Proc. Interspeech, pp338-342, Singapore, Sept. 2010
+       
+    """
     def __init__(self, n_out, n_in=None, init=GlorotUniform(), inner_init=Orthogonal(),
                  activation=Tanh(), return_sequence=False):
         self.n_out = n_out
@@ -46,6 +65,10 @@ class Recurrent(Layer):
 
 class SimpleRNN(Recurrent):
     """Fully-connected RNN where the output is to be fed back to input.
+    
+    .. math::
+        
+        o_t = tanh(U_t x_t + W_t o_{t-1} + b_t)
     
     Parameters
     ----------
