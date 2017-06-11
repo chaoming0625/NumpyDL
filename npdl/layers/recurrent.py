@@ -544,6 +544,8 @@ class BatchLSTM(Recurrent):
 
         # shape
         nb_batch, nb_seq, n_in = input.shape
+        self.nb_batch = nb_batch
+        self.nb_seq = nb_seq
 
         # data
         input = np.transpose(input, (1, 0, 2))
@@ -631,13 +633,24 @@ class BatchLSTM(Recurrent):
         dC = zero(self.C.shape)
         layer_grad = zero((nb_seq, batch_size, input_size))
         # make a copy so we don't have any funny side effects
+
+        # prepare layer gradients
+        if self.return_sequence:
+            timesteps = list(range(nb_seq))[::-1]
+            assert np.ndim(pre_grad) == 3
+        else:
+            timesteps = [nb_seq-1]
+            assert np.ndim(pre_grad) == 2
+            tmp = zero((self.nb_batch, self.nb_seq, self.n_out))
+            tmp[:, -1, :] = pre_grad
+            pre_grad = tmp
         dHout = np.transpose(pre_grad, (1, 0, 2)).copy()
 
         # carry over gradients from later
-        if dcn is not None: dC[nb_seq - 1] += dcn.copy()  
+        if dcn is not None: dC[nb_seq - 1] += dcn.copy()
         if dhn is not None: dHout[nb_seq - 1] += dhn.copy()
 
-        for t in reversed(range(nb_seq)):
+        for t in timesteps:
 
             tanhCt = self.Ct[t]
             dIFOGf[t, :, 2 * n_out:3 * n_out] = tanhCt * dHout[t]

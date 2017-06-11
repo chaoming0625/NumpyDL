@@ -28,10 +28,10 @@ def main(max_iter, corpus_path=os.path.join(os.path.dirname(__file__), 'data/lm/
 
     print("Building model ...")
     net = npdl.Model()
-    net.add(npdl.layers.BatchLSTM(n_out=300, n_in=vocab_size, return_sequence=True,
+    net.add(npdl.layers.BatchLSTM(n_out=300, n_in=vocab_size, return_sequence=False,
                                   nb_batch=batch_size, nb_seq=time_steps))
-    net.add(npdl.layers.MeanPooling(pool_size=(time_steps, 1)))
-    net.add(npdl.layers.Flatten())
+    # net.add(npdl.layers.MeanPooling(pool_size=(time_steps, 1)))
+    # net.add(npdl.layers.Flatten())
     net.add(npdl.layers.Softmax(n_out=vocab_size))
     net.compile(loss=npdl.objectives.SCCE(), optimizer=npdl.optimizers.SGD(lr=0.00001, clip=5))
 
