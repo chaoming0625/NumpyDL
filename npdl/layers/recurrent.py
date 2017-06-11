@@ -75,11 +75,11 @@ class SimpleRNN(Recurrent):
     output_dim: dimension of the internal projections and the final output.
     init: weight initialization function.
         Can be the name of an existing function (str),
-        or a Theano function (see: [initializations](../initializations.md)).
+        or a npdl function.
     inner_init: initialization function of the inner cells.
     activation: activation function.
         Can be the name of an existing function (str),
-        or a Theano function (see: [activations](../activations.md)).
+        or a npdl function.
     return_sequence: if `return_sequences`, 3D `numpy.array` with shape
             `(batch_size, timesteps, units)` will be returned. Else, return 
             2D `numpy.array` with shape `(batch_size, units)`.
@@ -198,13 +198,11 @@ class GRU(Recurrent):
     memory.[1]_ They have fewer parameters than LSTM, as they lack an output 
     gate.[2]_
     
-    .. math::
+    .. math:: z_t = \sigma(U_z x_t + W_z h_{t-1} + b_z)
+    .. math:: z_t = r_t = \sigma(U_r x_t + W_r h_{t-1} + b_r)
+    .. math:: h_t = tanh(U_h x_t + W_h (s_{t-1} \odot r_t) + b_h)
+    .. math:: s_t = (1- z_t) \odot h_t + z_t \odot s_{t-1}
         
-        & z_t = \sigmoid(U_z x_t + W_z h_{t-1} + b_z) \\
-        & r_t = \sigmoid(U_r x_t + W_r h_{t-1} + b_r) \\
-        & h_t = tanh(U_h x_t + W_h (s_{t-1} \times r_t) + b_h)
-        & s_t = (1- z_t) \times h_t + z_t \times s_{t-1}
-    
     Parameters
     ----------
     gate_activation : npdl.activations.Activation
@@ -214,10 +212,10 @@ class GRU(Recurrent):
     
     References
     ----------
-    ..[1] Chung, Junyoung; Gulcehre, Caglar; Cho, KyungHyun; Bengio, Yoshua 
+    .. [1] Chung, Junyoung; Gulcehre, Caglar; Cho, KyungHyun; Bengio, Yoshua 
           (2014). "Empirical Evaluation of Gated Recurrent Neural Networks on 
           Sequence Modeling". arXiv:1412.3555 Freely accessible [cs.NE].
-    ..[2] "Recurrent Neural Network Tutorial, Part 4 – Implementing a GRU/LSTM 
+    .. [2] "Recurrent Neural Network Tutorial, Part 4 – Implementing a GRU/LSTM 
           RNN with Python and Theano – WildML". Wildml.com. Retrieved 
           May 18, 2016.
     """
@@ -319,14 +317,12 @@ class LSTM(Recurrent):
     a conventional computer can compute, provided it has the proper weight 
     matrix, which may be viewed as its program. 
     
-    .. math::
-        
-        & f_t = \sigmoid(U_f x_t + W_f h_{t-1} + b_f) \
-        & i_t = \sigmoid(U_i x_t + W_i h_{t-1} + b_f) \
-        & o_t = \sigmoid(U_o x_t + W_o h_{t-1} + b_h) \
-        & g_t = tanh(U_g x_t + W_g h_{t-1} + b_g) \
-        & c_t = f_t \times c_{t-1} + i_t \times g_t \
-        & h_t = o_t * tanh(c_t)
+    .. math:: f_t = \sigma(U_f x_t + W_f h_{t-1} + b_f)
+    .. math:: i_t = \sigma(U_i x_t + W_i h_{t-1} + b_f)
+    .. math:: o_t = \sigma(U_o x_t + W_o h_{t-1} + b_h)
+    .. math:: g_t = tanh(U_g x_t + W_g h_{t-1} + b_g)
+    .. math:: c_t = f_t \odot c_{t-1} + i_t \odot g_t
+    .. math:: h_t = o_t \odot tanh(c_t)
         
     
     Parameters
@@ -338,10 +334,10 @@ class LSTM(Recurrent):
     
     References
     ----------
-    ..[1] Sepp Hochreiter; Jürgen Schmidhuber (1997). "Long short-term 
+    .. [1] Sepp Hochreiter; Jürgen Schmidhuber (1997). "Long short-term 
           memory". Neural Computation. 9 (8): 1735–1780. doi:10.1162/ne
           co.1997.9.8.1735. PMID 9377276.
-    ..[2] Felix A. Gers; Jürgen Schmidhuber; Fred Cummins (2000). "Learning 
+    .. [2] Felix A. Gers; Jürgen Schmidhuber; Fred Cummins (2000). "Learning 
           to Forget: Continual Prediction with LSTM". Neural Computation. 12 
           (10): 2451–2471. doi:10.1162/089976600300015015.
     """

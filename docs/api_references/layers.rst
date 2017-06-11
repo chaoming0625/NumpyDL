@@ -87,6 +87,7 @@
 .. autosummary::
    :nosignatures:
 
+    Recurrent
     SimpleRNN
     GRU
     LSTM

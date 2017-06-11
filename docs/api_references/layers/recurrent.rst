@@ -9,6 +9,9 @@ Recurrent Layers
 .. currentmodule:: npdl.layers
 
 
+.. autoclass:: Recurrent
+   :members:
+
 .. autoclass:: SimpleRNN
    :members:
 
