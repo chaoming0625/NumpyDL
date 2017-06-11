@@ -41,9 +41,8 @@ NumpyDL is a simple deep learning library based on pure Python/Numpy.Its main fe
 * *Pure* in Numpy and *native* to Python
 * Support basic *automatic differentiation*
 * Support *commonly used models*, such as MLP, RNNs, GRUs, LSTMs and CNNs
-* *Perfect documents* and easy to learn deep learning knowledge
-* Flexible network configurations and learning algorithms.
-* API like Keras deep learning library
+* *Tutorials* to learn deep learning knowledge
+* API like `Keras` deep learning library
 
 
 Documentation
