@@ -91,6 +91,7 @@
     SimpleRNN
     GRU
     LSTM
+    BatchLSTM
 
 .. npdl/layers/shape.py
 

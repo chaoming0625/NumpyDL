@@ -32,6 +32,7 @@ from .recurrent import Recurrent
 from .recurrent import SimpleRNN
 from .recurrent import GRU
 from .recurrent import LSTM
+from .recurrent import BatchLSTM
 
 
 # convolution

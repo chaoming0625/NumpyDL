@@ -12,6 +12,7 @@ Recurrent Layers
 .. autoclass:: Recurrent
    :members:
 
+
 .. autoclass:: SimpleRNN
    :members:
 
@@ -23,4 +24,7 @@ Recurrent Layers
 .. autoclass:: LSTM
    :members:
 
+
+.. autoclass:: BatchLSTM
+   :members:
 
