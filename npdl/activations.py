@@ -9,9 +9,12 @@ Together with the PSP function (which is applied first) this defines the
 unit type. Neural Networks supports a wide range of activation functions.
 """
 
+import copy
 
 import numpy as np
+
 from npdl.utils.random import get_dtype
+
 
 # activation-start
 
@@ -20,6 +23,7 @@ class Activation(object):
     """Base class for activations.
     
     """
+
     def __init__(self):
         self.last_forward = None
 
@@ -243,7 +247,8 @@ class Linear(Activation):
         return input
 
     def derivative(self, input=None):
-        """The backward also return identity matrix.
+        """Backward propagation.
+        The backward also return identity matrix.
         
         Returns
         -------
@@ -289,7 +294,7 @@ class Softmax(Activation):
         return s
 
     def derivative(self, input=None):
-        """
+        """Backward propagation.
         
         Returns
         -------
@@ -298,6 +303,7 @@ class Softmax(Activation):
         """
         last_forward = input if input else self.last_forward
         return np.ones(last_forward.shape, dtype=get_dtype())
+
 
 # softmax-end
 # elliot-start
@@ -322,11 +328,23 @@ class Elliot(Activation):
         self.steepness = steepness
 
     def forward(self, input):
+        """Forward propagation.
+
+        Parameters
+        ----------
+        x : float32
+            The activation (the summed, weighted input of a neuron).
+
+        Returns
+        -------
+        float32
+            The output of the softplus function applied to the activation.
+        """
         self.last_forward = 1 + np.abs(input * self.steepness)
         return 0.5 * self.steepness * input / self.last_forward + 0.5
 
     def derivative(self, input=None):
-        """
+        """Backward propagation.
         
         Returns
         -------
@@ -345,16 +363,29 @@ class SymmetricElliot(Activation):
     """Elliot symmetric sigmoid transfer function.
     
     """
+
     def __init__(self, steepness=1):
         super(SymmetricElliot, self).__init__()
         self.steepness = steepness
 
     def forward(self, input):
+        """Forward propagation.
+
+        Parameters
+        ----------
+        x : float32
+            The activation (the summed, weighted input of a neuron).
+
+        Returns
+        -------
+        float32
+            The output of the softplus function applied to the activation.
+        """
         self.last_forward = 1 + np.abs(input * self.steepness)
         return input * self.steepness / self.last_forward
 
     def derivative(self, input=None):
-        """
+        """Backward propagation.
         
         Returns
         -------
@@ -363,6 +394,7 @@ class SymmetricElliot(Activation):
         """
         last_forward = 1 + np.abs(input * self.steepness) if input else self.last_forward
         return self.steepness / np.power(last_forward, 2)
+
 
 # symmetric-elliot-end
 # softplus-start
@@ -392,7 +424,7 @@ class SoftPlus(Activation):
         return np.log(1 + self.last_forward)
 
     def derivative(self, input=None):
-        """
+        """Backward propagation.
         
         Returns
         -------
@@ -411,11 +443,12 @@ class SoftSign(Activation):
     """SoftSign activation function.
     
     """
+
     def __init__(self):
         super(SoftSign, self).__init__()
 
     def forward(self, input):
-        """
+        """Forward propagation.
 
         Parameters
         ----------
@@ -431,7 +464,7 @@ class SoftSign(Activation):
         return input / self.last_forward
 
     def derivative(self, input=None):
-        """
+        """Backward propagation.
         
         Returns
         -------
@@ -441,4 +474,34 @@ class SoftSign(Activation):
         last_forward = np.abs(input) + 1 if input else self.last_forward
         return 1. / np.power(last_forward, 2)
 
+
 # softsign-end
+
+
+def get(activation):
+    if activation.__class__.__name__ == 'str':
+        if activation in ['sigmoid', 'Sigmoid']:
+            return Sigmoid()
+        if activation in ['tan', 'tanh', 'Tanh']:
+            return Tanh()
+        if activation in ['relu', 'ReLU', 'RELU']:
+            return ReLU()
+        if activation in ['linear', 'Linear']:
+            return Linear()
+        if activation in ['softmax', 'Softmax']:
+            return Softmax()
+        if activation in ['elliot', 'Elliot']:
+            return Elliot()
+        if activation in ['symmetric_elliot', 'SymmetricElliot']:
+            return SymmetricElliot()
+        if activation in ['SoftPlus', 'soft_plus', 'softplus']:
+            return SoftPlus()
+        if activation in ['SoftSign', 'softsign', 'soft_sign']:
+            return SoftSign()
+        raise ValueError('Unknown activation name: {}.'.format(activation))
+
+    elif isinstance(activation, Activation):
+        return copy.deepcopy(activation)
+
+    else:
+        raise ValueError("Unknown type: {}.".format(activation.__class__.__name__))

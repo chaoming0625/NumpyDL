@@ -88,7 +88,7 @@ class MeanPooling(Layer):
                     for h in np.arange(new_h):
                         for w in np.arange(new_w):
                             h_shift, w_shift = h * pool_h, w * pool_w
-                            layer_grads[a, b, h_shift: h_shift+pool_h, w_shift: w_shift+pool_w] = \
+                            layer_grads[a, b, h_shift: h_shift + pool_h, w_shift: w_shift + pool_w] = \
                                 pre_grad[a, b, h, w] / length
 
         elif np.ndim(pre_grad) == 3:
@@ -98,7 +98,7 @@ class MeanPooling(Layer):
                 for h in np.arange(new_h):
                     for w in np.arange(new_w):
                         h_shift, w_shift = h * pool_h, w * pool_w
-                        layer_grads[a, h_shift: h_shift+pool_h, w_shift: w_shift+pool_w] = \
+                        layer_grads[a, h_shift: h_shift + pool_h, w_shift: w_shift + pool_w] = \
                             pre_grad[a, h, w] / length
 
         else:
@@ -123,6 +123,7 @@ class MaxPooling(Layer):
         or 4D tensor with shape:
         `(samples, pooled_rows, pooled_cols, channels)` if dim_ordering='tf'.
     """
+
     def __init__(self, pool_size):
         self.pool_size = pool_size
 

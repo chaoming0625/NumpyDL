@@ -19,6 +19,7 @@ Assuming you have a simple neural network for 3-way classification:
 
 """
 
+import copy
 import numpy as np
 
 
@@ -293,4 +294,32 @@ class SoftmaxCategoricalCrossEntropy(Objective):
 
 
 SCCE = SoftmaxCategoricalCrossEntropy
+
+
+def get(objective):
+    if objective.__class__.__name__ == 'str':
+        if objective in ['mse', 'MSE']:
+            return MSE()
+        if objective in ['mean_squared_error', 'MeanSquaredError']:
+            return MeanSquaredError()
+        if objective in ['hellinger_distance', 'HellingerDistance']:
+            return HellingerDistance()
+        if objective in ['hed', 'HeD']:
+            return HeD()
+        if objective in ['binary_cross_entropy', 'BinaryCrossEntropy']:
+            return BinaryCrossEntropy()
+        if objective in ['bce', 'BCE']:
+            return BCE()
+        if objective in ['softmax_categorical_cross_entropy', 'SoftmaxCategoricalCrossEntropy']:
+            return SoftmaxCategoricalCrossEntropy()
+        if objective in ['scce', 'SCCE']:
+            return SCCE()
+        raise ValueError('Unknown objective name: {}.'.format(objective))
+
+    elif isinstance(objective, Objective):
+        return copy.deepcopy(objective)
+
+    else:
+        raise ValueError("Unknown type: {}.".format(objective.__class__.__name__))
+
 

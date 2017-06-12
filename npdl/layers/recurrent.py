@@ -4,10 +4,8 @@
 import numpy as np
 
 from .base import Layer
-from ..activations import Sigmoid
-from ..activations import Tanh
-from ..initializations import GlorotUniform
-from ..initializations import Orthogonal
+from .. import activations
+from .. import initializations
 from ..initializations import _one
 from ..initializations import _zero
 
@@ -53,16 +51,16 @@ class Recurrent(Layer):
     """
 
     def __init__(self, n_out, n_in=None, nb_batch=None, nb_seq=None,
-                 init=GlorotUniform(), inner_init=Orthogonal(),
-                 activation=Tanh(), return_sequence=False):
+                 init='glorot_uniform', inner_init='orthogonal',
+                 activation='tanh', return_sequence=False):
         self.n_out = n_out
         self.n_in = n_in
         self.nb_batch = nb_batch
         self.nb_seq = nb_seq
-        self.init = init
-        self.inner_init = inner_init
-        self.activation_cls = activation.__class__
-        self.activation = activation
+        self.init = initializations.get(init)
+        self.inner_init = initializations.get(inner_init)
+        self.activation_cls = activations.get(activation).__class__
+        self.activation = activations.get(activation)
         self.return_sequence = return_sequence
 
         self.out_shape = None
@@ -245,11 +243,11 @@ class GRU(Recurrent):
           May 18, 2016.
     """
 
-    def __init__(self, gate_activation=Sigmoid(), need_grad=True, **kwargs):
+    def __init__(self, gate_activation='sigmoid', need_grad=True, **kwargs):
         super(GRU, self).__init__(**kwargs)
 
-        self.gate_activation_cls = gate_activation.__class__
-        self.gate_activation = gate_activation
+        self.gate_activation_cls = activations.get(gate_activation).__class__
+        self.gate_activation = activations.get(gate_activation)
         self.need_grad = need_grad
 
         self.U_r, self.U_z, self.U_h = None, None, None
@@ -368,11 +366,11 @@ class LSTM(Recurrent):
           (10): 2451–2471. doi:10.1162/089976600300015015.
     """
 
-    def __init__(self, gate_activation=Sigmoid(), need_grad=True, forget_bias_num=1, **kwargs):
+    def __init__(self, gate_activation="sigmoid", need_grad=True, forget_bias_num=1, **kwargs):
         super(LSTM, self).__init__(**kwargs)
 
-        self.gate_activation_cls = gate_activation.__class__
-        self.gate_activation = gate_activation
+        self.gate_activation_cls = activations.get(gate_activation).__class__
+        self.gate_activation = activations.get(gate_activation)
         self.need_grad = need_grad
         self.forget_bias_num = forget_bias_num
 
@@ -535,11 +533,12 @@ class BatchLSTM(Recurrent):
           (10): 2451–2471. doi:10.1162/089976600300015015.
     """
 
-    def __init__(self, gate_activation=Sigmoid(), need_grad=True,
+    def __init__(self, gate_activation='sigmoid', need_grad=True,
                  forget_bias_num=1, **kwargs):
         super(BatchLSTM, self).__init__(**kwargs)
 
-        self.gate_activation_cls = gate_activation.__class__
+        self.gate_activation_cls = activations.get(gate_activation).__class__
+        self.gate_activation = activations.get(gate_activation)
         self.need_grad = need_grad
         self.forget_bias_num = forget_bias_num
 

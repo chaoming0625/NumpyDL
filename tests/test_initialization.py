@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 
-import pytest
 import numpy as np
+import pytest
+
+from npdl import initializations
 
 
 def test_initializer_sample():
@@ -212,3 +214,14 @@ def test_decompose_size():
     assert dsize[0] == size[1] * np.prod(size[2:])
     assert dsize[1] == size[0] * np.prod(size[2:])
 
+
+def test_get():
+    for init in ['zero', 'one', 'uniform', 'normal',
+                 'lecun_uniform', 'glorot_uniform',
+                 'glorot_normal', 'HeNormal', 'HeUniform',
+                 'Orthogonal', initializations.Zero()]:
+        initializations.get(init)
+
+    for init in [1, '1']:
+        with pytest.raises(ValueError):
+            initializations.get(init)

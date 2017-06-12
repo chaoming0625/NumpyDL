@@ -4,14 +4,14 @@
 import numpy as np
 
 from .base import Layer
-from ..initializations import Uniform
+from .. import initializations
 
 
 class Embedding(Layer):
     def __init__(self, embed_words=None, static=None,
                  input_size=None, n_out=None,
                  nb_batch=None, nb_seq=None,
-                 init=Uniform()):
+                 init='uniform'):
         self.nb_batch = nb_batch
         self.nb_seq = nb_seq
 
@@ -21,7 +21,7 @@ class Embedding(Layer):
             else:
                 self.static = static
 
-            self.embed_words = init((input_size, n_out))
+            self.embed_words = initializations.get(init)((input_size, n_out))
 
         else:
             if static is None:

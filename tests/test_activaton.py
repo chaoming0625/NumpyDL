@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 
-import pytest
 import numpy as np
+import pytest
+
+from npdl import activations
 
 
 def test_activation():
@@ -18,8 +20,14 @@ def test_activation():
     assert str(act) == 'Activation'
 
 
-class TestActivations(object):
+def test_get():
+    with pytest.raises(ValueError):
+        activations.get(1)
+    with pytest.raises(ValueError):
+        activations.get('l')
 
+
+class TestActivations(object):
     @pytest.mark.parametrize('activation',
                              ['sigmoid',
                               'tanh',
@@ -34,28 +42,21 @@ class TestActivations(object):
 
         input = np.arange(24).reshape((4, 6))
 
-        if activation == 'sigmoid':
-            from npdl.activations import Sigmoid
+        npdl_act = activations.get(activation)
 
-            npdl_act = Sigmoid()
+        if activation == 'sigmoid':
             f_res = npdl_act.forward(input)
 
             assert 0. <= np.all(f_res) <= 1.
             assert npdl_act.derivative().shape == input.shape
 
         elif activation == 'tanh':
-            from npdl.activations import Tanh
-
-            npdl_act = Tanh()
             f_res = npdl_act.forward(input)
 
             assert -1. <= np.all(f_res) <= 1.0
             assert npdl_act.derivative().shape == input.shape
 
         elif activation == 'relu':
-            from npdl.activations import ReLU
-
-            npdl_act = ReLU()
             f_res = npdl_act.forward(input)
 
             assert np.all(f_res) >= 0.
@@ -63,9 +64,6 @@ class TestActivations(object):
             assert np.all(npdl_act.derivative()) <= 1.
 
         elif activation == 'linear':
-            from npdl.activations import Linear
-
-            npdl_act = Linear()
             f_res = npdl_act.forward(input)
 
             assert np.allclose(f_res, input)
@@ -73,9 +71,6 @@ class TestActivations(object):
             assert np.all(npdl_act.derivative()) == 1.
 
         elif activation == 'softmax':
-            from npdl.activations import Softmax
-
-            npdl_act = Softmax()
             f_res = npdl_act.forward(input)
 
             assert 0. <= np.all(f_res) <= 1.0
@@ -83,39 +78,25 @@ class TestActivations(object):
             assert np.all(npdl_act.derivative()) == 1.
 
         elif activation == 'elliot':
-            from npdl.activations import Elliot
-
-            npdl_act = Elliot()
             f_res = npdl_act.forward(input)
 
             assert f_res.shape == input.shape
             assert npdl_act.derivative().shape == input.shape
 
         elif activation == 'SymmetricElliot':
-            from npdl.activations import SymmetricElliot
-
-            npdl_act = SymmetricElliot()
             f_res = npdl_act.forward(input)
 
             assert f_res.shape == input.shape
             assert npdl_act.derivative().shape == input.shape
 
         elif activation == 'SoftPlus':
-            from npdl.activations import SoftPlus
-
-            npdl_act = SoftPlus()
             f_res = npdl_act.forward(input)
 
             assert f_res.shape == input.shape
             assert npdl_act.derivative().shape == input.shape
 
         elif activation == 'SoftSign':
-            from npdl.activations import SoftSign
-
-            npdl_act = SoftSign()
             f_res = npdl_act.forward(input)
 
             assert f_res.shape == input.shape
             assert npdl_act.derivative().shape == input.shape
-
-
