@@ -1,8 +1,14 @@
 
-# Content
+# Chatbot
 
-``applications`` directory includes the applications written by ``NumpyDL`.
-`
+
+Training Phase:
+
+![training](chatbot/pics/Training.jpg)
+
+![Evaluation](chatbot/pics/Eval.jpg)
+
+
  
  
  
