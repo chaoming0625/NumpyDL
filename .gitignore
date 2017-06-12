@@ -6,7 +6,7 @@
 report
 
 applications/chatbot/data/*
-
+examples/data/mldata
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

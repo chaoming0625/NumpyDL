@@ -9,8 +9,9 @@ import npdl
 
 def main(max_iter):
     # data
-    print("loading data ...")
+    print("loading data, please wait ...")
     mnist = fetch_mldata('MNIST original', data_home=os.path.join(os.path.dirname(__file__), './data'))
+    print('data loading is done ...')
     X_train = mnist.data / 255.0
     y_train = mnist.target
     n_classes = np.unique(y_train).size
