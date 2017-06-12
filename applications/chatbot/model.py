@@ -8,7 +8,7 @@ import numpy as np
 
 token2idx_path = "data/token2idx.json"
 idx2token_path = "data/idx2token.json"
-param_path = 'data/params.npy'
+param_path = "data/params.npy"
 max_sent_size = np.int32(50)
 idx_start = np.int32(1)
 idx_end = np.int32(2)
@@ -59,7 +59,8 @@ class Utils:
     def idxs2tokens(idxs):
         rez = []
         for idx in idxs:
-            rez += Utils.idx2token[str(idx)],
+            if str(idx) in Utils.idx2token:
+                rez.append(Utils.idx2token[str(idx)])
         return rez
 
     @staticmethod
@@ -81,7 +82,9 @@ class Utils:
 
 class Seq2Seq:
     def __init__(self, hidden_size=512, nb_seq=max_sent_size):
+        print("Load parameters ...")
         params = Utils.load_params()
+        print('Loading is done.')
 
         # embedding
         self.embedding = npdl.layers.Embedding(params['embed_words'], nb_seq=nb_seq)
@@ -102,7 +105,7 @@ class Seq2Seq:
         # self.decoder_lstm2 = npdl.layers.BatchLSTM(n_out=hidden_size, return_sequence=False)
 
     def forward(self, idxs):
-        return idxs
+        return idxs[::-1]
 
 
     def utter(self, sentence):

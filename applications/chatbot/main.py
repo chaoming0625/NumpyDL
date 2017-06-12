@@ -1,12 +1,14 @@
 # -*- coding: utf-8 -*-
 
 from flask import Flask
+from flask import jsonify
 from flask import render_template
 from flask import request
-from flask import jsonify
-import os
+
+from applications.chatbot.model import Seq2Seq
 
 app = Flask(__name__)
+model = Seq2Seq()
 
 
 @app.route("/")
@@ -23,7 +25,8 @@ def ask():
             exit()
         else:
             # print bot_response
-            return jsonify({'status': 'OK', 'answer': "hah"})
+            return jsonify({'status': 'OK',
+                            'answer': model.utter(message)})
 
 
 if __name__ == "__main__":
