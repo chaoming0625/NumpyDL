@@ -8,11 +8,9 @@ import numpy as np
 from npdl.initializations import _one
 from npdl.initializations import _zero
 
-
-
 token2idx_path = "data/token2idx.json"
 idx2token_path = "data/idx2token.json"
-param_path = "data/params2.npy"
+param_path = "data/params.npy"
 max_sent_size = np.int32(50)
 idx_start = np.int32(1)
 idx_end = np.int32(2)
@@ -180,7 +178,7 @@ class Seq2Seq:
         self.encoder_lstm1.b_g = params['en_lstm1']['b_g']
 
         # encoder LSTM 2
-        self.encoder_lstm2 = npdl.layers.LSTM(n_out=hidden_size, return_sequence=True)
+        self.encoder_lstm2 = npdl.layers.LSTM(n_out=hidden_size, return_sequence=False)
         self.encoder_lstm2.connect_to(self.encoder_lstm1)
         self.encoder_lstm2.U_f = params['en_lstm2']['U_f']
         self.encoder_lstm2.U_i = params['en_lstm2']['U_i']
@@ -272,20 +270,20 @@ class Seq2Seq:
 
         # decoder LSTMs
         while True:
-            # decoder lstm 1
+            # data
             idx = np.array([[idx]], dtype='int32')
             input = self.embedding.forward(idx)
 
-            #
+            # decoder lstm 1
             de_res1 = self.decoder_lstm1.forward(input, masks, c1_pre, h1_pre)
             c1_pre, h1_pre = self.decoder_lstm1.c0, self.decoder_lstm1.h0
 
-            #
+            # decoder lstm 2
             de_res2 = self.decoder_lstm2.forward(de_res1, masks, c2_pre, h2_pre)
             c2_pre, h2_pre = self.decoder_lstm2.c0, self.decoder_lstm2.h0
 
-            # softmax
-            out = self.linear.forward(h2_pre)
+            # linear layer
+            out = self.linear.forward(de_res2)
             idx = np.argmax(out[0])
 
             # break

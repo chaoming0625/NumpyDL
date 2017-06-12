@@ -421,12 +421,12 @@ class LSTM(Recurrent):
         self.h0 = _zero((nb_batch, self.n_out)) if h0 is None else h0
 
         # forward
-        for i in range(nb_timesteps):
+        for t in range(nb_timesteps):
             # data
-            h_pre = self.h0 if i == 0 else output[:, i - 1, :]
-            c_pre = self.c0 if i == 0 else cell[:, i - 1, :]
-            x_now = input[:, i, :]
-            m_now = mask[:, i]
+            h_pre = self.h0 if t == 0 else output[:, t - 1, :]
+            c_pre = self.c0 if t == 0 else cell[:, t - 1, :]
+            x_now = input[:, t, :]
+            m_now = mask[:, t]
 
             # computation
             f = self.gate_activation.forward(np.dot(x_now, self.U_f) +
@@ -450,6 +450,8 @@ class LSTM(Recurrent):
             # record
             self.h0 = h
             self.c0 = c
+            output[:, t, :] = h
+            cell[:, t, :] = c
 
         # record
         self.last_output = output
