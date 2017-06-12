@@ -4,19 +4,22 @@
 
 ## Usage
 
-Step 1: Decompress ``data.tar.gz`` into the ``data`` directory.
+Step 1: download pretrained model.
+
+    https://pan.baidu.com/s/1o7MtdhC
+
+Step 2: Decompress ``data.tar.gz`` into the ``data`` directory.
 
     cd applications/chatbot/data
     tar -xzf data.tar.gz
 
-Step 2: Run ``main.py`` script.
+Step 3: Run ``main.py`` script.
     
     python main.py
 
+Step 4: Open your favourite browser, and enjoy!
 
-Step 3: Open your favourite browser, and type ``http://127.0.0.1:5000/``
-
-    Enjoy!
+    http://127.0.0.1:5000/
 
 
 ## seq2seq
