@@ -73,6 +73,9 @@ class Recurrent(Layer):
         if prev_layer is not None:
             assert len(prev_layer.out_shape) == 3
             n_in = prev_layer.out_shape[-1]
+            self.nb_batch = prev_layer.out_shape[0] or self.nb_batch
+            self.nb_seq = prev_layer.out_shape[1] or self.nb_seq
+
         else:
             assert self.n_in is not None
             n_in = self.n_in
@@ -202,7 +205,7 @@ class SimpleRNN(Recurrent):
                     layer_grad[0] += np.dot(delta, self.W.T)
 
         if not self.first_layer:
-            return layer_grad
+            return np.transpose(layer_grad, (1, 0, 2))
 
     @property
     def params(self):
