@@ -217,6 +217,10 @@ class Seq2Seq:
         self.softmax.W = params['softmax']
 
     def forward(self, idxs, masks):
+        ##############################
+        # Encode
+        ##############################
+
         # idxs data
         idxs = idxs[None, :] if np.ndim(idxs) == 1 else idxs
         masks = masks[None, :] if np.ndim(masks) == 1 else masks
@@ -230,14 +234,80 @@ class Seq2Seq:
         # encoder lstm 2
         self.encoder_lstm2.forward(en_lstm1_res, masks)
 
-        # decoder lstm 1
+        ##############################
+        # Decode
+        ##############################
 
+        # variables
+        decodes = []
+        c1_pre = self.encoder_lstm1.c0
+        h1_pre = self.encoder_lstm1.h0
+        c2_pre = self.encoder_lstm2.c0
+        h2_pre = self.encoder_lstm2.h0
+        idx = idx_start
 
-        # decoder lstm 2
+        # functions
+        g1 = self.decoder_lstm1.gate_activation.forward
+        a1 = self.decoder_lstm1.activation.forward
+        g2 = self.decoder_lstm2.gate_activation.forward
+        a2 = self.decoder_lstm2.activation.forward
 
+        # decoder LSTMs
+        while True:
+            # decoder lstm 1
+            idx = np.array([idx_start], dtype='int32')
+            x_now = self.embedding.embed_words[idx]
+            f = g1(np.dot(x_now, self.encoder_lstm1.U_f) +
+                   np.dot(h1_pre, self.encoder_lstm1.W_f) +
+                   self.encoder_lstm1.b_f)
+            i = g1(np.dot(x_now, self.encoder_lstm1.U_i) +
+                   np.dot(h1_pre, self.encoder_lstm1.W_i)+
+                   self.encoder_lstm1.b_i)
+            o = g1(np.dot(x_now, self.encoder_lstm1.U_o) +
+                   np.dot(h1_pre, self.encoder_lstm1.W_o)+
+                   self.decoder_lstm1.b_o)
+            g = a1(np.dot(x_now, self.encoder_lstm1.U_g) +
+                   np.dot(h1_pre, self.encoder_lstm1.W_g) +
+                   self.decoder_lstm1.b_g)
+            c = f * c1_pre + i * g
+            h = o * a1(c)
 
+            # for next round
+            c1_pre, h1_pre = c, h
 
-        return idxs[::-1]
+            # decoder lstm 2
+            x_now = h
+            f = g2(np.dot(x_now, self.encoder_lstm2.U_f) +
+                   np.dot(h2_pre, self.encoder_lstm2.W_f) +
+                   self.encoder_lstm2.b_f)
+            i = g2(np.dot(x_now, self.encoder_lstm2.U_i) +
+                   np.dot(h2_pre, self.encoder_lstm2.W_i) +
+                   self.encoder_lstm2.b_i)
+            o = g2(np.dot(x_now, self.encoder_lstm2.U_o) +
+                   np.dot(h2_pre, self.encoder_lstm2.W_o) +
+                   self.encoder_lstm2.b_o)
+            g = a2(np.dot(x_now, self.encoder_lstm2.U_g) +
+                   np.dot(h2_pre, self.encoder_lstm2.W_g) +
+                   self.encoder_lstm2.b_g)
+            c = f * c2_pre + i * g
+            h = o * a2(c)
+
+            # for next round
+            c2_pre, h2_pre = c, h
+
+            # softmax
+            out = self.softmax.forward(h)
+            idx = np.argmax(out[0])
+
+            # break
+            if idx == 2:
+                break
+            else:
+                decodes.append(idx)
+            if len(decodes) >= max_sent_size:
+                break
+
+        return decodes
 
     def utter(self, sentence):
         # parse text to idxs
