@@ -5,7 +5,8 @@
 .idea
 report
 
-applications/chatbot/data/*
+applications/chatbot/data/*.npy
+applications/chatbot/data/*.json
 
 
 # Byte-compiled / optimized / DLL files

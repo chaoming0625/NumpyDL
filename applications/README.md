@@ -2,6 +2,11 @@
 # Chatbot
 
 
+## Usage
+
+decompress ``data.tar.gz`` into the ``data`` directory.
+
+
 Training Phase:
 
 ![training](chatbot/pics/Training.jpg)
@@ -9,6 +14,6 @@ Training Phase:
 ![Evaluation](chatbot/pics/Eval.jpg)
 
 
- 
- 
+
+
  

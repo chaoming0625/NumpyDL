@@ -5,10 +5,14 @@ import json
 import re
 import npdl
 import numpy as np
+from npdl.initializations import _one
+from npdl.initializations import _zero
+
+
 
 token2idx_path = "data/token2idx.json"
 idx2token_path = "data/idx2token.json"
-param_path = "data/params.npy"
+param_path = "data/params2.npy"
 max_sent_size = np.int32(50)
 idx_start = np.int32(1)
 idx_end = np.int32(2)
@@ -32,62 +36,75 @@ class Utils:
     @staticmethod
     def load_params(hi):
         embed_words, \
-        softmax_weights, \
+        linear_weights, \
         en_lstm1_W, en_lstm1_U, en_lstm1_b, \
         en_lstm2_W, en_lstm2_U, en_lstm2_b, \
         de_lstm1_W, de_lstm1_U, de_lstm1_b, \
         de_lstm2_W, de_lstm2_U, de_lstm2_b = np.load(param_path)
 
         params = {'embed_words': embed_words,
+
                   'en_lstm1': {'U_f': en_lstm1_W[:, : hi * 1],
                                'U_i': en_lstm1_W[:, hi * 1: hi * 2],
                                'U_o': en_lstm1_W[:, hi * 2: hi * 3],
                                'U_g': en_lstm1_W[:, hi * 3:],
+
                                'W_f': en_lstm1_U[:, : hi * 1],
                                'W_i': en_lstm1_U[:, hi * 1: hi * 2],
                                'W_o': en_lstm1_U[:, hi * 2: hi * 3],
                                'W_g': en_lstm1_U[:, hi * 3:],
+
                                'b_f': en_lstm1_b[: hi * 1],
                                'b_i': en_lstm1_b[hi * 1: hi * 2],
                                'b_o': en_lstm1_b[hi * 2: hi * 3],
                                'b_g': en_lstm1_b[hi * 3:]},
+
                   'en_lstm2': {'U_f': en_lstm2_W[:, : hi * 1],
                                'U_i': en_lstm2_W[:, hi * 1: hi * 2],
                                'U_o': en_lstm2_W[:, hi * 2: hi * 3],
                                'U_g': en_lstm2_W[:, hi * 3:],
+
                                'W_f': en_lstm2_U[:, : hi * 1],
                                'W_i': en_lstm2_U[:, hi * 1: hi * 2],
                                'W_o': en_lstm2_U[:, hi * 2: hi * 3],
                                'W_g': en_lstm2_U[:, hi * 3:],
+
                                'b_f': en_lstm2_b[: hi * 1],
                                'b_i': en_lstm2_b[hi * 1: hi * 2],
                                'b_o': en_lstm2_b[hi * 2: hi * 3],
                                'b_g': en_lstm2_b[hi * 3:]},
+
                   'de_lstm1': {'U_f': de_lstm1_W[:, : hi * 1],
                                'U_i': de_lstm1_W[:, hi * 1: hi * 2],
                                'U_o': de_lstm1_W[:, hi * 2: hi * 3],
                                'U_g': de_lstm1_W[:, hi * 3:],
+
                                'W_f': de_lstm1_U[:, : hi * 1],
                                'W_i': de_lstm1_U[:, hi * 1: hi * 2],
                                'W_o': de_lstm1_U[:, hi * 2: hi * 3],
                                'W_g': de_lstm1_U[:, hi * 3:],
+
                                'b_f': de_lstm1_b[: hi * 1],
                                'b_i': de_lstm1_b[hi * 1: hi * 2],
                                'b_o': de_lstm1_b[hi * 2: hi * 3],
                                'b_g': de_lstm1_b[hi * 3:]},
+
                   'de_lstm2': {'U_f': de_lstm2_W[:, : hi * 1],
                                'U_i': de_lstm2_W[:, hi * 1: hi * 2],
                                'U_o': de_lstm2_W[:, hi * 2: hi * 3],
                                'U_g': de_lstm2_W[:, hi * 3:],
+
                                'W_f': de_lstm2_U[:, : hi * 1],
                                'W_i': de_lstm2_U[:, hi * 1: hi * 2],
                                'W_o': de_lstm2_U[:, hi * 2: hi * 3],
                                'W_g': de_lstm2_U[:, hi * 3:],
+
                                'b_f': de_lstm2_b[: hi * 1],
                                'b_i': de_lstm2_b[hi * 1: hi * 2],
                                'b_o': de_lstm2_b[hi * 2: hi * 3],
                                'b_g': de_lstm2_b[hi * 3:]},
-                  'softmax': softmax_weights}
+
+                  'linear': linear_weights}
 
         return params
 
@@ -212,9 +229,9 @@ class Seq2Seq:
         self.decoder_lstm2.b_g = params['de_lstm2']['b_g']
 
         # softmax layer
-        self.softmax = npdl.layers.Softmax(n_out=self.embedding.embed_words.shape[0])
-        self.softmax.connect_to(self.decoder_lstm2)
-        self.softmax.W = params['softmax']
+        self.linear = npdl.layers.Linear(n_out=self.embedding.embed_words.shape[0])
+        self.linear.connect_to(self.decoder_lstm2)
+        self.linear.W = params['linear']
 
     def forward(self, idxs, masks):
         ##############################
@@ -238,6 +255,12 @@ class Seq2Seq:
         # Decode
         ##############################
 
+        # functions
+        g1 = self.decoder_lstm1.gate_activation.forward
+        a1 = self.decoder_lstm1.activation.forward
+        g2 = self.decoder_lstm2.gate_activation.forward
+        a2 = self.decoder_lstm2.activation.forward
+
         # variables
         decodes = []
         c1_pre = self.encoder_lstm1.c0
@@ -245,58 +268,24 @@ class Seq2Seq:
         c2_pre = self.encoder_lstm2.c0
         h2_pre = self.encoder_lstm2.h0
         idx = idx_start
-
-        # functions
-        g1 = self.decoder_lstm1.gate_activation.forward
-        a1 = self.decoder_lstm1.activation.forward
-        g2 = self.decoder_lstm2.gate_activation.forward
-        a2 = self.decoder_lstm2.activation.forward
+        masks = _one((1, 1))
 
         # decoder LSTMs
         while True:
             # decoder lstm 1
-            idx = np.array([idx_start], dtype='int32')
-            x_now = self.embedding.embed_words[idx]
-            f = g1(np.dot(x_now, self.encoder_lstm1.U_f) +
-                   np.dot(h1_pre, self.encoder_lstm1.W_f) +
-                   self.encoder_lstm1.b_f)
-            i = g1(np.dot(x_now, self.encoder_lstm1.U_i) +
-                   np.dot(h1_pre, self.encoder_lstm1.W_i)+
-                   self.encoder_lstm1.b_i)
-            o = g1(np.dot(x_now, self.encoder_lstm1.U_o) +
-                   np.dot(h1_pre, self.encoder_lstm1.W_o)+
-                   self.decoder_lstm1.b_o)
-            g = a1(np.dot(x_now, self.encoder_lstm1.U_g) +
-                   np.dot(h1_pre, self.encoder_lstm1.W_g) +
-                   self.decoder_lstm1.b_g)
-            c = f * c1_pre + i * g
-            h = o * a1(c)
+            idx = np.array([[idx]], dtype='int32')
+            input = self.embedding.forward(idx)
 
-            # for next round
-            c1_pre, h1_pre = c, h
+            #
+            de_res1 = self.decoder_lstm1.forward(input, masks, c1_pre, h1_pre)
+            c1_pre, h1_pre = self.decoder_lstm1.c0, self.decoder_lstm1.h0
 
-            # decoder lstm 2
-            x_now = h
-            f = g2(np.dot(x_now, self.encoder_lstm2.U_f) +
-                   np.dot(h2_pre, self.encoder_lstm2.W_f) +
-                   self.encoder_lstm2.b_f)
-            i = g2(np.dot(x_now, self.encoder_lstm2.U_i) +
-                   np.dot(h2_pre, self.encoder_lstm2.W_i) +
-                   self.encoder_lstm2.b_i)
-            o = g2(np.dot(x_now, self.encoder_lstm2.U_o) +
-                   np.dot(h2_pre, self.encoder_lstm2.W_o) +
-                   self.encoder_lstm2.b_o)
-            g = a2(np.dot(x_now, self.encoder_lstm2.U_g) +
-                   np.dot(h2_pre, self.encoder_lstm2.W_g) +
-                   self.encoder_lstm2.b_g)
-            c = f * c2_pre + i * g
-            h = o * a2(c)
-
-            # for next round
-            c2_pre, h2_pre = c, h
+            #
+            de_res2 = self.decoder_lstm2.forward(de_res1, masks, c2_pre, h2_pre)
+            c2_pre, h2_pre = self.decoder_lstm2.c0, self.decoder_lstm2.h0
 
             # softmax
-            out = self.softmax.forward(h)
+            out = self.linear.forward(h2_pre)
             idx = np.argmax(out[0])
 
             # break
