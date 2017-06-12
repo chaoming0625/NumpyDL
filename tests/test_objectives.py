@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 
-import pytest
 import numpy as np
+import pytest
+
+from npdl import objectives
 
 
 def test_objective():
@@ -76,5 +78,17 @@ def test_SoftmaxCategoricalCrossEntropy():
 
     assert np.ndim(f_res) == 0
     assert np.ndim(b_res) == 2
+
+
+def test_get():
+    for init in ['mse', 'mean_squared_error', 'hellinger_distance', 'hed',
+                 'binary_cross_entropy', 'bce', 'scce',
+                 'softmax_categorical_cross_entropy',
+                 objectives.MeanSquaredError()]:
+        objectives.get(init)
+
+    for init in [1, '1']:
+        with pytest.raises(ValueError):
+            objectives.get(init)
 
 

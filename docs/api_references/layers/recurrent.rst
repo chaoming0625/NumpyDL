@@ -9,6 +9,13 @@ Recurrent Layers
 .. currentmodule:: npdl.layers
 
 
+<<<<<<< HEAD
+.. autoclass:: Recurrent
+   :members:
+
+
+=======
+>>>>>>> e22daacbbdc1ec9c60d2542f41fce63947a11b74
 .. autoclass:: SimpleRNN
    :members:
 
@@ -21,3 +28,9 @@ Recurrent Layers
    :members:
 
 
+<<<<<<< HEAD
+.. autoclass:: BatchLSTM
+   :members:
+
+=======
+>>>>>>> e22daacbbdc1ec9c60d2542f41fce63947a11b74

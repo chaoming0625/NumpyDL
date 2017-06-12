@@ -9,6 +9,7 @@ Examples
 >>> l1 = Dense(n_out=300, n_in=100, init=GlorotUniform())
 """
 
+import copy
 import numpy as np
 
 from npdl.utils.random import get_rng
@@ -257,4 +258,36 @@ def _cast_dtype(res):
 
 _zero = Zero()
 _one = One()
+
+
+def get(initialization):
+    if initialization.__class__.__name__ == 'str':
+        if initialization in ['zero', 'Zero']:
+            return Zero()
+        if initialization in ['one', 'One']:
+            return One()
+        if initialization in ['uniform', 'Uniform']:
+            return Uniform()
+        if initialization in ['normal', 'Normal']:
+            return Normal()
+        if initialization in ['lecun_uniform', 'LecunUniform']:
+            return LecunUniform()
+        if initialization in ['glorot_uniform', 'GlorotUniform']:
+            return GlorotUniform()
+        if initialization in ['glorot_normal', 'GlorotNormal']:
+            return GlorotNormal()
+        if initialization in ['HeNormal', 'he_normal']:
+            return HeNormal()
+        if initialization in ['HeUniform', 'he_uniform']:
+            return HeUniform()
+        if initialization in ['Orthogonal', 'orthogonal']:
+            return Orthogonal()
+        raise ValueError('Unknown initialization name: {}.'.format(initialization))
+
+    elif isinstance(initialization, Initializer):
+        return copy.deepcopy(initialization)
+
+    else:
+        raise ValueError("Unknown type: {}.".format(initialization.__class__.__name__))
+
 

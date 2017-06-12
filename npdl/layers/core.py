@@ -5,9 +5,9 @@ import numpy as np
 
 from npdl.utils.random import get_rng
 from .base import Layer
-from ..activations import Softmax as SoftmaxAct
-from ..activations import Tanh
-from ..initializations import GlorotUniform
+from .. import activations
+from ..initializations import _zero
+from ..initializations import get as get_init
 
 
 class Linear(Layer):
@@ -23,11 +23,12 @@ class Linear(Layer):
     init : (Initializer, optional)
         Initializer object to use for initializing layer weights
     """
-    def __init__(self, n_out, n_in=None, init=GlorotUniform()):
+
+    def __init__(self, n_out, n_in=None, init='glorot_uniform'):
         self.n_out = n_out
         self.n_in = n_in
         self.out_shape = (None, n_out)
-        self.init = init
+        self.init = get_init(init)
 
         self.W = None
         self.b = None
@@ -44,7 +45,7 @@ class Linear(Layer):
             n_in = prev_layer.out_shape[-1]
 
         self.W = self.init((n_in, self.n_out))
-        self.b = np.zeros((self.n_out,))
+        self.b = _zero((self.n_out,))
 
     def forward(self, input, *args, **kwargs):
         """ Apply the forward pass transformation to the input data.
@@ -104,12 +105,13 @@ class Dense(Layer):
     init : (Initializer, optional)
         Initializer object to use for initializing layer weights
     """
-    def __init__(self, n_out, n_in=None, init=GlorotUniform(), activation=Tanh()):
+
+    def __init__(self, n_out, n_in=None, init='glorot_uniform', activation='tanh'):
         self.n_out = n_out
         self.n_in = n_in
         self.out_shape = (None, n_out)
-        self.init = init
-        self.act_layer = activation
+        self.init = get_init(init)
+        self.act_layer = activations.get(activation)
 
         self.W, self.dW = None, None
         self.b, self.db = None, None
@@ -124,7 +126,7 @@ class Dense(Layer):
             n_in = prev_layer.out_shape[-1]
 
         self.W = self.init((n_in, self.n_out))
-        self.b = np.zeros((self.n_out,))
+        self.b = _zero((self.n_out,))
 
     def forward(self, input, *args, **kwargs):
         """ Apply the forward pass transformation to the input data.
@@ -185,8 +187,9 @@ class Softmax(Dense):
     init : (Initializer, optional)
         Initializer object to use for initializing layer weights
     """
-    def __init__(self, n_out, n_in=None, init=GlorotUniform()):
-        super(Softmax, self).__init__(n_out, n_in, init, activation=SoftmaxAct())
+
+    def __init__(self, n_out, n_in=None, init='glorot_uniform'):
+        super(Softmax, self).__init__(n_out, n_in, init, activation='softmax')
 
 
 class Dropout(Layer):
@@ -205,6 +208,7 @@ class Dropout(Layer):
         fraction of the inputs that should be stochastically kept.
     
     """
+
     def __init__(self, p=0.):
         self.p = p
 

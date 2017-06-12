@@ -1,6 +1,17 @@
 # -*- coding: utf-8 -*-
 
 
+# import file
+from . import base
+from . import convolution
+from . import core
+from . import embedding
+from . import normalization
+from . import pooling
+from . import recurrent
+from . import shape
+
+
 # base
 from .base import Layer
 
@@ -17,9 +28,11 @@ from .embedding import Embedding
 
 
 # recurrent layers
+from .recurrent import Recurrent
 from .recurrent import SimpleRNN
 from .recurrent import GRU
 from .recurrent import LSTM
+from .recurrent import BatchLSTM
 
 
 # convolution

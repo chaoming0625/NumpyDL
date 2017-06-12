@@ -5,6 +5,7 @@
 .idea
 report
 
+applications/chatbot/data/*
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

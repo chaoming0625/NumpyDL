@@ -4,6 +4,8 @@ import pytest
 
 import numpy as np
 
+from npdl import optimizers
+
 
 def test_optimizer():
     from npdl.optimizers import Optimizer
@@ -78,4 +80,14 @@ def test_npdl_clip():
 
     assert np.all(np.abs(npdl_clip(grad, boundary)) <= boundary)
     assert np.allclose(npdl_clip(grad, 0.), grad)
+
+
+def test_get():
+    for init in ['sgd', 'momentum', 'nesterov_momentum', 'adagrad',
+                 'rmsprop', 'adadelta', 'adam', 'adamax', optimizers.SGD()]:
+        optimizers.get(init)
+
+    for init in [1, '1']:
+        with pytest.raises(ValueError):
+            optimizers.get(init)
 

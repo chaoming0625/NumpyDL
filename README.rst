@@ -33,33 +33,16 @@
 
 
 
-NumpyDL: Deep Learning Library based on Pure Numpy
-==================================================
+NumpyDL: Deep Learning Library based on Pure Numpy, for Education
+=================================================================
 
 NumpyDL is a simple deep learning library based on pure Python/Numpy.Its main features are:
 
 * *Pure* in Numpy and *native* to Python
 * Support basic *automatic differentiation*
 * Support *commonly used models*, such as MLP, RNNs, GRUs, LSTMs and CNNs
-* *Perfect documents* and easy to learn deep learning knowledge
-* Flexible network configurations and learning algorithms.
-* API like Keras deep learning library
-
-The design of NumpyDL is governed by several principles:
-
-* **Simplicity**: Be easy to use, easy to understand and easy to extend, to
-  facilitate use in research. Interfaces should be kept small, with as few
-  classes and methods as possible. Every added abstraction and feature
-  should be carefully scrutinized, to determine whether the added complexity
-  is justified.
-* **Transparency**: Native to Numpy, directly process and return Python/Numpy
-  data types. Do not rely on the functionality of Theano, Tensorflow or any
-  such deep learning frameworks.
-* **Modularity**: Allow all parts (layers, regularizers, optimizers, ...) to be
-  used independently of NumpyDL. Make it easy to use components in isolation
-  or in conjunction with other frameworks.
-* **Focus**: “Do one thing and do it well”. Do not try to provide a library
-  for everything to do with deep learning.
+* *Tutorials* to learn deep learning knowledge
+* API like `Keras` deep learning library
 
 
 Documentation
@@ -136,6 +119,7 @@ Layers
     * MaxPooling Layer
     * MeanPooling Layer
 * `reccurent.py <npdl/layers/reccurent.py>`_
+    * Recurrent Layer
     * SimpleRNN Layer
 * `shape.py <npdl/layers/shape.py>`_
     * Flatten Layer
@@ -143,40 +127,42 @@ Layers
 Activations
 -----------
 
-* Sigmoid
-* Tanh
-* ReLU
-* Softmax
-* Elliot
-* SymmetricElliot
-* LReLU
-* SoftPlus
-* SoftSign
+* `acitvations <npdl/activations.py>`_
+    * Sigmoid
+    * Tanh
+    * ReLU
+    * Softmax
+    * Elliot
+    * SymmetricElliot
+    * LReLU
+    * SoftPlus
+    * SoftSign
 
 Initializations
 ---------------
 
-* Uniform
-* Normal
-* LecunUniform
-* GlorotUniform
-* GlorotNormal
-* HeNormal
-* HeUniform
-* Orthogonal
+* `initializations <npdl/initializations.py>`_
+    * Uniform
+    * Normal
+    * LecunUniform
+    * GlorotUniform
+    * GlorotNormal
+    * HeNormal
+    * HeUniform
+    * Orthogonal
 
 Objectives
 ----------
 
-* MeanSquaredError
-* HellingerDistance
-* BinaryCrossEntropy
-* SoftmaxCategoricalCrossEntropy
+* `objectives <npdl/objectives.py>`_
+    * MeanSquaredError
+    * HellingerDistance
+    * BinaryCrossEntropy
+    * SoftmaxCategoricalCrossEntropy
 
 
 Optimizers
 ----------
 
-* SGD
-
-
+* `optimizers <npdl/optimizers.py>`_
+    * SGD

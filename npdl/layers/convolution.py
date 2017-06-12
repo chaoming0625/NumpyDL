@@ -3,9 +3,9 @@
 import numpy as np
 
 from .base import Layer
-from ..activations import ReLU
-from ..initializations import GlorotUniform
-from ..initializations import Zero
+from .. import activations
+from ..initializations import _zero
+from ..initializations import get as get_init
 
 
 class Convolution(Layer):
@@ -18,9 +18,8 @@ class Convolution(Layer):
 
     """
 
-
     def __init__(self, nb_filter, filter_size, input_shape=None, stride=1,
-                 init=GlorotUniform(), activation=ReLU()):
+                 init='glorot_uniform', activation='relu'):
         self.nb_filter = nb_filter
         self.filter_size = filter_size
         self.input_shape = input_shape
@@ -32,8 +31,8 @@ class Convolution(Layer):
         self.last_output = None
         self.last_input = None
 
-        self.init = init
-        self.activation = activation
+        self.init = get_init(init)
+        self.activation = activations.get(activation)
 
     def connect_to(self, prev_layer=None):
         if prev_layer is None:
@@ -56,7 +55,7 @@ class Convolution(Layer):
 
         # filters
         self.W = self.init((self.nb_filter, pre_nb_filter, filter_height, filter_width))
-        self.b = Zero()((self.nb_filter,))
+        self.b = _zero((self.nb_filter,))
 
     def forward(self, input, *args, **kwargs):
 
@@ -68,7 +67,7 @@ class Convolution(Layer):
         new_img_h, new_img_w = self.out_shape[2:]
 
         # init
-        outputs = Zero()((nb_batch, self.nb_filter, new_img_h, new_img_w))
+        outputs = _zero((nb_batch, self.nb_filter, new_img_h, new_img_w))
 
         # convolution operation
         for x in np.arange(nb_batch):
@@ -96,9 +95,8 @@ class Convolution(Layer):
         old_img_h, old_img_w = self.last_input.shape[-2:]
 
         # gradients
-        zero = Zero()
-        self.dW = zero(self.W.shape)
-        self.db = zero(self.b.shape)
+        self.dW = _zero(self.W.shape)
+        self.db = _zero(self.b.shape)
         delta = pre_grad * self.activation.derivative()
 
         # dW
@@ -118,7 +116,7 @@ class Convolution(Layer):
 
         # dX
         if not self.first_layer:
-            layer_grads = zero(self.last_input.shape)
+            layer_grads = _zero(self.last_input.shape)
             for b in np.arange(nb_batch):
                 for r in np.arange(self.nb_filter):
                     for t in np.arange(input_depth):

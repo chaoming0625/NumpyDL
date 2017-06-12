@@ -26,6 +26,7 @@ example network:
 
 """
 
+import copy
 import numpy as np
 
 
@@ -416,3 +417,31 @@ def npdl_clip(grad, boundary):
         return np.clip(grad, -boundary, boundary)
     else:
         return grad
+
+
+def get(optimizer):
+    if optimizer.__class__.__name__ == 'str':
+        if optimizer in ['sgd', 'SGD']:
+            return SGD()
+        if optimizer in ['momentum', 'Momentum']:
+            return Momentum()
+        if optimizer in ['nesterov_momentum', 'NesterovMomentum']:
+            return NesterovMomentum()
+        if optimizer in ['adagrad', 'Adagrad']:
+            return Adagrad()
+        if optimizer in ['rmsprop', 'RMSprop']:
+            return RMSprop()
+        if optimizer in ['adadelta', 'Adadelta']:
+            return Adadelta()
+        if optimizer in ['adam', 'Adam']:
+            return Adam()
+        if optimizer in ['adamax', 'Adamax']:
+            return Adamax()
+        raise ValueError('Unknown optimizer name: {}.'.format(optimizer))
+
+    elif isinstance(optimizer, Optimizer):
+        return copy.deepcopy(optimizer)
+
+    else:
+        raise ValueError("Unknown type: {}.".format(optimizer.__class__.__name__))
+

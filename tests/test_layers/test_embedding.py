@@ -16,14 +16,20 @@ def test_embed_words():
     assert len(layer.grads) == 1
     assert len(layer.param_grads) == 1
 
+    layer.connect_to()
+    assert len(layer.out_shape) == 3
+
     # static == True
     layer = Embedding(embed_words, True)
 
-    with pytest.raises(NotImplementedError):
-        layer.forward(None)
+    with pytest.raises(AssertionError):
+        layer.forward(np.arange(10))
 
     with pytest.raises(NotImplementedError):
         layer.backward(None)
+
+    input = np.random.randint(0, 10, (4, 2))
+    assert layer.forward(input).shape == (4, 2, 10)
 
     assert len(layer.params) == 0
     assert len(layer.grads) == 0

@@ -4,8 +4,7 @@
 import numpy as np
 
 from .base import Layer
-from ..initializations import One
-from ..initializations import Zero
+from .. import initializations
 
 
 class BatchNormal(Layer):
@@ -49,13 +48,13 @@ class BatchNormal(Layer):
     """
 
     def __init__(self, epsilon=1e-6, momentum=0.9, axis=0,
-                 beta_init=Zero(), gamma_init=One()):
+                 beta_init='zero', gamma_init='one'):
         self.epsilon = epsilon
         self.momentum = momentum
         self.axis = axis
 
-        self.beta_init = beta_init
-        self.gamma_init = gamma_init
+        self.beta_init = initializations.get(beta_init)
+        self.gamma_init = initializations.get(gamma_init)
 
         self.beta, self.dbeta = None, None
         self.gamma, self.dgamma = None, None

@@ -87,9 +87,17 @@
 .. autosummary::
    :nosignatures:
 
+<<<<<<< HEAD
+    Recurrent
     SimpleRNN
     GRU
     LSTM
+    BatchLSTM
+=======
+    SimpleRNN
+    GRU
+    LSTM
+>>>>>>> e22daacbbdc1ec9c60d2542f41fce63947a11b74
 
 .. npdl/layers/shape.py
 
