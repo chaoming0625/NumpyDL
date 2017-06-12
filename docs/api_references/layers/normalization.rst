@@ -9,3 +9,4 @@ Normalization Layer
 .. currentmodule:: npdl.layers
 
 .. autoclass:: BatchNormal
+    :members:

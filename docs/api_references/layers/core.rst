@@ -10,7 +10,6 @@ Core Layers
 .. autoclass:: Linear
    :members:
 
-
 .. autoclass:: Dense
    :members:
 
