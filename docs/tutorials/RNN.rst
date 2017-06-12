@@ -3,10 +3,11 @@
 Recurrent Neural Networks
 =========================
 
-Recurrent Neural Networks (RNNs) are popular models that have shown great promise
-in many NLP tasks. But despite their recent popularity I’ve only found a limited
-number of resources that throughly explain how RNNs work, and how to implement
-them. That’s what this tutorial is about.
+What are Recurrent Neural Networks and how can you use them?
+
+In this post I discuss the basics of Recurrent Neural Networks (RNNs) which are
+deep learning models that are becoming increasingly popular. I don’t intend to get too heavily into the math and proofs behind why these work and am aiming for a more abstract understanding.
+
 
 Introduction to RNNs
 =======================
