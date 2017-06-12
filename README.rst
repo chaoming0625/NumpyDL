@@ -166,5 +166,3 @@ Optimizers
 
 * `optimizers <npdl/optimizers.py>`_
     * SGD
-
-

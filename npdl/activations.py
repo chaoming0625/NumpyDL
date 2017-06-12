@@ -23,7 +23,6 @@ class Activation(object):
     """Base class for activations.
     
     """
-
     def __init__(self):
         self.last_forward = None
 
@@ -86,7 +85,7 @@ class Sigmoid(Activation):
         return self.last_forward
 
     def derivative(self, input=None):
-        """The derivative of sigmoid is 
+        """The derivative of sigmoid is
         
         .. math:: \\frac{dy}{dx} & = (1-\\varphi(x)) \\otimes \\varphi(x)  \\\\
                   & = \\frac{e^{-x}}{(1+e^{-x})^2} \\\\
@@ -141,7 +140,7 @@ class Tanh(Activation):
         return self.last_forward
 
     def derivative(self, input=None):
-        """The derivative of :meth:`tanh` functions is 
+        """The derivative of :meth:`tanh` functions is
         
         .. math:: \\frac{d}{dx} tanh(x) & = \\frac{d}{dx} \\frac{sinh(x)}{cosh(x)} \\\\
                   & = \\frac{cosh(x) \\frac{d}{dx}sinh(x) - sinh(x) \\frac{d}{dx}cosh(x) }{ cosh^2(x)} \\\\
@@ -204,7 +203,7 @@ class ReLU(Activation):
         return np.maximum(0.0, input)
 
     def derivative(self, input=None):
-        """The point-wise derivative for ReLU is :math:`\\frac{dy}{dx} = 1`, if 
+        """The point-wise derivative for ReLU is :math:`\\frac{dy}{dx} = 1`, if
         :math:`x>0`, or :math:`\\frac{dy}{dx} = 0`, if :math:`x<=0`.
         
         Returns
@@ -249,7 +248,7 @@ class Linear(Activation):
     def derivative(self, input=None):
         """Backward propagation.
         The backward also return identity matrix.
-        
+
         Returns
         -------
         float32 
@@ -295,7 +294,7 @@ class Softmax(Activation):
 
     def derivative(self, input=None):
         """Backward propagation.
-        
+
         Returns
         -------
         float32 
@@ -345,7 +344,7 @@ class Elliot(Activation):
 
     def derivative(self, input=None):
         """Backward propagation.
-        
+
         Returns
         -------
         float32 
@@ -386,7 +385,7 @@ class SymmetricElliot(Activation):
 
     def derivative(self, input=None):
         """Backward propagation.
-        
+
         Returns
         -------
         float32 
@@ -425,7 +424,7 @@ class SoftPlus(Activation):
 
     def derivative(self, input=None):
         """Backward propagation.
-        
+
         Returns
         -------
         float32 
@@ -465,7 +464,7 @@ class SoftSign(Activation):
 
     def derivative(self, input=None):
         """Backward propagation.
-        
+
         Returns
         -------
         float32 

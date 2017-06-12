@@ -90,3 +90,5 @@ def test_get():
     for init in [1, '1']:
         with pytest.raises(ValueError):
             objectives.get(init)
+
+

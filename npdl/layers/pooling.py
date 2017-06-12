@@ -123,7 +123,6 @@ class MaxPooling(Layer):
         or 4D tensor with shape:
         `(samples, pooled_rows, pooled_cols, channels)` if dim_ordering='tf'.
     """
-
     def __init__(self, pool_size):
         self.pool_size = pool_size
 
