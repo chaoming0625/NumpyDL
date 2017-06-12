@@ -26,12 +26,14 @@ def main(max_iter):
     net = npdl.Model()
     net.add(npdl.layers.Convolution(1, (3, 3), input_shape=(None, 1, 28, 28)))
     net.add(npdl.layers.MeanPooling((2, 2)))
+    net.add(npdl.layers.Convolution(2, (4, 4)))
+    net.add(npdl.layers.MeanPooling((2, 2)))
     net.add(npdl.layers.Flatten())
     net.add(npdl.layers.Softmax(n_out=n_classes))
     net.compile()
 
     print("train model ... ")
-    net.fit(X_train, npdl.utils.data.one_hot(y_train), max_iter=max_iter, validation_split=0.1)
+    net.fit(X_train, npdl.utils.data.one_hot(y_train), max_iter=max_iter, validation_split=0.1, batch_size=100)
 
 
 if __name__ == '__main__':
