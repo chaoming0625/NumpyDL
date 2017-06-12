@@ -16,6 +16,8 @@ def test_embed_words():
     assert len(layer.grads) == 1
     assert len(layer.param_grads) == 1
 
+    assert len(layer.connect_to()) == 3
+
     # static == True
     layer = Embedding(embed_words, True)
 
