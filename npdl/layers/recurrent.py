@@ -8,9 +8,8 @@ from ..activations import Sigmoid
 from ..activations import Tanh
 from ..initializations import GlorotUniform
 from ..initializations import Orthogonal
-from ..initializations import Zero
-
-zero = Zero()
+from ..initializations import _one
+from ..initializations import _zero
 
 
 class Recurrent(Layer):
@@ -126,14 +125,14 @@ class SimpleRNN(Recurrent):
 
         self.W = self.init((n_in, self.n_out))
         self.U = self.inner_init((self.n_out, self.n_out))
-        self.b = zero((self.n_out,))
+        self.b = _zero((self.n_out,))
 
     def forward(self, input, *args, **kwargs):
         assert np.ndim(input) == 3, 'Only support batch training.'
 
         self.last_input = input
         nb_batch, nb_timestep, nb_in = input.shape
-        output = zero((nb_batch, nb_timestep, self.n_out))
+        output = _zero((nb_batch, nb_timestep, self.n_out))
 
         if len(self.activations) == 0:
             self.activations = [self.activation_cls() for _ in range(nb_timestep)]
@@ -152,10 +151,9 @@ class SimpleRNN(Recurrent):
             return self.last_output[:, -1, :]
 
     def backward(self, pre_grad, *args, **kwargs):
-        zero = Zero()
-        self.dW = zero(self.W.shape)
-        self.dU = zero(self.U.shape)
-        self.db = zero(self.b.shape)
+        self.dW = _zero(self.W.shape)
+        self.dU = _zero(self.U.shape)
+        self.db = _zero(self.b.shape)
 
         # hiddens.shape == (nb_timesteps, nb_batch, nb_out)
         hiddens = np.transpose(self.last_output, (1, 0, 2))
@@ -164,7 +162,7 @@ class SimpleRNN(Recurrent):
             pre_grad = np.transpose(pre_grad, (1, 0, 2))
             assert hiddens.shape == pre_grad.shape
             nb_timesteps = pre_grad.shape[0]
-            layer_grad = Zero()(pre_grad.shape)
+            layer_grad = _zero(pre_grad.shape)
 
             for timestep1 in np.arange(nb_timesteps)[::-1]:
                 delta = pre_grad[timestep1] * self.activations[timestep1].derivative()
@@ -186,7 +184,7 @@ class SimpleRNN(Recurrent):
             nb_timesteps = self.last_output.shape[1]
             nb_batchs = self.last_output.shape[0]
             assert (nb_batchs, self.last_output.shape[2]) == pre_grad.shape
-            layer_grad = Zero()(hiddens.shape)
+            layer_grad = _zero(hiddens.shape)
 
             delta = pre_grad * self.activations[nb_timesteps - 1].derivative()
             for timestep2 in np.arange(nb_timesteps - 1)[::-1]:
@@ -273,9 +271,9 @@ class GRU(Recurrent):
         self.W_h = self.inner_init((self.n_out, self.n_out))
 
         # Biases
-        self.b_r = zero((self.n_out,))
-        self.b_z = zero((self.n_out,))
-        self.b_h = zero((self.n_out,))
+        self.b_r = _zero((self.n_out,))
+        self.b_z = _zero((self.n_out,))
+        self.b_h = _zero((self.n_out,))
 
     def forward(self, input, *args, **kwargs):
         assert np.ndim(input) == 3, 'Only support batch training.'
@@ -287,12 +285,12 @@ class GRU(Recurrent):
         nb_batch, nb_timesteps, nb_in = input.shape
 
         # outputs
-        output = zero((nb_batch, nb_timesteps, self.n_out))
+        output = _zero((nb_batch, nb_timesteps, self.n_out))
 
         # forward
         for i in range(nb_timesteps):
             # data
-            s_pre = zero((nb_batch, self.n_out)) if i == 0 else output[:, i - 1, :]
+            s_pre = _zero((nb_batch, self.n_out)) if i == 0 else output[:, i - 1, :]
             x_now = input[:, i, :]
 
             # computation
@@ -354,6 +352,8 @@ class LSTM(Recurrent):
         Gate activation.
     need_grad ： bool
         If `True`, will calculate gradients.
+    forget_bias_num : int
+        integer.
     
     References
     ----------
@@ -365,11 +365,12 @@ class LSTM(Recurrent):
           (10): 2451–2471. doi:10.1162/089976600300015015.
     """
 
-    def __init__(self, gate_activation=Sigmoid(), need_grad=True, **kwargs):
+    def __init__(self, gate_activation=Sigmoid(), need_grad=True, forget_bias_num=1, **kwargs):
         super(LSTM, self).__init__(**kwargs)
 
         self.gate_activation_cls = gate_activation.__class__
         self.need_grad = need_grad
+        self.forget_bias_num = forget_bias_num
 
         self.U_g, self.U_i, self.U_f, self.U_o = None, None, None, None
         self.W_g, self.W_i, self.W_f, self.W_o = None, None, None, None
@@ -378,8 +379,6 @@ class LSTM(Recurrent):
         self.grad_U_g, self.grad_U_i, self.grad_U_f, self.grad_U_o = None, None, None, None
         self.grad_W_g, self.grad_W_i, self.grad_W_f, self.grad_W_o = None, None, None, None
         self.grad_b_g, self.grad_b_i, self.grad_b_f, self.grad_b_o = None, None, None, None
-
-        self.block_list = []
 
     def connect_to(self, prev_layer=None):
         n_in = super(LSTM, self).connect_to(prev_layer)
@@ -397,30 +396,30 @@ class LSTM(Recurrent):
         self.W_o = self.inner_init((self.n_out, self.n_out))
 
         # Biases
-        self.b_g = zero((self.n_out,))
-        self.b_i = zero((self.n_out,))
-        self.b_f = zero((self.n_out,))
-        self.b_o = zero((self.n_out,))
+        self.b_g = _zero((self.n_out,))
+        self.b_i = _zero((self.n_out,))
+        self.b_f = _one((self.n_out,)) * self.forget_bias_num
+        self.b_o = _zero((self.n_out,))
 
     def forward(self, input, *args, **kwargs):
         raise NotImplementedError
 
     def backward(self, pre_grad, *args, **kwargs):
         # reset
-        self.grad_W_g = zero(self.W_g.shape)
-        self.grad_W_i = zero(self.W_i.shape)
-        self.grad_W_f = zero(self.W_f.shape)
-        self.grad_W_o = zero(self.W_o.shape)
+        self.grad_W_g = _zero(self.W_g.shape)
+        self.grad_W_i = _zero(self.W_i.shape)
+        self.grad_W_f = _zero(self.W_f.shape)
+        self.grad_W_o = _zero(self.W_o.shape)
 
-        self.grad_U_g = zero(self.U_g.shape)
-        self.grad_U_i = zero(self.U_i.shape)
-        self.grad_U_f = zero(self.U_f.shape)
-        self.grad_U_o = zero(self.U_o.shape)
+        self.grad_U_g = _zero(self.U_g.shape)
+        self.grad_U_i = _zero(self.U_i.shape)
+        self.grad_U_f = _zero(self.U_f.shape)
+        self.grad_U_o = _zero(self.U_o.shape)
 
-        self.grad_b_g = zero(self.b_g.shape)
-        self.grad_b_i = zero(self.b_i.shape)
-        self.grad_b_f = zero(self.b_f.shape)
-        self.grad_b_o = zero(self.b_o.shape)
+        self.grad_b_g = _zero(self.b_g.shape)
+        self.grad_b_i = _zero(self.b_i.shape)
+        self.grad_b_f = _zero(self.b_f.shape)
+        self.grad_b_o = _zero(self.b_o.shape)
 
         # backward
         raise NotImplementedError
@@ -493,19 +492,26 @@ class BatchLSTM(Recurrent):
 
     def connect_to(self, prev_layer=None):
         """Connection to the previous layer.
-        
-        :param AllW: numpy.array
-                    i   f   o   g
-            bias    
+
+        Parameters
+        ----------
+        prev_layer : npdl.layers.Layer or None
+            Previous layer.
+        AllW : numpy.array
+            ===== ==== === === ===
+            type   i    f   o   g
+            ----- ---- --- --- ---
+            bias
             x2h
             h2h
-            
+            ===== ==== === === ===
+
         """
         n_in = super(BatchLSTM, self).connect_to(prev_layer)
         n_out = self.n_out
 
         # init weights
-        self.AllW = zero((n_in + n_out + 1, 4 * n_out))
+        self.AllW = _zero((n_in + n_out + 1, 4 * n_out))
 
         # bias
         if self.forget_bias_num != 0:
@@ -550,24 +556,24 @@ class BatchLSTM(Recurrent):
 
         # data
         input = np.transpose(input, (1, 0, 2))
-        self.c0 = np.zeros((nb_batch, self.n_out)) if c0 is None else c0
-        self.h0 = np.zeros((nb_batch, self.n_out)) if h0 is None else h0
+        self.c0 = _zero((nb_batch, self.n_out)) if c0 is None else c0
+        self.h0 = _zero((nb_batch, self.n_out)) if h0 is None else h0
 
         # Perform the LSTM forward pass with X as the input #
         # x plus h plus bias, lol
         xphpb = self.AllW.shape[0]
         # input [1, xt, ht-1] to each tick of the LSTM
-        Hin = np.zeros((nb_seq, nb_batch, xphpb))
+        Hin = _zero((nb_seq, nb_batch, xphpb))
         # hidden representation of the LSTM (gated cell content)
-        Hout = np.zeros((nb_seq, nb_batch, self.n_out))
+        Hout = _zero((nb_seq, nb_batch, self.n_out))
         # input, forget, output, gate (IFOG)
-        IFOG = np.zeros((nb_seq, nb_batch, self.n_out * 4))
+        IFOG = _zero((nb_seq, nb_batch, self.n_out * 4))
         # after nonlinearity
-        IFOGf = np.zeros((nb_seq, nb_batch, self.n_out * 4))
+        IFOGf = _zero((nb_seq, nb_batch, self.n_out * 4))
         # cell content
-        C = np.zeros((nb_seq, nb_batch, self.n_out))
+        C = _zero((nb_seq, nb_batch, self.n_out))
         # tanh of cell content
-        Ct = np.zeros((nb_seq, nb_batch, self.n_out))
+        Ct = _zero((nb_seq, nb_batch, self.n_out))
         for t in range(nb_seq):
             # concat [x,h] as input to the LSTM
             prevh = Hout[t - 1] if t > 0 else self.h0
@@ -624,15 +630,15 @@ class BatchLSTM(Recurrent):
         nb_seq, batch_size, n_out = Hout.shape
         input_size = self.AllW.shape[0] - n_out - 1  # -1 due to bias
 
-        self.d_AllW = zero(self.AllW.shape)
-        self.d_h0 = zero((batch_size, n_out))
+        self.d_AllW = _zero(self.AllW.shape)
+        self.d_h0 = _zero((batch_size, n_out))
 
         # backprop the LSTM
-        dIFOG = zero(self.IFOG.shape)
-        dIFOGf = zero(self.IFOGf.shape)
-        dHin = zero(self.Hin.shape)
-        dC = zero(self.C.shape)
-        layer_grad = zero((nb_seq, batch_size, input_size))
+        dIFOG = _zero(self.IFOG.shape)
+        dIFOGf = _zero(self.IFOGf.shape)
+        dHin = _zero(self.Hin.shape)
+        dC = _zero(self.C.shape)
+        layer_grad = _zero((nb_seq, batch_size, input_size))
         # make a copy so we don't have any funny side effects
 
         # prepare layer gradients
@@ -642,7 +648,7 @@ class BatchLSTM(Recurrent):
         else:
             timesteps = [nb_seq-1]
             assert np.ndim(pre_grad) == 2
-            tmp = zero((self.nb_batch, self.nb_seq, self.n_out))
+            tmp = _zero((self.nb_batch, self.nb_seq, self.n_out))
             tmp[:, -1, :] = pre_grad
             pre_grad = tmp
         dHout = np.transpose(pre_grad, (1, 0, 2)).copy()
