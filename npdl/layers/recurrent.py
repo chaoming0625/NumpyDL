@@ -369,6 +369,7 @@ class LSTM(Recurrent):
         super(LSTM, self).__init__(**kwargs)
 
         self.gate_activation_cls = gate_activation.__class__
+        self.gate_activation = gate_activation
         self.need_grad = need_grad
         self.forget_bias_num = forget_bias_num
 
@@ -379,6 +380,9 @@ class LSTM(Recurrent):
         self.grad_U_g, self.grad_U_i, self.grad_U_f, self.grad_U_o = None, None, None, None
         self.grad_W_g, self.grad_W_i, self.grad_W_f, self.grad_W_o = None, None, None, None
         self.grad_b_g, self.grad_b_i, self.grad_b_f, self.grad_b_o = None, None, None, None
+
+        self.c0, self.h0 = None, None
+        self.last_cell = None
 
     def connect_to(self, prev_layer=None):
         n_in = super(LSTM, self).connect_to(prev_layer)
@@ -401,8 +405,61 @@ class LSTM(Recurrent):
         self.b_f = _one((self.n_out,)) * self.forget_bias_num
         self.b_o = _zero((self.n_out,))
 
-    def forward(self, input, *args, **kwargs):
-        raise NotImplementedError
+    def forward(self, input, mask, c0=None, h0=None):
+        assert np.ndim(input) == 3, 'Only support batch training.'
+
+        # record
+        self.last_input = input
+
+        # dim
+        nb_batch, nb_timesteps, nb_in = input.shape
+
+        # data
+        output = _zero((nb_batch, nb_timesteps, self.n_out))
+        cell = _zero((nb_batch, nb_timesteps, self.n_out))
+        self.c0 = _zero((nb_batch, self.n_out)) if c0 is None else c0
+        self.h0 = _zero((nb_batch, self.n_out)) if h0 is None else h0
+
+        # forward
+        for i in range(nb_timesteps):
+            # data
+            h_pre = self.h0 if i == 0 else output[:, i - 1, :]
+            c_pre = self.c0 if i == 0 else cell[:, i - 1, :]
+            x_now = input[:, i, :]
+            m_now = mask[:, i]
+
+            # computation
+            f = self.gate_activation.forward(np.dot(x_now, self.U_f) +
+                                             np.dot(h_pre, self.W_f) +
+                                             self.b_f)
+            i = self.gate_activation.forward(np.dot(x_now, self.U_i) +
+                                             np.dot(h_pre, self.W_i) +
+                                             self.b_i)
+            o = self.gate_activation.forward(np.dot(x_now, self.U_o) +
+                                             np.dot(h_pre, self.W_o) +
+                                             self.b_o)
+            g = self.activation.forward(np.dot(x_now, self.U_g) +
+                                        np.dot(h_pre, self.W_g) +
+                                        self.b_g)
+            c = f * c_pre + i * g
+            c = m_now[:, None] * c + (1.0 - m_now)[:, None] * c_pre
+
+            h = o * self.activation.forward(c)
+            h = m_now[:, None] * h + (1.0 - m_now)[:, None] * h_pre
+
+            # record
+            self.h0 = h
+            self.c0 = c
+
+        # record
+        self.last_output = output
+        self.last_cell = cell
+
+        # return
+        if self.return_sequence:
+            return self.last_output
+        else:
+            return self.last_output[:, -1, :]
 
     def backward(self, pre_grad, *args, **kwargs):
         # reset
@@ -626,7 +683,7 @@ class BatchLSTM(Recurrent):
             The gradients propagated to previous layer.
         """
 
-        Hout = np.transpose(self.last_output, (1, 0 , 2))
+        Hout = np.transpose(self.last_output, (1, 0, 2))
         nb_seq, batch_size, n_out = Hout.shape
         input_size = self.AllW.shape[0] - n_out - 1  # -1 due to bias
 
@@ -646,7 +703,7 @@ class BatchLSTM(Recurrent):
             timesteps = list(range(nb_seq))[::-1]
             assert np.ndim(pre_grad) == 3
         else:
-            timesteps = [nb_seq-1]
+            timesteps = [nb_seq - 1]
             assert np.ndim(pre_grad) == 2
             tmp = _zero((self.nb_batch, self.nb_seq, self.n_out))
             tmp[:, -1, :] = pre_grad
@@ -694,9 +751,8 @@ class BatchLSTM(Recurrent):
 
     @property
     def params(self):
-        return [self.AllW,]
+        return [self.AllW, ]
 
     @property
     def grads(self):
-        return [self.d_AllW,]
-
+        return [self.d_AllW, ]
