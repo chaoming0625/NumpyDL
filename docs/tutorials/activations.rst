@@ -12,7 +12,7 @@ that node given an input or set of inputs. In biologically inspired neural netwo
 activation function is usually an abstraction representing the rate of action potential
 firing in the cell.
 
-.. figure:: pics/900px-ArtificialNeuronModel_english.png
+.. figure:: pics/act_0.png
 
 
 Why need activation function?
@@ -48,7 +48,7 @@ you may encounter in practice:
 Sigmoid
 -------
 
-.. figure:: pics/sigmoid_activation_function.png
+.. figure:: pics/act_1.png
 
   Sigmoid non-linearity squashes real numbers to range between :math:`[0,1]`.
 
@@ -85,7 +85,7 @@ out of favor and it is rarely ever used. It has two major drawbacks:
 Tangent
 -------
 
-.. figure:: pics/tanh_activation_functions.png
+.. figure:: pics/act_2.png
 
     The tanh non-linearity squashes real numbers to range between :math:`[-1,1]`.
 
@@ -103,7 +103,7 @@ sigmoid neuron, in particular the following holds:
 ReLU
 ----
 
-.. figure:: pics/relu_activation_functions.png
+.. figure:: pics/act_3.png
 
      Rectified Linear Unit (ReLU) activation function, which is zero when :math:`x < 0` and
      then linear with slope :math:`1` when :math:`x > 0`.
@@ -133,7 +133,7 @@ several pros and cons to using the ReLUs:
   learning rate is set too high. With a proper setting of the learning rate this is less
   frequently an issue.
 
-.. figure:: pics/relu_activation_functions_training_error.png
+.. figure:: pics/act_4.png
 
     A plot from Krizhevsky et al. [1]_ paper indicating the 6x improvement in convergence
     with the ReLU unit compared to the tanh unit.
@@ -142,7 +142,7 @@ several pros and cons to using the ReLUs:
 Leaky ReLU
 ----------
 
-.. figure:: pics/leaky_relu_activation_functions.png
+.. figure:: pics/act_5.png
 
 
 Leaky ReLUs are one attempt to fix the "dying ReLU" problem. Instead of the function being

@@ -32,26 +32,57 @@
    :target: https://github.com/oujago/NumpyDL
 
 
+NumpyDL
+=======
 
-NumpyDL: Deep Learning Library based on Pure Numpy, for Education
-=================================================================
+Descriptions
+============
 
-NumpyDL is a simple deep learning library based on pure Python/Numpy.Its main features are:
+``NumpyDL`` is:
 
-* *Pure* in Numpy and *native* to Python
-* Support basic *automatic differentiation*
-* Support *commonly used models*, such as MLP, RNNs, GRUs, LSTMs and CNNs
-* *Tutorials* to learn deep learning knowledge
-* API like `Keras` deep learning library
+1. Deep Learning Library
+2. Based on Pure Numpy/Python
+3. For Education
+4. And for My Homework
 
+
+Features
+========
+
+Its main features are:
+
+1. *Pure* in Numpy
+2. *Native* to Python
+3. *Automatic differentiations* are basically supported
+4. *Commonly used models* are supported: MLP, RNNs, GRUs, LSTMs and CNNs
+5. *API* like ``Keras`` library
+6. *Examples* for several AI tasks
+7. *Application* for a toy chatbot
 
 Documentation
 =============
 
-Available online documents: `latest <http://numpydl.readthedocs.io/en/latest>`_
-docs, `development <http://numpydl.readthedocs.io/en/develop/>`_ docs, and
-`stable <http://numpydl.readthedocs.io/en/stable/>`_ docs. Chinese version document
-is in development and will be available soon.
+Available online documents:
+
+1. `latest docs <http://numpydl.readthedocs.io/en/latest>`_
+2. `development docs <http://numpydl.readthedocs.io/en/develop/>`_
+3. `stable docs <http://numpydl.readthedocs.io/en/stable/>`_
+
+
+Installation
+============
+
+Install NumpyDL using pip:
+
+.. code-block:: bash
+
+    $> pip install npdl
+
+Install from source code:
+
+.. code-block:: bash
+
+    $> python setup.py install
 
 
 Example
@@ -82,87 +113,3 @@ Example
     # train
     model.fit(X_train, npdl.utils.data.one_hot(Y_train), max_iter=150, validation_split=0.1)
 
-
-Installation
-============
-
-Install NumpyDL using pip:
-
-.. code-block:: bash
-
-    $> pip install npdl
-
-Install from source code:
-
-.. code-block:: bash
-
-    $> python setup.py install
-   
-   
-Support
-=======
-
-Layers
-------
-
-* `core.py <npdl/layers/core.py>`_
-    * Dense (perceptron) Layer
-    * Softmax Layer
-    * Dropout Layer
-* `normalization.py <npdl/layers/normalization.py>`_
-    * Batch Normalization Layer
-* `embedding.py <npdl/layers/embedding.py>`_
-    * Embedding Layer
-* `convolution.py <npdl/layers/convolution.py>`_
-    * Convolution Layer
-* `pooling.py <npdl/layers/pooling.py>`_
-    * MaxPooling Layer
-    * MeanPooling Layer
-* `reccurent.py <npdl/layers/reccurent.py>`_
-    * Recurrent Layer
-    * SimpleRNN Layer
-* `shape.py <npdl/layers/shape.py>`_
-    * Flatten Layer
-
-Activations
------------
-
-* `acitvations <npdl/activations.py>`_
-    * Sigmoid
-    * Tanh
-    * ReLU
-    * Softmax
-    * Elliot
-    * SymmetricElliot
-    * LReLU
-    * SoftPlus
-    * SoftSign
-
-Initializations
----------------
-
-* `initializations <npdl/initializations.py>`_
-    * Uniform
-    * Normal
-    * LecunUniform
-    * GlorotUniform
-    * GlorotNormal
-    * HeNormal
-    * HeUniform
-    * Orthogonal
-
-Objectives
-----------
-
-* `objectives <npdl/objectives.py>`_
-    * MeanSquaredError
-    * HellingerDistance
-    * BinaryCrossEntropy
-    * SoftmaxCategoricalCrossEntropy
-
-
-Optimizers
-----------
-
-* `optimizers <npdl/optimizers.py>`_
-    * SGD

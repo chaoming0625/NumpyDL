@@ -4,7 +4,7 @@ Initialization
 
 
 Introduction
-=============
+============
 
 As we all know, the solution to a non-convex optimization algorithm (like stochastic gradient descent)
 depends on the initial values of the parameters. This post is about choosing initialization parameters
@@ -22,7 +22,7 @@ having multiple layers. If, on the other hand, your activations become larger an
 activations will saturate and become meaningless, with gradients approaching 0.
 
 
-.. figure:: pics/activation-functions.svg
+.. figure:: pics/init_0.svg
 
 Let us consider one layer and forget about the bias. Note that the following analysis and conclusion
 is taken from Glorot and Bengio [1]_. Consider a weight matrix :math:`W \in R^{m×n}`, where each element

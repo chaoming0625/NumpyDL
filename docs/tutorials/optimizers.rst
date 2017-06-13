@@ -28,7 +28,7 @@ with gradient descent, you can find a good introduction on optimizing neural net
 
 
 Gradient descent variants
-============================
+=========================
 There are three variants of gradient descent, which differ in how much data we use to compute
 the gradient of the objective function. Depending on the amount of data, we make a trade-off
 between the accuracy of the parameter update and the time it takes to perform an update.
@@ -142,7 +142,7 @@ In code, instead of iterating over examples, we now iterate over mini-batches of
 
 
 Challenges
-=============
+==========
 
 Vanilla mini-batch gradient descent, however, does not guarantee good convergence,
 but offers a few challenges that need to be addressed:

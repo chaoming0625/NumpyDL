@@ -3,7 +3,7 @@ Objective
 =========
 
 What is the Objective Function?
-==================================
+===============================
 
 The objective of a linear programming problem will be to maximize or to minimize
 some numerical value. This value may be the expected net present value of a project
@@ -47,7 +47,7 @@ not being in the objective function at all.
 
 
 Visualizing the Objective function
-=====================================
+==================================
 
 The loss functions we’ll look at in this class are usually defined over very
 high-dimensional spaces (e.g. in CIFAR-10 a linear classifier weight matrix is of
