@@ -10,6 +10,7 @@ Step 1: download pretrained model.
 
 Step 2: Decompress ``data.tar.gz`` into the ``data`` directory.
 
+    mkdir applications/chatbot/data
     cd applications/chatbot/data
     tar -xzf data.tar.gz
 
