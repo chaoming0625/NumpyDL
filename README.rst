@@ -32,18 +32,17 @@
    :target: https://github.com/oujago/NumpyDL
 
 
-NumpyDL
-=======
+NumpyDL: Numpy Deep Learning Library
+====================================
 
 Descriptions
 ============
 
 ``NumpyDL`` is:
 
-1. Deep Learning Library
-2. Based on Pure Numpy/Python
-3. For Education
-4. And for My Homework
+1. For My Homework
+2. For Education
+3. Based on Pure Numpy/Python
 
 
 Features

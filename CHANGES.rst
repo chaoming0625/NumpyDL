@@ -2,6 +2,16 @@ Changelog
 ---------
 
 
+0.3.0 (2017-06-15)
+~~~~~~~~~~~~~~~~~~
+
+Version 0.3.0.
+
+* Add chatbot application.
+* Add more examples.
+* Support LSTM.
+* Support GRU.
+
 
 0.2.5 (2017-05-30)
 ~~~~~~~~~~~~~~~~~~
