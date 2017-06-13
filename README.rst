@@ -11,6 +11,15 @@
 .. image:: https://coveralls.io/repos/github/oujago/NumpyDL/badge.svg
     :target: https://coveralls.io/github/oujago/NumpyDL
 
+.. image:: https://badge.fury.io/py/npdl.svg
+    :target: https://badge.fury.io/py/npdl
+
+.. image:: https://img.shields.io/badge/python-3.5-blue.svg
+    :target: https://pypi.python.org/pypi/npdl
+
+.. image:: https://img.shields.io/badge/python-3.6-blue.svg
+    :target: https://pypi.python.org/pypi/npdl
+
 .. image:: https://codeclimate.com/github/oujago/NumpyDL/badges/gpa.svg
    :target: https://codeclimate.com/github/oujago/NumpyDL
    :alt: Code Climate
@@ -41,7 +50,7 @@ Descriptions
 ``NumpyDL`` is:
 
 1. For My Homework
-2. For Education
+2. For DL Education
 3. Based on Pure Numpy/Python
 
 
