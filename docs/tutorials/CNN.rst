@@ -323,7 +323,10 @@ features are made of any linear combination of first layer features. I'm sure th
 trained on a higher resolution image set, these features would become more apparent.
 
 
-.. literalinclude:: visualization.py
+Code
+====
+
+.. literalinclude:: cnn_visualization.py
     :start-after: start
     :end-before: end
 
