@@ -117,10 +117,6 @@ class Momentum(Optimizer):
     Higher momentum also results in larger update steps. To counter that,
     you can optionally scale your learning rate by `1 - momentum`.
 
-    See Also
-    --------
-    apply_momentum : Generic function applying momentum to updates
-    nesterov_momentum : Nesterov's variant of SGD with momentum
     """
 
     def __init__(self, lr=0.01, momentum=0.9):
@@ -171,9 +167,6 @@ class NesterovMomentum(Optimizer):
     https://github.com/lisa-lab/pylearn2/pull/136#issuecomment-10381617,
     which allows the gradient to be evaluated at the current parameters.
 
-    See Also
-    --------
-    apply_nesterov_momentum : Function applying momentum to updates
     """
     def __init__(self):
         super(NesterovMomentum, self).__init__()

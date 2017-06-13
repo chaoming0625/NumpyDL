@@ -1,4 +1,9 @@
+
+# basic requirements
+
 numpy>=1.6
 scipy>=0.16
 scikit-learn>=0.18
 nltk>=3.0
+
+

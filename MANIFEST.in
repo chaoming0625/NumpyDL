@@ -4,6 +4,7 @@ include LICENSE
 include CHANGES.rst
 include requirements.txt
 include requirements-doc.txt
+include requirements-dev.txt
 
 # tests
 recursive-include tests *.py
@@ -13,4 +14,9 @@ recursive-include examples *.py
 
 # documents
 recursive-include docs *.rst conf.py *.css Makefile
+
+# applications
+recursive-include application *.py *.md *.html *.jpg
+
+
 
