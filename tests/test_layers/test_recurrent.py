@@ -20,7 +20,8 @@ def test_Recurrent():
         assert layer.out_shape is None
         with pytest.raises(AssertionError):
             layer.connect_to()
-        assert layer.connect_to(PrevLayer((20, 10, 100))) == 100
+        layer.connect_to(PrevLayer((20, 10, 100)))
+        assert layer.n_in == 100
         assert len(layer.out_shape) == (3 if seq else 2)
 
 

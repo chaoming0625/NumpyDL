@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 
 
+import os
 import json
 import re
 import npdl
 import numpy as np
 from npdl.initializations import _one
-from npdl.initializations import _zero
 
 token2idx_path = "data/token2idx.json"
 idx2token_path = "data/idx2token.json"
@@ -19,6 +19,11 @@ idx_unk = np.int32(3)  # unknown
 token_start = "<start>"
 token_end = "<end>"
 token_unk = "<unk>"
+
+if not os.path.exists(token2idx_path) or \
+        not os.path.exists(idx2token_path) or \
+        not os.path.exists(param_path):
+    raise ValueError('Please download pre-trained models and put them in "data" directory.')
 
 
 class Utils:

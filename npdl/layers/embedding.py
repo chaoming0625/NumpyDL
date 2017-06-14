@@ -17,7 +17,7 @@ class Embedding(Layer):
 
         if embed_words is None:
             if static is None:
-                self.static = False
+                self.static = True
             else:
                 self.static = static
 
@@ -25,7 +25,7 @@ class Embedding(Layer):
 
         else:
             if static is None:
-                self.static = False
+                self.static = True
             else:
                 self.static = static
 
@@ -41,25 +41,13 @@ class Embedding(Layer):
         return self.embed_words[input]
 
     def backward(self, pre_grad, *args, **kwargs):
-        raise NotImplementedError
+        assert self.static
 
     @property
     def params(self):
-        if self.static:
-            return []
-        else:
-            return [self.embed_words, ]
+        return [] if self.static else [self.embed_words, ]
 
     @property
     def grads(self):
-        if self.static:
-            return []
-        else:
-            return [self.d_embed_words, ]
+        return [] if self.static else [self.d_embed_words, ]
 
-    @property
-    def param_grads(self):
-        if self.static:
-            return []
-        else:
-            return [(self.embed_words, self.d_embed_words), ]

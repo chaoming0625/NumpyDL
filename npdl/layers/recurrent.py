@@ -70,20 +70,17 @@ class Recurrent(Layer):
     def connect_to(self, prev_layer=None):
         if prev_layer is not None:
             assert len(prev_layer.out_shape) == 3
-            n_in = prev_layer.out_shape[-1]
+            self.n_in = prev_layer.out_shape[-1]
             self.nb_batch = prev_layer.out_shape[0] or self.nb_batch
             self.nb_seq = prev_layer.out_shape[1] or self.nb_seq
 
         else:
             assert self.n_in is not None
-            n_in = self.n_in
 
         if self.return_sequence:
             self.out_shape = (self.nb_batch, self.nb_seq, self.n_out)
         else:
             self.out_shape = (self.nb_batch, self.n_out)
-
-        return n_in
 
 
 class SimpleRNN(Recurrent):
@@ -122,9 +119,9 @@ class SimpleRNN(Recurrent):
         self.activations = []
 
     def connect_to(self, prev_layer=None):
-        n_in = super(SimpleRNN, self).connect_to(prev_layer)
+        super(SimpleRNN, self).connect_to(prev_layer)
 
-        self.W = self.init((n_in, self.n_out))
+        self.W = self.init((self.n_in, self.n_out))
         self.U = self.inner_init((self.n_out, self.n_out))
         self.b = _zero((self.n_out,))
 
@@ -259,12 +256,12 @@ class GRU(Recurrent):
         self.grad_b_r, self.grad_b_z, self.grad_b_h = None, None, None
 
     def connect_to(self, prev_layer=None):
-        n_in = super(GRU, self).connect_to(prev_layer)
+        super(GRU, self).connect_to(prev_layer)
 
         # Weights matrices for input x
-        self.U_r = self.init((n_in, self.n_out))
-        self.U_z = self.init((n_in, self.n_out))
-        self.U_h = self.init((n_in, self.n_out))
+        self.U_r = self.init((self.n_in, self.n_out))
+        self.U_z = self.init((self.n_in, self.n_out))
+        self.U_h = self.init((self.n_in, self.n_out))
 
         # Weights matrices for memory cell
         self.W_r = self.inner_init((self.n_out, self.n_out))
@@ -386,13 +383,13 @@ class LSTM(Recurrent):
         self.last_cell = None
 
     def connect_to(self, prev_layer=None):
-        n_in = super(LSTM, self).connect_to(prev_layer)
+        super(LSTM, self).connect_to(prev_layer)
 
         # Weights matrices for input x
-        self.U_g = self.init((n_in, self.n_out))
-        self.U_i = self.init((n_in, self.n_out))
-        self.U_f = self.init((n_in, self.n_out))
-        self.U_o = self.init((n_in, self.n_out))
+        self.U_g = self.init((self.n_in, self.n_out))
+        self.U_i = self.init((self.n_in, self.n_out))
+        self.U_f = self.init((self.n_in, self.n_out))
+        self.U_o = self.init((self.n_in, self.n_out))
 
         # Weights matrices for memory cell
         self.W_g = self.inner_init((self.n_out, self.n_out))
@@ -568,7 +565,8 @@ class BatchLSTM(Recurrent):
             ===== ==== === === ===
 
         """
-        n_in = super(BatchLSTM, self).connect_to(prev_layer)
+        super(BatchLSTM, self).connect_to(prev_layer)
+        n_in = self.n_in
         n_out = self.n_out
 
         # init weights

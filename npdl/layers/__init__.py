@@ -41,6 +41,7 @@ from .convolution import Convolution
 
 # shape layer
 from .shape import Flatten
+from .shape import DimShuffle
 
 
 # pooling layers
