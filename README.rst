@@ -28,9 +28,6 @@
    :target: https://codeclimate.com/github/oujago/NumpyDL
    :alt: Issue Count
 
-.. image:: https://zenodo.org/badge/83100910.svg
-   :target: https://zenodo.org/badge/latestdoi/83100910
-
 .. image:: https://img.shields.io/github/issues/oujago/NumpyDL.svg
    :target: https://github.com/oujago/NumpyDL
 
@@ -39,6 +36,10 @@
 
 .. image:: https://img.shields.io/github/stars/oujago/NumpyDL.svg
    :target: https://github.com/oujago/NumpyDL
+
+.. image:: https://zenodo.org/badge/83100910.svg
+   :target: https://zenodo.org/badge/latestdoi/83100910
+
 
 
 NumpyDL: Numpy Deep Learning Library
