@@ -60,17 +60,11 @@ class SGD(Optimizer):
 
     Parameters
     ----------
-    loss_or_grads : symbolic expression or list of expressions
-        A scalar loss expression, or a list of gradient expressions
-    params : list of shared variables
-        The variables to generate update expressions for
-    learning_rate : float or symbolic scalar
+    clip : float
+        If smaller than 0, do not apply parameter clip.
+    lr : float
         The learning rate controlling the size of update steps
 
-    Returns
-    -------
-    OrderedDict
-        A dictionary mapping each parameter to its update expression
     """
 
     def __init__(self, lr=0.001, clip=-1):
@@ -97,20 +91,8 @@ class Momentum(Optimizer):
 
     Parameters
     ----------
-    loss_or_grads : symbolic expression or list of expressions
-        A scalar loss expression, or a list of gradient expressions
-    params : list of shared variables
-        The variables to generate update expressions for
-    learning_rate : float or symbolic scalar
+    lr : float
         The learning rate controlling the size of update steps
-    momentum : float or symbolic scalar, optional
-        The amount of momentum to apply. Higher momentum results in
-        smoothing over more update steps. Defaults to 0.9.
-
-    Returns
-    -------
-    OrderedDict
-        A dictionary mapping each parameter to its update expression
 
     Notes
     -----
@@ -131,6 +113,7 @@ class Momentum(Optimizer):
     def update_params(self, ):
         pass
 
+
 class NesterovMomentum(Optimizer):
     """Stochastic Gradient Descent (SGD) updates with Nesterov momentum
 
@@ -141,20 +124,8 @@ class NesterovMomentum(Optimizer):
 
     Parameters
     ----------
-    loss_or_grads : symbolic expression or list of expressions
-        A scalar loss expression, or a list of gradient expressions
-    params : list of shared variables
-        The variables to generate update expressions for
-    learning_rate : float or symbolic scalar
+    lr : float
         The learning rate controlling the size of update steps
-    momentum : float or symbolic scalar, optional
-        The amount of momentum to apply. Higher momentum results in
-        smoothing over more update steps. Defaults to 0.9.
-
-    Returns
-    -------
-    OrderedDict
-        A dictionary mapping each parameter to its update expression
 
     Notes
     -----
@@ -168,7 +139,7 @@ class NesterovMomentum(Optimizer):
     which allows the gradient to be evaluated at the current parameters.
 
     """
-    def __init__(self):
+    def __init__(self, lr=0.001):
         super(NesterovMomentum, self).__init__()
 
 
@@ -180,19 +151,8 @@ class Adagrad(Optimizer):
 
     Parameters
     ----------
-    loss_or_grads : symbolic expression or list of expressions
-        A scalar loss expression, or a list of gradient expressions
-    params : list of shared variables
-        The variables to generate update expressions for
-    learning_rate : float or symbolic scalar
+    lr : float
         The learning rate controlling the size of update steps
-    epsilon : float or symbolic scalar
-        Small value added for numerical stability
-
-    Returns
-    -------
-    OrderedDict
-        A dictionary mapping each parameter to its update expression
 
     Notes
     -----
@@ -216,7 +176,7 @@ class Adagrad(Optimizer):
            Notes on AdaGrad. http://www.ark.cs.cmu.edu/cdyer/adagrad.pdf
     """
 
-    def __init__(self):
+    def __init__(self, lr=0.001):
         super(Adagrad, self).__init__()
 
 
@@ -228,21 +188,8 @@ class RMSprop(Optimizer):
 
     Parameters
     ----------
-    loss_or_grads : symbolic expression or list of expressions
-        A scalar loss expression, or a list of gradient expressions
-    params : list of shared variables
-        The variables to generate update expressions for
-    learning_rate : float or symbolic scalar
+    lr : float
         The learning rate controlling the size of update steps
-    rho : float or symbolic scalar
-        Gradient moving average decay factor
-    epsilon : float or symbolic scalar
-        Small value added for numerical stability
-
-    Returns
-    -------
-    OrderedDict
-        A dictionary mapping each parameter to its update expression
 
     Notes
     -----
@@ -264,7 +211,7 @@ class RMSprop(Optimizer):
            Coursera. http://www.youtube.com/watch?v=O3sxAc4hxZU (formula @5:20)
     """
 
-    def __init__(self):
+    def __init__(self, lr=0.001):
         super(RMSprop, self).__init__()
 
 
@@ -276,21 +223,8 @@ class Adadelta(Optimizer):
 
     Parameters
     ----------
-    loss_or_grads : symbolic expression or list of expressions
-        A scalar loss expression, or a list of gradient expressions
-    params : list of shared variables
-        The variables to generate update expressions for
-    learning_rate : float or symbolic scalar
+    lr : float
         The learning rate controlling the size of update steps
-    rho : float or symbolic scalar
-        Squared gradient moving average decay factor
-    epsilon : float or symbolic scalar
-        Small value added for numerical stability
-
-    Returns
-    -------
-    OrderedDict
-        A dictionary mapping each parameter to its update expression
 
     Notes
     -----
@@ -322,7 +256,7 @@ class Adadelta(Optimizer):
            arXiv Preprint arXiv:1212.5701.
     """
 
-    def __init__(self):
+    def __init__(self, lr=0.001):
         super(Adadelta, self).__init__()
 
 
@@ -333,23 +267,8 @@ class Adam(Optimizer):
 
     Parameters
     ----------
-    loss_or_grads : symbolic expression or list of expressions
-        A scalar loss expression, or a list of gradient expressions
-    params : list of shared variables
-        The variables to generate update expressions for
-    learning_rate : float or symbolic scalar
-        Learning rate
-    beta1 : float or symbolic scalar
-        Exponential decay rate for the first moment estimates.
-    beta2 : float or symbolic scalar
-        Exponential decay rate for the second moment estimates.
-    epsilon : float or symbolic scalar
-        Constant for numerical stability.
-
-    Returns
-    -------
-    OrderedDict
-        A dictionary mapping each parameter to its update expression
+    lr : float
+        The learning rate controlling the size of update steps
 
     Notes
     -----
@@ -364,7 +283,7 @@ class Adam(Optimizer):
            arXiv preprint arXiv:1412.6980.
     """
 
-    def __init__(self):
+    def __init__(self, lr=0.001):
         super(Adam, self).__init__()
 
 
@@ -376,23 +295,8 @@ class Adamax(Optimizer):
 
     Parameters
     ----------
-    loss_or_grads : symbolic expression or list of expressions
-        A scalar loss expression, or a list of gradient expressions
-    params : list of shared variables
-        The variables to generate update expressions for
-    learning_rate : float or symbolic scalar
-        Learning rate
-    beta1 : float or symbolic scalar
-        Exponential decay rate for the first moment estimates.
-    beta2 : float or symbolic scalar
-        Exponential decay rate for the weighted infinity norm estimates.
-    epsilon : float or symbolic scalar
-        Constant for numerical stability.
-
-    Returns
-    -------
-    OrderedDict
-        A dictionary mapping each parameter to its update expression
+    lr : float
+        The learning rate controlling the size of update steps
 
     References
     ----------
@@ -401,7 +305,7 @@ class Adamax(Optimizer):
            arXiv preprint arXiv:1412.6980.
     """
 
-    def __init__(self):
+    def __init__(self, lr=0.001):
         super(Adamax, self).__init__()
 
 
