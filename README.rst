@@ -50,8 +50,8 @@ Descriptions
 
 ``NumpyDL`` is:
 
-1. For DL Education
-2. Based on Pure Numpy/Python
+1. Based on Pure Numpy/Python
+2. For DL Education
 3. And for My Homework
 
 
@@ -68,6 +68,7 @@ Its main features are:
 6. *Examples* for several AI tasks
 7. *Application* for a toy chatbot
 
+
 Documentation
 =============
 
@@ -76,6 +77,10 @@ Available online documents:
 1. `latest docs <http://numpydl.readthedocs.io/en/latest>`_
 2. `development docs <http://numpydl.readthedocs.io/en/develop/>`_
 3. `stable docs <http://numpydl.readthedocs.io/en/stable/>`_
+
+Available offline PDF:
+
+1. `latest PDF <http://readthedocs.org/projects/numpydl/downloads/pdf/latest>`_
 
 
 Installation
@@ -94,15 +99,32 @@ Install from source code:
     $> python setup.py install
 
 
-Example
-=======
+Examples
+========
+
+``NumpyDL`` provides several examples of AI tasks:
+
+* sentence classification
+    * LSTM in `examples/lstm_sentence_classification.py`
+    * CNN in `examples/cnn_sentence_classification.py`
+* mnist handwritten recognition
+    * MLP in `examples/mlp-mnist.py`
+    * MLP in `examples/mlp-digits.py`
+    * CNN in `examples/cnn-minist.py`
+* language modeling
+    * RNN in `examples/rnn-character-lm.py`
+    * RNN in `examples/rnn-character-lm2.py`
+    * LSTM in `examples/lstm-character-lm.py`
+    * LSTM in `examples/lstm-character-lm2.py`
+
+One concrete code example in `examples/mlp-digits.py`:
 
 .. code-block:: python
 
     import numpy as np
     from sklearn.datasets import load_digits
     import npdl
-    
+
     # prepare
     npdl.utils.random.set_seed(1234)
 
@@ -121,4 +143,20 @@ Example
 
     # train
     model.fit(X_train, npdl.utils.data.one_hot(Y_train), max_iter=150, validation_split=0.1)
+
+
+
+Applications
+============
+
+``NumpyDL`` provides one toy application:
+
+* Chatbot
+    * seq2seq in `applications/chatbot/model.py`
+
+
+And its final result:
+
+.. figure:: applications/chatbot/pics/chatbot.png
+    :width: 80%
 

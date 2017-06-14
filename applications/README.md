@@ -32,6 +32,7 @@ Step 5: Open your favourite browser, and enjoy!
 
 ## Example 
 
+![chatbot](chatbot/pics/chatbot.png)
 
 ## seq2seq
 
