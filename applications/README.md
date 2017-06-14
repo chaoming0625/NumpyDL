@@ -12,7 +12,7 @@ Step 2: Decompress ``data.tar.gz`` into the ``data`` directory.
 
     mkdir applications/chatbot/data
     cd applications/chatbot/data
-    tar -xzf data.tar.gz
+    tar -xzf data.tar.gz applications/chatbot/data
 
 Step 3: Run ``main.py`` script.
     

@@ -12,8 +12,10 @@ import numpy as np
 from npdl.utils.random import get_rng
 from .layers import Layer
 from .optimizers import SGD
+from . import optimizers
 from npdl.utils.random import get_dtype
 from .objectives import SoftmaxCategoricalCrossEntropy
+from . import objectives
 
 
 class Model(object):
@@ -41,16 +43,17 @@ class Model(object):
         #     layer.connect_to(pre_layer)
 
         # get loss class
-        self.loss = loss
+        self.loss = objectives.get(loss)
 
         # get optimizer class
-        self.optimizer = optimizer
+        self.optimizer = optimizers.get(optimizer)
 
     def fit(self, X, Y, max_iter=100, batch_size=64, shuffle=True,
             validation_split=0., validation_data=None, file=sys.stdout):
 
         # prepare data
-        train_X, train_Y = X.astype(get_dtype()), Y.astype(get_dtype())
+        train_X = X.astype(get_dtype()) if np.issubdtype(np.float64, X.dtype) else X
+        train_Y = Y.astype(get_dtype()) if np.issubdtype(np.float64, Y.dtype) else Y
 
         if 1. > validation_split > 0.:
             split = int(train_Y.shape[0] * validation_split)
