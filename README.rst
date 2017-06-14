@@ -20,7 +20,7 @@
 .. image:: https://img.shields.io/badge/python-3.6-blue.svg
     :target: https://pypi.python.org/pypi/npdl
 
-.. image:: https://codeclimate.com/github/oujago/NumpyDL/badges/gpa.svg
+.. https://codeclimate.com/github/oujago/NumpyDL/badges/gpa.svg
    :target: https://codeclimate.com/github/oujago/NumpyDL
    :alt: Code Climate
 
@@ -49,9 +49,9 @@ Descriptions
 
 ``NumpyDL`` is:
 
-1. For My Homework
-2. For DL Education
-3. Based on Pure Numpy/Python
+1. For DL Education
+2. Based on Pure Numpy/Python
+3. And for My Homework
 
 
 Features
@@ -62,7 +62,7 @@ Its main features are:
 1. *Pure* in Numpy
 2. *Native* to Python
 3. *Automatic differentiations* are basically supported
-4. *Commonly used models* are supported: MLP, RNNs, GRUs, LSTMs and CNNs
+4. *Commonly used models* are provided: MLP, RNNs, LSTMs and CNNs
 5. *API* like ``Keras`` library
 6. *Examples* for several AI tasks
 7. *Application* for a toy chatbot
