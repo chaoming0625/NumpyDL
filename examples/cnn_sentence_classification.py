@@ -13,7 +13,7 @@ def prepare_data(nb_seq=20):
     all_labels = set()
 
     # get all words and labels
-    with open('data/trec/TREC_10.label') as fin:
+    with open(os.path.join(os.path.dirname(__file__), 'data/trec/TREC_10.label')) as fin:
         for line in fin:
             words = line.strip().split()
             y = words[0].split(':')[0]

@@ -119,7 +119,7 @@ class SimpleRNN(Recurrent):
         self.activations = []
 
     def connect_to(self, prev_layer=None):
-        self.n_in = super(SimpleRNN, self).connect_to(prev_layer)
+        super(SimpleRNN, self).connect_to(prev_layer)
 
         self.W = self.init((self.n_in, self.n_out))
         self.U = self.inner_init((self.n_out, self.n_out))
