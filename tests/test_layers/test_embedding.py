@@ -23,7 +23,7 @@ def test_embed_words():
         layer.backward(None)
 
     # static == True
-    layer = Embedding(embed_words, True)
+    layer = Embedding(embed_words)
 
     with pytest.raises(AssertionError):
         layer.forward(np.arange(10))

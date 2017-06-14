@@ -3,6 +3,7 @@
 import pytest
 
 from npdl.layers import Flatten
+from npdl.layers import DimShuffle
 
 
 def test_flatten():
@@ -11,3 +12,6 @@ def test_flatten():
         flatten_layer = Flatten(0)
 
 
+def test_DimShuffle():
+    with pytest.raises(ValueError):
+        DimShuffle(-1)
