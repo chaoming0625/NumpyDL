@@ -47,8 +47,6 @@ class Optimizer(object):
     """
 
     def __init__(self, lr=0.001, clip=-1):
-        self.param_grads = None
-
         self.lr = lr
         self.clip = clip
 
@@ -122,18 +120,13 @@ class Momentum(Optimizer):
             p += v
 
 
-class NesterovMomentum(Optimizer):
+class NesterovMomentum(Momentum):
     """Stochastic Gradient Descent (SGD) updates with Nesterov momentum
 
     Generates update expressions of the form:
 
     * ``velocity := momentum * velocity - learning_rate * gradient``
     * ``param := param + momentum * velocity - learning_rate * gradient``
-
-    Parameters
-    ----------
-    lr : float
-        The learning rate controlling the size of update steps
 
     Notes
     -----
@@ -149,6 +142,16 @@ class NesterovMomentum(Optimizer):
     """
     def __init__(self, *args, **kwargs):
         super(NesterovMomentum, self).__init__(*args, **kwargs)
+
+    def update(self, params, grads):
+        # init the velocities
+        if self.velocity is None:
+            self.velocity = [_zero(p.shape) for p in params]
+
+        # update the parameters
+        for v, p, g in zip(self.velocity, params, grads):
+            v = self.momentum * v - self.lr * g
+            p += (self.momentum * v - self.lr * g)
 
 
 class Adagrad(Optimizer):
