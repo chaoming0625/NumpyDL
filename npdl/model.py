@@ -100,7 +100,7 @@ class Model(object):
                     grads += layer.grads
 
                 # update parameters
-                self.optimizer.update_params(params, grads)
+                self.optimizer.update(params, grads)
 
                 # got loss and predict
                 train_losses.append(self.loss.forward(y_pred, y_batch))

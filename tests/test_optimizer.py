@@ -13,10 +13,7 @@ def test_optimizer():
     opt = Optimizer()
 
     with pytest.raises(NotImplementedError):
-        opt.add_param_grads(None)
-
-    with pytest.raises(NotImplementedError):
-        opt.update_params()
+        opt.update([], [])
 
     assert str(opt) == 'Optimizer'
 
@@ -32,8 +29,6 @@ def test_Momentum():
 
     opt = Momentum()
 
-    opt.add_param_grads(None)
-    opt.update_params()
 
 
 def test_NesterovMomentum():
@@ -83,8 +78,15 @@ def test_npdl_clip():
 
 
 def test_get():
-    for init in ['sgd', 'momentum', 'nesterov_momentum', 'adagrad',
-                 'rmsprop', 'adadelta', 'adam', 'adamax', optimizers.SGD()]:
+    for init in ['sgd',
+                 'momentum',
+                 'nesterov_momentum',
+                 'adagrad',
+                 'rmsprop',
+                 'adadelta',
+                 'adam',
+                 'adamax',
+                 optimizers.SGD()]:
         optimizers.get(init)
 
     for init in [1, '1']:

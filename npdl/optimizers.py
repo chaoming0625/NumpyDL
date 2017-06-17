@@ -52,7 +52,7 @@ class Optimizer(object):
         self.lr = lr
         self.clip = clip
 
-    def update_params(self, params, grads):
+    def update(self, params, grads):
         """Update parameters.
 
         Parameters
@@ -78,7 +78,7 @@ class SGD(Optimizer):
     def __init__(self, *args, **kwargs):
         super(SGD, self).__init__(*args, **kwargs)
 
-    def update_params(self, params, grads):
+    def update(self, params, grads):
         for p, g in zip(params, grads):
             p -= self.lr * npdl_clip(g, self.clip)
 
@@ -111,7 +111,7 @@ class Momentum(Optimizer):
 
         self.velocity = None
 
-    def update_params(self, params, grads):
+    def update(self, params, grads):
         # init the velocities
         if self.velocity is None:
             self.velocity = [_zero(p.shape) for p in params]
