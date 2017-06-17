@@ -29,14 +29,16 @@ def example(request):
 @pytest.mark.slow
 @pytest.mark.parametrize("module_name", _example_modules())
 def test_example(example, module_name):
-    try:
-        main = getattr(import_module(module_name), 'main')
-    except ImportError as e:
-        skip_exceptions = ["requires a GPU", "pylearn2", "dnn not available"]
-        if any([text in str(e) for text in skip_exceptions]):
-            pytest.skip(e)
-        else:
-            raise
-
-    main(max_iter=1)  # run the example for one iteration
+    for idx in range(5):
+        try:
+            main = getattr(import_module(module_name), "main{}".format('' if idx == 0 else idx))
+            main(max_iter=1)  # run the example for one iteration
+        except Exception as e:
+            skip_exceptions = ['No module named',
+                               'cannot import name',
+                               'has no attribute']
+            if any([text in str(e) for text in skip_exceptions]):
+                continue
+            else:
+                raise
 

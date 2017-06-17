@@ -24,17 +24,16 @@
    :target: https://codeclimate.com/github/oujago/NumpyDL
    :alt: Code Climate
 
-.. image:: https://codeclimate.com/github/oujago/NumpyDL/badges/issue_count.svg
+.. images:: https://codeclimate.com/github/oujago/NumpyDL/badges/issue_count.svg
    :target: https://codeclimate.com/github/oujago/NumpyDL
-   :alt: Issue Count
 
-.. image:: https://img.shields.io/github/issues/oujago/NumpyDL.svg
+.. https://img.shields.io/github/issues/oujago/NumpyDL.svg
    :target: https://github.com/oujago/NumpyDL
 
-.. image:: https://img.shields.io/github/forks/oujago/NumpyDL.svg
+.. https://img.shields.io/github/forks/oujago/NumpyDL.svg
    :target: https://github.com/oujago/NumpyDL
 
-.. image:: https://img.shields.io/github/stars/oujago/NumpyDL.svg
+.. https://img.shields.io/github/stars/oujago/NumpyDL.svg
    :target: https://github.com/oujago/NumpyDL
 
 .. image:: https://zenodo.org/badge/83100910.svg

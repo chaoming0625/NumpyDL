@@ -29,6 +29,8 @@ example network:
 import copy
 import numpy as np
 
+from .initializations import _zero
+
 
 class Optimizer(object):
     """Abstract optimizer base class.
@@ -36,16 +38,31 @@ class Optimizer(object):
     Note: this is the parent class of all optimizers, not an actual optimizer
     that can be used for training models.
 
+    Parameters
+    ----------
+    clip : float
+        If smaller than 0, do not apply parameter clip.
+    lr : float
+        The learning rate controlling the size of update steps
     """
 
-    def __init__(self, ):
+    def __init__(self, lr=0.001, clip=-1):
         self.param_grads = None
 
-    def add_param_grads(self, param_grads):
-        raise NotImplementedError()
+        self.lr = lr
+        self.clip = clip
 
-    def update_params(self, ):
-        raise NotImplementedError()
+    def update_params(self, params, grads):
+        """Update parameters.
+
+        Parameters
+        ----------
+        params : list
+            A list of parameters in model.
+        grads : list
+            A list of gradients in model.
+        """
+        raise NotImplementedError
 
     def __str__(self):
         return self.__class__.__name__
@@ -57,27 +74,12 @@ class SGD(Optimizer):
     Generates update expressions of the form:
 
     * ``param := param - learning_rate * gradient``
-
-    Parameters
-    ----------
-    clip : float
-        If smaller than 0, do not apply parameter clip.
-    lr : float
-        The learning rate controlling the size of update steps
-
     """
+    def __init__(self, *args, **kwargs):
+        super(SGD, self).__init__(*args, **kwargs)
 
-    def __init__(self, lr=0.001, clip=-1):
-        super(SGD, self).__init__()
-
-        self.lr = lr
-        self.clip = clip
-
-    def add_param_grads(self, param_grads):
-        self.param_grads = param_grads
-
-    def update_params(self, ):
-        for p, g in self.param_grads:
+    def update_params(self, params, grads):
+        for p, g in zip(params, grads):
             p -= self.lr * npdl_clip(g, self.clip)
 
 
@@ -91,8 +93,9 @@ class Momentum(Optimizer):
 
     Parameters
     ----------
-    lr : float
-        The learning rate controlling the size of update steps
+    momentum : float
+        The amount of momentum to apply. Higher momentum results in
+        smoothing over more update steps. Defaults to 0.9.
 
     Notes
     -----
@@ -101,17 +104,22 @@ class Momentum(Optimizer):
 
     """
 
-    def __init__(self, lr=0.01, momentum=0.9):
-        super(Momentum, self).__init__()
+    def __init__(self, momentum=0.9, *args, **kwargs):
+        super(Momentum, self).__init__(*args, **kwargs)
 
-        self.lr = lr
         self.momentum = momentum
 
-    def add_param_grads(self, param_grads):
-        pass
+        self.velocity = None
 
-    def update_params(self, ):
-        pass
+    def update_params(self, params, grads):
+        # init the velocities
+        if self.velocity is None:
+            self.velocity = [_zero(p.shape) for p in params]
+
+        # update the parameters
+        for v, p, g in zip(self.velocity, params, grads):
+            v = self.momentum * v - self.lr * g
+            p += v
 
 
 class NesterovMomentum(Optimizer):
@@ -139,8 +147,8 @@ class NesterovMomentum(Optimizer):
     which allows the gradient to be evaluated at the current parameters.
 
     """
-    def __init__(self, lr=0.001):
-        super(NesterovMomentum, self).__init__()
+    def __init__(self, *args, **kwargs):
+        super(NesterovMomentum, self).__init__(*args, **kwargs)
 
 
 class Adagrad(Optimizer):
@@ -176,8 +184,8 @@ class Adagrad(Optimizer):
            Notes on AdaGrad. http://www.ark.cs.cmu.edu/cdyer/adagrad.pdf
     """
 
-    def __init__(self, lr=0.001):
-        super(Adagrad, self).__init__()
+    def __init__(self, *args, **kwargs):
+        super(Adagrad, self).__init__(*args, **kwargs)
 
 
 class RMSprop(Optimizer):
@@ -211,8 +219,8 @@ class RMSprop(Optimizer):
            Coursera. http://www.youtube.com/watch?v=O3sxAc4hxZU (formula @5:20)
     """
 
-    def __init__(self, lr=0.001):
-        super(RMSprop, self).__init__()
+    def __init__(self, *args, **kwargs):
+        super(RMSprop, self).__init__(*args, **kwargs)
 
 
 class Adadelta(Optimizer):
@@ -256,8 +264,8 @@ class Adadelta(Optimizer):
            arXiv Preprint arXiv:1212.5701.
     """
 
-    def __init__(self, lr=0.001):
-        super(Adadelta, self).__init__()
+    def __init__(self, *args, **kwargs):
+        super(Adadelta, self).__init__(*args, **kwargs)
 
 
 class Adam(Optimizer):
@@ -283,8 +291,8 @@ class Adam(Optimizer):
            arXiv preprint arXiv:1412.6980.
     """
 
-    def __init__(self, lr=0.001):
-        super(Adam, self).__init__()
+    def __init__(self, *args, **kwargs):
+        super(Adam, self).__init__(*args, **kwargs)
 
 
 class Adamax(Optimizer):
@@ -305,8 +313,8 @@ class Adamax(Optimizer):
            arXiv preprint arXiv:1412.6980.
     """
 
-    def __init__(self, lr=0.001):
-        super(Adamax, self).__init__()
+    def __init__(self, *args, **kwargs):
+        super(Adamax, self).__init__(*args, **kwargs)
 
 
 def npdl_clip(grad, boundary):
