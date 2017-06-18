@@ -22,18 +22,11 @@
 
 .. https://codeclimate.com/github/oujago/NumpyDL/badges/gpa.svg
    :target: https://codeclimate.com/github/oujago/NumpyDL
-   :alt: Code Climate
 
-.. images:: https://codeclimate.com/github/oujago/NumpyDL/badges/issue_count.svg
+.. image:: https://codeclimate.com/github/oujago/NumpyDL/badges/issue_count.svg
    :target: https://codeclimate.com/github/oujago/NumpyDL
 
-.. https://img.shields.io/github/issues/oujago/NumpyDL.svg
-   :target: https://github.com/oujago/NumpyDL
-
-.. https://img.shields.io/github/forks/oujago/NumpyDL.svg
-   :target: https://github.com/oujago/NumpyDL
-
-.. https://img.shields.io/github/stars/oujago/NumpyDL.svg
+.. image:: https://img.shields.io/github/issues/oujago/NumpyDL.svg
    :target: https://github.com/oujago/NumpyDL
 
 .. image:: https://zenodo.org/badge/83100910.svg
@@ -66,6 +59,7 @@ Its main features are:
 5. *API* like ``Keras`` library
 6. *Examples* for several AI tasks
 7. *Application* for a toy chatbot
+8. *Mobile friendly* documents
 
 
 Documentation
@@ -104,19 +98,17 @@ Examples
 ``NumpyDL`` provides several examples of AI tasks:
 
 * sentence classification
-    * LSTM in `examples/lstm_sentence_classification.py`
-    * CNN in `examples/cnn_sentence_classification.py`
+    * LSTM in *examples/lstm_sentence_classification.py*
+    * CNN in *examples/cnn_sentence_classification.py*
 * mnist handwritten recognition
-    * MLP in `examples/mlp-mnist.py`
-    * MLP in `examples/mlp-digits.py`
-    * CNN in `examples/cnn-minist.py`
+    * MLP in *examples/mlp-mnist.py*
+    * MLP in *examples/mlp-digits.py*
+    * CNN in *examples/cnn-minist.py*
 * language modeling
-    * RNN in `examples/rnn-character-lm.py`
-    * RNN in `examples/rnn-character-lm2.py`
-    * LSTM in `examples/lstm-character-lm.py`
-    * LSTM in `examples/lstm-character-lm2.py`
+    * RNN in *examples/rnn-character-lm.py*
+    * LSTM in *examples/lstm-character-lm.py*
 
-One concrete code example in `examples/mlp-digits.py`:
+One concrete code example in *examples/mlp-digits.py*:
 
 .. code-block:: python
 
@@ -151,7 +143,7 @@ Applications
 ``NumpyDL`` provides one toy application:
 
 * Chatbot
-    * seq2seq in `applications/chatbot/model.py`
+    * seq2seq in *applications/chatbot/model.py*
 
 
 And its final result:
@@ -165,65 +157,54 @@ Supports
 
 ``NumpyDL`` supports following deep learning techniques:
 
-
 * Layers
-
-    1. Linear
-    2. Dense
-    3. Softmax
-    4. Dropout
-    5. Convolution
-    6. Embedding
-    7. BatchNormal
-    8. MeanPooling
-    9. MaxPooling
-    10. SimpleRNN
-    11. GRU
-    12. LSTM
-    13. Flatten
-    14. DimShuffle
-
+    * Linear
+    * Dense
+    * Softmax
+    * Dropout
+    * Convolution
+    * Embedding
+    * BatchNormal
+    * MeanPooling
+    * MaxPooling
+    * SimpleRNN
+    * GRU
+    * LSTM
+    * Flatten
+    * DimShuffle
 * Optimizers
-
-    1. Momentum
-    2. NesterovMomentum
-    3. Adagrad
-    4. RMSprop
-    5. Adadelta
-    6. Adam
-    7. Adamax
-
+    * SGD
+    * Momentum
+    * NesterovMomentum
+    * Adagrad
+    * RMSprop
+    * Adadelta
+    * Adam
+    * Adamax
 * Objectives
-
-    1. MeanSquaredError
-    2. HellingerDistance
-    3. BinaryCrossEntropy
-    4. SoftmaxCategoricalCrossEntropy
-
-
+    * MeanSquaredError
+    * HellingerDistance
+    * BinaryCrossEntropy
+    * SoftmaxCategoricalCrossEntropy
 * Initializations
-
-    1. Zero
-    2. One
-    3. Uniform
-    4. Normal
-    5. LecunUniform
-    6. GlorotUniform
-    7. GlorotNormal
-    8. HeNormal
-    9. HeUniform
-    10. Orthogonal
-
-
+    * Zero
+    * One
+    * Uniform
+    * Normal
+    * LecunUniform
+    * GlorotUniform
+    * GlorotNormal
+    * HeNormal
+    * HeUniform
+    * Orthogonal
 * Activations
-
-    1. Sigmoid
-    2. Tanh
-    3. ReLU
-    4. Linear
-    5. Softmax
-    6. Elliot
-    7. SymmetricElliot
-    8. SoftPlus
-    9. SoftSign
+    * Sigmoid
+    * Tanh
+    * ReLU
+    * Linear
+    * Softmax
+    * Elliot
+    * SymmetricElliot
+    * SoftPlus
+    * SoftSign
 
