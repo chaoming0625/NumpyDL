@@ -212,7 +212,7 @@ class BinaryCrossEntropy(Objective):
             Targets in [0, 1], such as ground truth labels.
 
         """
-        # outputs = np.clip(outputs, self.epsilon, 1 - self.epsilon)
+        outputs = np.clip(outputs, self.epsilon, 1 - self.epsilon)
         return np.mean(-np.sum(targets * np.log(outputs) + (1 - targets) * np.log(1 - outputs), axis=1))
 
     def backward(self, outputs, targets):
@@ -226,7 +226,7 @@ class BinaryCrossEntropy(Objective):
             Targets in [0, 1], such as ground truth labels.
 
         """
-        # outputs = np.clip(outputs, self.epsilon, 1 - self.epsilon)
+        outputs = np.clip(outputs, self.epsilon, 1 - self.epsilon)
         divisor = np.maximum(outputs * (1 - outputs), self.epsilon)
         return (outputs - targets) / divisor
 
@@ -289,7 +289,7 @@ class SoftmaxCategoricalCrossEntropy(Objective):
         -------
         numpy 1D array
         """
-        # outputs = np.clip(outputs, self.epsilon, 1 - self.epsilon)
+        outputs = np.clip(outputs, self.epsilon, 1 - self.epsilon)
         return outputs - targets
 
 
