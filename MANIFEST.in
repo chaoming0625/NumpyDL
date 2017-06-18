@@ -10,10 +10,10 @@ include requirements-dev.txt
 recursive-include tests *.py
 
 # examples
-recursive-include examples *.py
+recursive-include examples  *.py  *.txt  *.label
 
 # documents
-recursive-include docs *.rst conf.py *.css Makefile
+recursive-include docs  *.rst  *.py  fix_rtd.css  Makefile  make.bat
 
 # applications
 recursive-include application *.py *.md *.html *.jpg

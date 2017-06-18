@@ -22,19 +22,11 @@
 
 .. https://codeclimate.com/github/oujago/NumpyDL/badges/gpa.svg
    :target: https://codeclimate.com/github/oujago/NumpyDL
-   :alt: Code Climate
 
 .. image:: https://codeclimate.com/github/oujago/NumpyDL/badges/issue_count.svg
    :target: https://codeclimate.com/github/oujago/NumpyDL
-   :alt: Issue Count
 
 .. image:: https://img.shields.io/github/issues/oujago/NumpyDL.svg
-   :target: https://github.com/oujago/NumpyDL
-
-.. image:: https://img.shields.io/github/forks/oujago/NumpyDL.svg
-   :target: https://github.com/oujago/NumpyDL
-
-.. image:: https://img.shields.io/github/stars/oujago/NumpyDL.svg
    :target: https://github.com/oujago/NumpyDL
 
 .. image:: https://zenodo.org/badge/83100910.svg
@@ -67,6 +59,7 @@ Its main features are:
 5. *API* like ``Keras`` library
 6. *Examples* for several AI tasks
 7. *Application* for a toy chatbot
+8. *Mobile friendly* documents
 
 
 Documentation
@@ -105,19 +98,17 @@ Examples
 ``NumpyDL`` provides several examples of AI tasks:
 
 * sentence classification
-    * LSTM in `examples/lstm_sentence_classification.py`
-    * CNN in `examples/cnn_sentence_classification.py`
+    * LSTM in *examples/lstm_sentence_classification.py*
+    * CNN in *examples/cnn_sentence_classification.py*
 * mnist handwritten recognition
-    * MLP in `examples/mlp-mnist.py`
-    * MLP in `examples/mlp-digits.py`
-    * CNN in `examples/cnn-minist.py`
+    * MLP in *examples/mlp-mnist.py*
+    * MLP in *examples/mlp-digits.py*
+    * CNN in *examples/cnn-minist.py*
 * language modeling
-    * RNN in `examples/rnn-character-lm.py`
-    * RNN in `examples/rnn-character-lm2.py`
-    * LSTM in `examples/lstm-character-lm.py`
-    * LSTM in `examples/lstm-character-lm2.py`
+    * RNN in *examples/rnn-character-lm.py*
+    * LSTM in *examples/lstm-character-lm.py*
 
-One concrete code example in `examples/mlp-digits.py`:
+One concrete code example in *examples/mlp-digits.py*:
 
 .. code-block:: python
 
@@ -152,11 +143,68 @@ Applications
 ``NumpyDL`` provides one toy application:
 
 * Chatbot
-    * seq2seq in `applications/chatbot/model.py`
+    * seq2seq in *applications/chatbot/model.py*
 
 
 And its final result:
 
 .. figure:: applications/chatbot/pics/chatbot.png
     :width: 80%
+
+
+Supports
+========
+
+``NumpyDL`` supports following deep learning techniques:
+
+* Layers
+    * Linear
+    * Dense
+    * Softmax
+    * Dropout
+    * Convolution
+    * Embedding
+    * BatchNormal
+    * MeanPooling
+    * MaxPooling
+    * SimpleRNN
+    * GRU
+    * LSTM
+    * Flatten
+    * DimShuffle
+* Optimizers
+    * SGD
+    * Momentum
+    * NesterovMomentum
+    * Adagrad
+    * RMSprop
+    * Adadelta
+    * Adam
+    * Adamax
+* Objectives
+    * MeanSquaredError
+    * HellingerDistance
+    * BinaryCrossEntropy
+    * SoftmaxCategoricalCrossEntropy
+* Initializations
+    * Zero
+    * One
+    * Uniform
+    * Normal
+    * LecunUniform
+    * GlorotUniform
+    * GlorotNormal
+    * HeNormal
+    * HeUniform
+    * Orthogonal
+* Activations
+    * Sigmoid
+    * Tanh
+    * ReLU
+    * Linear
+    * Softmax
+    * Elliot
+    * SymmetricElliot
+    * SoftPlus
+    * SoftSign
 

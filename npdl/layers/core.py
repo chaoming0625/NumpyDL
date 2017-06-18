@@ -96,13 +96,13 @@ class Dense(Layer):
 
     Parameters
     ----------
-    n_out : (int, tuple)
+    n_out : int
         Desired size or shape of layer output
-    n_in : (int, tuple) or None
+    n_in : int, or None
         The layer input size feeding into this layer
-    activation : (Activation, optional)
+    activation : str, or npdl.activatns.Activation
         Defaults to ``Tanh``
-    init : (Initializer, optional)
+    init : str, or npdl.initializations.Initializer
         Initializer object to use for initializing layer weights
     """
 
@@ -180,11 +180,11 @@ class Softmax(Dense):
 
     Parameters
     ----------
-    n_out : (int, tuple)
+    n_out : int
         Desired size or shape of layer output
-    n_in : (int, tuple) or None
+    n_in : int, or None
         The layer input size feeding into this layer
-    init : (Initializer, optional)
+    init : str, or npdl.initializations.Initializer
         Initializer object to use for initializing layer weights
     """
 

@@ -62,5 +62,24 @@ def main(max_iter):
     net.fit(xs, ys, batch_size=nb_batch, validation_split=0.1, max_iter=max_iter)
 
 
+def main2(max_iter):
+    nb_batch = 30
+    nb_seq = 20
+
+    xs, ys, x_size, y_size = prepare_data(nb_seq)
+
+    net = npdl.Model()
+    net.add(npdl.layers.Embedding(nb_batch=nb_batch, nb_seq=nb_seq,
+                                  n_out=200, input_size=x_size,
+                                  static=False))
+    net.add(npdl.layers.BatchLSTM(n_out=400, return_sequence=True))
+    net.add(npdl.layers.BatchLSTM(n_out=200, return_sequence=True))
+    net.add(npdl.layers.MeanPooling((nb_seq, 1)))
+    net.add(npdl.layers.Flatten())
+    net.add(npdl.layers.Softmax(n_out=y_size))
+    net.compile(loss='scce', optimizer=npdl.optimizers.RMSprop())
+    net.fit(xs, ys, batch_size=nb_batch, validation_split=0.1, max_iter=max_iter)
+
+
 if __name__ == '__main__':
-    main(100)
+    main2(100)
