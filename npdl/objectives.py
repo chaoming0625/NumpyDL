@@ -256,10 +256,10 @@ class SoftmaxCategoricalCrossEntropy(Objective):
         
         Parameters
         ----------
-        outputs : numpy 2D array
+        outputs : numpy.array
             Predictions in (0, 1), such as softmax output of a neural network,
             with data points in rows and class probabilities in columns.
-        targets : numpy 2D array 
+        targets : numpy.array
             Either targets in [0, 1] matching the layout of `outputs`, or
             a vector of int giving the correct class index per data point.
     
@@ -268,7 +268,7 @@ class SoftmaxCategoricalCrossEntropy(Objective):
         numpy 1D array
             An expression for the item-wise categorical cross-entropy.
         """
-        # outputs = np.clip(outputs, self.epsilon, 1 - self.epsilon)
+        outputs = np.clip(outputs, self.epsilon, 1 - self.epsilon)
         return np.mean(-np.sum(targets * np.log(outputs), axis=1))
 
     def backward(self, outputs, targets):
