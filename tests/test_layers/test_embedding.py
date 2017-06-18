@@ -19,9 +19,6 @@ def test_embed_words():
     layer.connect_to()
     assert len(layer.out_shape) == 3
 
-    with pytest.raises(AssertionError):
-        layer.backward(None)
-
     # static == True
     layer = Embedding(embed_words)
 

@@ -12,8 +12,8 @@ def test_optimizer():
 
     opt = Optimizer()
 
-    with pytest.raises(NotImplementedError):
-        opt.update([], [])
+    opt.update([], [])
+    assert opt.iterations == 1
 
     assert str(opt) == 'Optimizer'
 
