@@ -25,7 +25,7 @@ def main(max_iter):
     # model
     print("building model ...")
     model = npdl.Model()
-    model.add(npdl.layers.Dense(n_out=500, n_in=784, activation=npdl.activations.ReLU()))
+    model.add(npdl.layers.Dense(n_out=200, n_in=784, activation=npdl.activations.ReLU()))
     model.add(npdl.layers.Dense(n_out=n_classes, activation=npdl.activations.Softmax()))
     model.compile(loss=npdl.objectives.SCCE(), optimizer=npdl.optimizers.SGD())
 
@@ -42,7 +42,7 @@ def main2(max_iter):
     # model
     print("building model ...")
     model = npdl.Model()
-    model.add(npdl.layers.Dense(n_out=500, n_in=784, activation=npdl.activations.ReLU()))
+    model.add(npdl.layers.Dense(n_out=200, n_in=784, activation=npdl.activations.ReLU()))
     model.add(npdl.layers.Dense(n_out=n_classes, activation=npdl.activations.Softmax()))
     model.compile(loss=npdl.objectives.SCCE(), optimizer=npdl.optimizers.Momentum())
 
@@ -59,7 +59,7 @@ def main3(max_iter):
     # model
     print("building model ...")
     model = npdl.Model()
-    model.add(npdl.layers.Dense(n_out=500, n_in=784, activation='relu'))
+    model.add(npdl.layers.Dense(n_out=200, n_in=784, activation='relu'))
     model.add(npdl.layers.Softmax(n_out=n_classes))
     model.compile(loss=npdl.objectives.SCCE(), optimizer=npdl.optimizers.NesterovMomentum())
 
@@ -76,7 +76,7 @@ def main4(max_iter):
     # model
     print("building model ...")
     model = npdl.Model()
-    model.add(npdl.layers.Dense(n_out=500, n_in=784, activation='relu'))
+    model.add(npdl.layers.Dense(n_out=100, n_in=784, activation='relu'))
     model.add(npdl.layers.Softmax(n_out=n_classes))
     model.compile(loss='scce', optimizer='adagrad')
 
@@ -93,7 +93,7 @@ def main5(max_iter):
     # model
     print("building model ...")
     model = npdl.Model()
-    model.add(npdl.layers.Dense(n_out=500, n_in=784, activation='relu'))
+    model.add(npdl.layers.Dense(n_out=100, n_in=784, activation='relu'))
     model.add(npdl.layers.Softmax(n_out=n_classes))
     model.compile(loss='scce', optimizer='rmsprop')
 
@@ -110,7 +110,7 @@ def main6(max_iter):
     # model
     print("building model ...")
     model = npdl.Model()
-    model.add(npdl.layers.Dense(n_out=500, n_in=784, activation='relu'))
+    model.add(npdl.layers.Dense(n_out=100, n_in=784, activation='relu'))
     model.add(npdl.layers.Softmax(n_out=n_classes))
     model.compile(loss='scce', optimizer='adadelta')
 
@@ -127,7 +127,7 @@ def main7(max_iter):
     # model
     print("building model ...")
     model = npdl.Model()
-    model.add(npdl.layers.Dense(n_out=500, n_in=784, activation='relu'))
+    model.add(npdl.layers.Dense(n_out=100, n_in=784, activation='relu'))
     model.add(npdl.layers.Softmax(n_out=n_classes))
     model.compile(loss='scce', optimizer='adam')
 
@@ -144,7 +144,7 @@ def main8(max_iter):
     # model
     print("building model ...")
     model = npdl.Model()
-    model.add(npdl.layers.Dense(n_out=500, n_in=784, activation='relu'))
+    model.add(npdl.layers.Dense(n_out=100, n_in=784, activation='relu'))
     model.add(npdl.layers.Softmax(n_out=n_classes))
     model.compile(loss='scce', optimizer='adamax')
 
