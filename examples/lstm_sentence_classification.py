@@ -62,7 +62,6 @@ def main(max_iter):
     net.fit(xs, ys, batch_size=nb_batch, validation_split=0.1, max_iter=max_iter)
 
 
-
 def main2(max_iter):
     nb_batch = 30
     nb_seq = 20
@@ -80,6 +79,7 @@ def main2(max_iter):
     net.add(npdl.layers.Softmax(n_out=y_size))
     net.compile(loss='scce', optimizer=npdl.optimizers.RMSprop())
     net.fit(xs, ys, batch_size=nb_batch, validation_split=0.1, max_iter=max_iter)
+
 
 if __name__ == '__main__':
     main2(100)
