@@ -329,7 +329,9 @@ class GRU(Recurrent):
 
 
 class LSTM(Recurrent):
-    """Long short-term memory (LSTM) is a recurrent neural network (RNN) 
+    """Bacth LSTM, support mask, but not support training.
+
+    Long short-term memory (LSTM) is a recurrent neural network (RNN)
     architecture (an artificial neural network) proposed in 1997 by Sepp 
     Hochreiter and Jürgen Schmidhuber [1]_ and further improved in 2000 
     by Felix Gers et al.[2]_ Like most RNNs, a LSTM network is universal 
@@ -495,21 +497,7 @@ class LSTM(Recurrent):
 
 
 class BatchLSTM(Recurrent):
-    """Long short-term memory (LSTM) is a special kind of RNN.
-    It is a recurrent neural network (RNN) architecture (an artificial 
-    neural network) proposed in 1997 by Sepp Hochreiter and Jürgen 
-    Schmidhuber [1]_ and further improved in 2000 by Felix Gers et 
-    al.[2]_ Like most RNNs, a LSTM network is universal in the sense 
-    that given enough network units it can compute anything a conventional 
-    computer can compute, provided it has the proper weight matrix, which 
-    may be viewed as its program. 
-
-    .. math:: f_t = \sigma(U_f x_t + W_f h_{t-1} + b_f)
-    .. math:: i_t = \sigma(U_i x_t + W_i h_{t-1} + b_f)
-    .. math:: o_t = \sigma(U_o x_t + W_o h_{t-1} + b_h)
-    .. math:: g_t = tanh(U_g x_t + W_g h_{t-1} + b_g)
-    .. math:: c_t = f_t \odot c_{t-1} + i_t \odot g_t
-    .. math:: h_t = o_t \odot tanh(c_t)
+    """Batch LSTM, support training, but not support mask.
 
     Parameters
     ----------
