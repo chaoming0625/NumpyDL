@@ -159,3 +159,71 @@ And its final result:
 .. figure:: applications/chatbot/pics/chatbot.png
     :width: 80%
 
+
+Supports
+========
+
+``NumpyDL`` supports following deep learning techniques:
+
+
+* Layers
+
+    1. Linear
+    2. Dense
+    3. Softmax
+    4. Dropout
+    5. Convolution
+    6. Embedding
+    7. BatchNormal
+    8. MeanPooling
+    9. MaxPooling
+    10. SimpleRNN
+    11. GRU
+    12. LSTM
+    13. Flatten
+    14. DimShuffle
+
+* Optimizers
+
+    1. Momentum
+    2. NesterovMomentum
+    3. Adagrad
+    4. RMSprop
+    5. Adadelta
+    6. Adam
+    7. Adamax
+
+* Objectives
+
+    1. MeanSquaredError
+    2. HellingerDistance
+    3. BinaryCrossEntropy
+    4. SoftmaxCategoricalCrossEntropy
+
+
+* Initializations
+
+    1. Zero
+    2. One
+    3. Uniform
+    4. Normal
+    5. LecunUniform
+    6. GlorotUniform
+    7. GlorotNormal
+    8. HeNormal
+    9. HeUniform
+    10. Orthogonal
+
+
+* Activations
+
+    1. Sigmoid
+    2. Tanh
+    3. ReLU
+    4. Linear
+    5. Softmax
+    6. Elliot
+    7. SymmetricElliot
+    8. SoftPlus
+    9. SoftSign
+
