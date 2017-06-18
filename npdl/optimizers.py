@@ -162,8 +162,8 @@ class Adagrad(Optimizer):
 
     Parameters
     ----------
-    lr : float
-        The learning rate controlling the size of update steps
+    epsilon : float
+        Small value added for numerical stability.
 
     Notes
     -----
@@ -187,8 +187,22 @@ class Adagrad(Optimizer):
            Notes on AdaGrad. http://www.ark.cs.cmu.edu/cdyer/adagrad.pdf
     """
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, epsilon=1e-6, *args, **kwargs):
         super(Adagrad, self).__init__(*args, **kwargs)
+
+        self.epsilon = epsilon
+
+        self.cache = None
+
+    def update(self, params, grads):
+        # init cache
+        if self.cache is None:
+            self.cache = [_zero(g.shape) for g in grads]
+
+        # update parameters
+        for c, p, g in zip(self.cache, params, grads):
+            c += np.power(g, 2)
+            p -= self.lr * g / (np.sqrt(c) + self.epsilon)
 
 
 class RMSprop(Optimizer):

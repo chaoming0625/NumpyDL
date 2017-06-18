@@ -29,7 +29,7 @@ def example(request):
 @pytest.mark.slow
 @pytest.mark.parametrize("module_name", _example_modules())
 def test_example(example, module_name):
-    for idx in range(5):
+    for idx in range(10):
         try:
             main = getattr(import_module(module_name), "main{}".format('' if idx == 0 else idx))
             main(max_iter=1)  # run the example for one iteration

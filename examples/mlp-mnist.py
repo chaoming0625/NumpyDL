@@ -49,8 +49,8 @@ def main3(max_iter):
     # model
     print("building model ...")
     model = npdl.Model()
-    model.add(npdl.layers.Dense(n_out=500, n_in=784, activation=npdl.activations.ReLU()))
-    model.add(npdl.layers.Dense(n_out=n_classes, activation=npdl.activations.Softmax()))
+    model.add(npdl.layers.Dense(n_out=500, n_in=784, activation='relu'))
+    model.add(npdl.layers.Softmax(n_out=n_classes))
     model.compile(loss=npdl.objectives.SCCE(), optimizer=npdl.optimizers.NesterovMomentum())
 
     # train
@@ -58,6 +58,20 @@ def main3(max_iter):
     model.fit(X_train, npdl.utils.data.one_hot(y_train), max_iter=max_iter, validation_split=0.1)
 
 
+def main4(max_iter):
+    # test Adagrad optimizer
+
+    # model
+    print("building model ...")
+    model = npdl.Model()
+    model.add(npdl.layers.Dense(n_out=500, n_in=784, activation='relu'))
+    model.add(npdl.layers.Softmax(n_out=n_classes))
+    model.compile(loss='scce', optimizer='adagrad')
+
+    # train
+    print("train model ... ")
+    model.fit(X_train, npdl.utils.data.one_hot(y_train), max_iter=max_iter, validation_split=0.1)
+
 
 if __name__ == '__main__':
-    main3(150)
+    main4(50)
