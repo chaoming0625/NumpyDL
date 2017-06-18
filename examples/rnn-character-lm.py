@@ -7,7 +7,8 @@ import numpy as np
 import npdl
 
 
-def main(max_iter, corpus_path=os.path.join(os.path.dirname(__file__), 'data/lm/tiny_shakespeare.txt')):
+def get_data():
+    corpus_path = os.path.join(os.path.dirname(__file__), 'data/lm/tiny_shakespeare.txt')
     raw_text = open(corpus_path, 'r').read()
     chars = list(set(raw_text))
     data_size, vocab_size = len(raw_text), len(chars)
@@ -26,6 +27,12 @@ def main(max_iter, corpus_path=os.path.join(os.path.dirname(__file__), 'data/lm/
         batch_in[i, range(time_steps), b_[:-1]] = 1
         batch_out[i, b_[-1]] = 1
 
+    return batch_size, vocab_size, time_steps, batch_in, batch_out
+
+
+def main1(max_iter):
+    batch_size, vocab_size, time_steps, batch_in, batch_out = get_data()
+
     print("Building model ...")
     net = npdl.Model()
     net.add(npdl.layers.SimpleRNN(n_out=200, n_in=vocab_size, return_sequence=True,
@@ -40,5 +47,20 @@ def main(max_iter, corpus_path=os.path.join(os.path.dirname(__file__), 'data/lm/
     net.fit(batch_in, batch_out, max_iter=max_iter, batch_size=batch_size)
 
 
+def main2(max_iter):
+    batch_size, vocab_size, time_steps, batch_in, batch_out = get_data()
+
+    print("Building model ...")
+    net = npdl.Model()
+    net.add(npdl.layers.SimpleRNN(n_out=200, n_in=vocab_size, return_sequence=True,
+                                  nb_batch=batch_size, nb_seq=time_steps))
+    net.add(npdl.layers.SimpleRNN(n_out=200, n_in=200))
+    net.add(npdl.layers.Softmax(n_out=vocab_size))
+    net.compile(loss=npdl.objectives.SCCE(), optimizer=npdl.optimizers.SGD(lr=0.00001, clip=5))
+
+    print("Train model ...")
+    net.fit(batch_in, batch_out, max_iter=max_iter, batch_size=batch_size)
+
+
 if __name__ == '__main__':
-    main(100)
+    main1(100)

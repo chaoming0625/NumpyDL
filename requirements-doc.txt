@@ -1,7 +1,6 @@
 -r requirements.txt
 
 # document building requirements
-mock
 Jinja2
 numpydoc>=0.6
 sphinx>=1.5.4

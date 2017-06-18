@@ -2,6 +2,22 @@ Changelog
 ---------
 
 
+0.4.0 (2017-06-18)
+~~~~~~~~~~~~~~~~~~
+
+Version 0.4.0.
+
+* Embedding backward
+* Momentum
+* NesterovMomentum
+* Adagrad
+* RMSprop
+* Adadelta
+* Adam
+* Adamax
+
+
+
 0.3.0 (2017-06-15)
 ~~~~~~~~~~~~~~~~~~
 

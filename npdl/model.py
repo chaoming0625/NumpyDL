@@ -93,13 +93,14 @@ class Model(object):
                     next_grad = layer.backward(next_grad)
 
                 # get parameter and gradients
-                param_grads = []
+                params = []
+                grads = []
                 for layer in self.layers:
-                    param_grads += layer.param_grads
-                self.optimizer.add_param_grads(param_grads)
+                    params += layer.params
+                    grads += layer.grads
 
                 # update parameters
-                self.optimizer.update_params()
+                self.optimizer.update(params, grads)
 
                 # got loss and predict
                 train_losses.append(self.loss.forward(y_pred, y_batch))

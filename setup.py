@@ -12,7 +12,6 @@ here = os.path.abspath(os.path.dirname(__file__))
 
 try:
     # obtain version string from __init__.py
-    # Read ASCII file with builtin open() so __version__ is str in Python 2 and 3
     with open(os.path.join(here, 'npdl', '__init__.py'), 'r') as f:
         init_py = f.read()
     version = re.search('__version__ = "(.*)"', init_py).groups()[0]
@@ -21,7 +20,6 @@ except Exception:
 
 try:
     # obtain long description from README and CHANGES
-    # Specify encoding to get a unicode type in Python 2 and a str in Python 3
     with io.open(os.path.join(here, 'README.rst'), 'r', encoding='utf-8') as f:
         README = f.read()
     with io.open(os.path.join(here, 'CHANGES.rst'), 'r', encoding='utf-8') as f:
@@ -53,8 +51,8 @@ setup(
     include_dirs=[np.get_include()],
     install_requires=['numpy', ],
     extras_require={
-        "test": ['pytest'],
-        'doc': ['sphinx', 'numpydoc'],
-        'example': ['scikit-learn'],
+        "test": ['pytest', 'coverage', 'python-coveralls', ],
+        'doc': ['sphinx', 'numpydoc', 'jinjia2', 'sphinx_rtd_theme'],
+        'example': ['scikit-learn', 'flask'],
     }
 )

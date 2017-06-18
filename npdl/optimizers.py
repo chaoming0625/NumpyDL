@@ -29,6 +29,8 @@ example network:
 import copy
 import numpy as np
 
+from .initializations import _zero
+
 
 class Optimizer(object):
     """Abstract optimizer base class.
@@ -36,16 +38,44 @@ class Optimizer(object):
     Note: this is the parent class of all optimizers, not an actual optimizer
     that can be used for training models.
 
+    Parameters
+    ----------
+    clip : float
+        If smaller than 0, do not apply parameter clip.
+    lr : float
+        The learning rate controlling the size of update steps
+    decay : float
+        Decay parameter for the moving average. Must lie in [0, 1) where
+        lower numbers means a shorter “memory”.
+    lr_min : float
+        When adapting step rates, do not move below this value. Default is 0.
+    lr_max : float
+        When adapting step rates, do not move above this value. Default is inf.
     """
 
-    def __init__(self, ):
-        self.param_grads = None
+    def __init__(self, lr=0.001, clip=-1, decay=0., lr_min=0., lr_max=np.inf):
+        self.lr = lr
+        self.clip = clip
+        self.decay = decay
+        self.lr_min = lr_min
+        self.lr_max = lr_max
 
-    def add_param_grads(self, param_grads):
-        raise NotImplementedError()
+        self.iterations = 0
 
-    def update_params(self, ):
-        raise NotImplementedError()
+    def update(self, params, grads):
+        """Update parameters.
+
+        Parameters
+        ----------
+        params : list
+            A list of parameters in model.
+        grads : list
+            A list of gradients in model.
+        """
+        self.iterations += 1
+
+        self.lr *= (1. / 1 + self.decay * self.iterations)
+        self.lr = np.clip(self.lr, self.lr_min, self.lr_max)
 
     def __str__(self):
         return self.__class__.__name__
@@ -57,28 +87,16 @@ class SGD(Optimizer):
     Generates update expressions of the form:
 
     * ``param := param - learning_rate * gradient``
-
-    Parameters
-    ----------
-    clip : float
-        If smaller than 0, do not apply parameter clip.
-    lr : float
-        The learning rate controlling the size of update steps
-
     """
 
-    def __init__(self, lr=0.001, clip=-1):
-        super(SGD, self).__init__()
+    def __init__(self, *args, **kwargs):
+        super(SGD, self).__init__(*args, **kwargs)
 
-        self.lr = lr
-        self.clip = clip
-
-    def add_param_grads(self, param_grads):
-        self.param_grads = param_grads
-
-    def update_params(self, ):
-        for p, g in self.param_grads:
+    def update(self, params, grads):
+        for p, g in zip(params, grads):
             p -= self.lr * npdl_clip(g, self.clip)
+
+        super(SGD, self).update(params, grads)
 
 
 class Momentum(Optimizer):
@@ -91,8 +109,9 @@ class Momentum(Optimizer):
 
     Parameters
     ----------
-    lr : float
-        The learning rate controlling the size of update steps
+    momentum : float
+        The amount of momentum to apply. Higher momentum results in
+        smoothing over more update steps. Defaults to 0.9.
 
     Notes
     -----
@@ -101,17 +120,25 @@ class Momentum(Optimizer):
 
     """
 
-    def __init__(self, lr=0.01, momentum=0.9):
-        super(Momentum, self).__init__()
+    def __init__(self, momentum=0.9, *args, **kwargs):
+        super(Momentum, self).__init__(*args, **kwargs)
 
-        self.lr = lr
         self.momentum = momentum
 
-    def add_param_grads(self, param_grads):
-        pass
+        self.velocity = None
 
-    def update_params(self, ):
-        pass
+    def update(self, params, grads):
+        # init the velocities
+        if self.velocity is None:
+            self.velocity = [_zero(p.shape) for p in params]
+
+        # update the parameters
+        for i, (v, p, g) in enumerate(zip(self.velocity, params, grads)):
+            v = self.momentum * v - self.lr * g
+            p += v
+            self.velocity[i] = v
+
+        super(Momentum, self).update(params, grads)
 
 
 class NesterovMomentum(Optimizer):
@@ -124,8 +151,9 @@ class NesterovMomentum(Optimizer):
 
     Parameters
     ----------
-    lr : float
-        The learning rate controlling the size of update steps
+    momentum : float
+        The amount of momentum to apply. Higher momentum results in
+        smoothing over more update steps. Defaults to 0.9.
 
     Notes
     -----
@@ -139,8 +167,26 @@ class NesterovMomentum(Optimizer):
     which allows the gradient to be evaluated at the current parameters.
 
     """
-    def __init__(self, lr=0.001):
-        super(NesterovMomentum, self).__init__()
+
+    def __init__(self, momentum=0.9, *args, **kwargs):
+        super(NesterovMomentum, self).__init__(*args, **kwargs)
+
+        self.momentum = momentum
+
+        self.velocity = None
+
+    def update(self, params, grads):
+        # init the velocities
+        if self.velocity is None:
+            self.velocity = [_zero(p.shape) for p in params]
+
+        # update the parameters
+        for i, (v, p, g) in enumerate(zip(self.velocity, params, grads)):
+            v = self.momentum * v - self.lr * g
+            p += (self.momentum * v - self.lr * g)
+            self.velocity[i] = v
+
+        super(NesterovMomentum, self).update(params, grads)
 
 
 class Adagrad(Optimizer):
@@ -151,8 +197,8 @@ class Adagrad(Optimizer):
 
     Parameters
     ----------
-    lr : float
-        The learning rate controlling the size of update steps
+    epsilon : float
+        Small value added for numerical stability.
 
     Notes
     -----
@@ -176,8 +222,25 @@ class Adagrad(Optimizer):
            Notes on AdaGrad. http://www.ark.cs.cmu.edu/cdyer/adagrad.pdf
     """
 
-    def __init__(self, lr=0.001):
-        super(Adagrad, self).__init__()
+    def __init__(self, epsilon=1e-6, *args, **kwargs):
+        super(Adagrad, self).__init__(*args, **kwargs)
+
+        self.epsilon = epsilon
+
+        self.cache = None
+
+    def update(self, params, grads):
+        # init cache
+        if self.cache is None:
+            self.cache = [_zero(g.shape) for g in grads]
+
+        # update parameters
+        for i, (c, p, g) in enumerate(zip(self.cache, params, grads)):
+            c += np.power(g, 2)
+            p -= self.lr * g / (np.sqrt(c) + self.epsilon)
+            self.cache[i] = c
+
+        super(Adagrad, self).update(params, grads)
 
 
 class RMSprop(Optimizer):
@@ -188,8 +251,10 @@ class RMSprop(Optimizer):
 
     Parameters
     ----------
-    lr : float
-        The learning rate controlling the size of update steps
+    rho : float
+        Gradient moving average decay factor.
+    epsilon : float
+        Small value added for numerical stability.
 
     Notes
     -----
@@ -211,8 +276,25 @@ class RMSprop(Optimizer):
            Coursera. http://www.youtube.com/watch?v=O3sxAc4hxZU (formula @5:20)
     """
 
-    def __init__(self, lr=0.001):
-        super(RMSprop, self).__init__()
+    def __init__(self, rho=0.9, epsilon=1e-6, *args, **kwargs):
+        super(RMSprop, self).__init__(*args, **kwargs)
+
+        self.rho = rho
+        self.epsilon = epsilon
+
+        self.cache = None
+        self.iterations = 0
+
+    def update(self, params, grads):
+        # init cache
+        if self.cache is None:
+            self.cache = [_zero(p.shape) for p in params]
+
+        # update parameters
+        for i, (c, p, g) in enumerate(zip(self.cache, params, grads)):
+            c = self.rho * c + (1 - self.rho) * np.power(g, 2)
+            p -= (self.lr * g / np.sqrt(c + self.epsilon))
+            self.cache[i] = c
 
 
 class Adadelta(Optimizer):
@@ -223,8 +305,12 @@ class Adadelta(Optimizer):
 
     Parameters
     ----------
-    lr : float
-        The learning rate controlling the size of update steps
+    rho : float
+        Gradient moving average decay factor.
+    epsilon : float
+        Small value added for numerical stability.
+    decay : float
+        Decay parameter for the moving average.
 
     Notes
     -----
@@ -256,8 +342,31 @@ class Adadelta(Optimizer):
            arXiv Preprint arXiv:1212.5701.
     """
 
-    def __init__(self, lr=0.001):
-        super(Adadelta, self).__init__()
+    def __init__(self, rho=0.9, epsilon=1e-6, *args, **kwargs):
+        super(Adadelta, self).__init__(*args, **kwargs)
+
+        self.rho = rho
+        self.epsilon = epsilon
+
+        self.cache = None
+        self.delta = None
+
+    def update(self, params, grads):
+        # init cache and delta
+        if self.cache is None:
+            self.cache = [_zero(p.shape) for p in params]
+        if self.delta is None:
+            self.delta = [_zero(p.shape) for p in params]
+
+        # update parameters
+        for i, (c, d, p, g) in enumerate(zip(self.cache, self.delta, params, grads)):
+            c = self.rho * c + (1 - self.rho) * np.power(g, 2)
+            update = g * np.sqrt(d + self.epsilon) / np.sqrt(c + self.epsilon)
+            p -= self.lr * update
+            d = self.rho * d + (1 - self.rho) * np.power(update, 2)
+
+            self.cache[i] = c
+            self.delta[i] = d
 
 
 class Adam(Optimizer):
@@ -267,8 +376,12 @@ class Adam(Optimizer):
 
     Parameters
     ----------
-    lr : float
-        The learning rate controlling the size of update steps
+    beta1 : float
+        Exponential decay rate for the first moment estimates.
+    beta2 : float
+        Exponential decay rate for the second moment estimates.
+    epsilon : float
+        Constant for numerical stability.
 
     Notes
     -----
@@ -283,8 +396,34 @@ class Adam(Optimizer):
            arXiv preprint arXiv:1412.6980.
     """
 
-    def __init__(self, lr=0.001):
-        super(Adam, self).__init__()
+    def __init__(self, beta1=0.9, beta2=0.999, epsilon=1e-8, *args, **kwargs):
+        super(Adam, self).__init__(*args, **kwargs)
+
+        self.beta1 = beta1
+        self.beta2 = beta2
+        self.epsilon = epsilon
+
+        self.ms = None
+        self.vs = None
+
+    def update(self, params, grads):
+        # init
+        self.iterations += 1
+        a_t = self.lr * np.sqrt(1 - np.power(self.beta2, self.iterations)) / \
+              (1 - np.power(self.beta1, self.iterations))
+        if self.ms is None:
+            self.ms = [_zero(p.shape) for p in params]
+        if self.vs is None:
+            self.vs = [_zero(p.shape) for p in params]
+
+        # update parameters
+        for i, (m, v, p, g) in enumerate(zip(self.ms, self.vs, params, grads)):
+            m = self.beta1 * m + (1 - self.beta1) * g
+            v = self.beta2 * v + (1 - self.beta2) * np.power(g, 2)
+            p -= a_t * m / (np.sqrt(v) + self.epsilon)
+
+            self.ms[i] = m
+            self.vs[i] = v
 
 
 class Adamax(Optimizer):
@@ -295,8 +434,12 @@ class Adamax(Optimizer):
 
     Parameters
     ----------
-    lr : float
-        The learning rate controlling the size of update steps
+    beta1 : float
+        Exponential decay rate for the first moment estimates.
+    beta2 : float
+        Exponential decay rate for the second moment estimates.
+    epsilon : float
+        Constant for numerical stability.
 
     References
     ----------
@@ -305,8 +448,33 @@ class Adamax(Optimizer):
            arXiv preprint arXiv:1412.6980.
     """
 
-    def __init__(self, lr=0.001):
-        super(Adamax, self).__init__()
+    def __init__(self, beta1=0.9, beta2=0.999, epsilon=1e-8, *args, **kwargs):
+        super(Adamax, self).__init__(*args, **kwargs)
+
+        self.beta1 = beta1
+        self.beta2 = beta2
+        self.epsilon = epsilon
+
+        self.ms = None
+        self.vs = None
+
+    def update(self, params, grads):
+        # init
+        self.iterations += 1
+        a_t = self.lr / (1 - np.power(self.beta1, self.iterations))
+        if self.ms is None:
+            self.ms = [_zero(p.shape) for p in params]
+        if self.vs is None:
+            self.vs = [_zero(p.shape) for p in params]
+
+        # update parameters
+        for i, (m, v, p, g) in enumerate(zip(self.ms, self.vs, params, grads)):
+            m = self.beta1 * m + (1 - self.beta1) * g
+            v = np.maximum(self.beta2 * v, np.abs(g))
+            p -= a_t * m / (v + self.epsilon)
+
+            self.ms[i] = m
+            self.vs[i] = v
 
 
 def npdl_clip(grad, boundary):
@@ -341,4 +509,3 @@ def get(optimizer):
 
     else:
         raise ValueError("Unknown type: {}.".format(optimizer.__class__.__name__))
-

@@ -9,6 +9,8 @@ pytest-pep8
 python-coveralls
 requests
 six
+mock
+
 
 # application requirements
 flask

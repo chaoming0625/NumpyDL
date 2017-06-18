@@ -24,7 +24,6 @@ def ask():
         if message == "quit":
             exit()
         else:
-            # print bot_response
             return jsonify({'status': 'OK',
                             'answer': model.utter(message)})
 
