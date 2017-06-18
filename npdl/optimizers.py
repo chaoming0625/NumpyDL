@@ -44,11 +44,17 @@ class Optimizer(object):
         If smaller than 0, do not apply parameter clip.
     lr : float
         The learning rate controlling the size of update steps
+    decay : float
+        Decay parameter for the moving average. Must lie in [0, 1) where
+        lower numbers means a shorter “memory”.
     """
 
-    def __init__(self, lr=0.001, clip=-1):
+    def __init__(self, lr=0.001, clip=-1, decay=0., lr_min=0., lr_max=np.inf):
         self.lr = lr
         self.clip = clip
+        self.decay = decay
+        self.lr_min = lr_min
+        self.lr_max = lr_max
 
     def update(self, params, grads):
         """Update parameters.
@@ -60,7 +66,8 @@ class Optimizer(object):
         grads : list
             A list of gradients in model.
         """
-        raise NotImplementedError
+        self.lr *= (1-self.decay)
+        self.lr = np.clip(self.lr, self.lr_min, self.lr_max)
 
     def __str__(self):
         return self.__class__.__name__
@@ -79,6 +86,8 @@ class SGD(Optimizer):
     def update(self, params, grads):
         for p, g in zip(params, grads):
             p -= self.lr * npdl_clip(g, self.clip)
+
+        super(SGD, self).update(params, grads)
 
 
 class Momentum(Optimizer):
@@ -119,14 +128,22 @@ class Momentum(Optimizer):
             v = self.momentum * v - self.lr * g
             p += v
 
+        super(Momentum, self).update(params, grads)
 
-class NesterovMomentum(Momentum):
+
+class NesterovMomentum(Optimizer):
     """Stochastic Gradient Descent (SGD) updates with Nesterov momentum
 
     Generates update expressions of the form:
 
     * ``velocity := momentum * velocity - learning_rate * gradient``
     * ``param := param + momentum * velocity - learning_rate * gradient``
+
+    Parameters
+    ----------
+    momentum : float
+        The amount of momentum to apply. Higher momentum results in
+        smoothing over more update steps. Defaults to 0.9.
 
     Notes
     -----
@@ -140,8 +157,12 @@ class NesterovMomentum(Momentum):
     which allows the gradient to be evaluated at the current parameters.
 
     """
-    def __init__(self, *args, **kwargs):
+    def __init__(self, momentum=0.9, *args, **kwargs):
         super(NesterovMomentum, self).__init__(*args, **kwargs)
+
+        self.momentum = momentum
+
+        self.velocity = None
 
     def update(self, params, grads):
         # init the velocities
@@ -152,6 +173,8 @@ class NesterovMomentum(Momentum):
         for v, p, g in zip(self.velocity, params, grads):
             v = self.momentum * v - self.lr * g
             p += (self.momentum * v - self.lr * g)
+
+        super(NesterovMomentum, self).update(params, grads)
 
 
 class Adagrad(Optimizer):
@@ -204,6 +227,8 @@ class Adagrad(Optimizer):
             c += np.power(g, 2)
             p -= self.lr * g / (np.sqrt(c) + self.epsilon)
 
+        super(Adagrad, self).update(params, grads)
+
 
 class RMSprop(Optimizer):
     """RMSProp updates
@@ -213,8 +238,10 @@ class RMSprop(Optimizer):
 
     Parameters
     ----------
-    lr : float
-        The learning rate controlling the size of update steps
+    rho : float
+        Gradient moving average decay factor.
+    epsilon : float
+        Small value added for numerical stability.
 
     Notes
     -----
@@ -239,6 +266,8 @@ class RMSprop(Optimizer):
     def __init__(self, *args, **kwargs):
         super(RMSprop, self).__init__(*args, **kwargs)
 
+    def update(self, params, grads):
+        pass
 
 class Adadelta(Optimizer):
     """ Adadelta updates
