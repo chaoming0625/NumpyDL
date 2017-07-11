@@ -59,7 +59,6 @@ Its main features are:
 5. *API* like ``Keras`` library
 6. *Examples* for several AI tasks
 7. *Application* for a toy chatbot
-8. *Mobile friendly* documents
 
 
 Documentation

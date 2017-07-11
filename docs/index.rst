@@ -17,39 +17,6 @@ The main features of NumpyDL are as follows:
 7. *Application* for a toy chatbot
 
 
-User Guides
-===========
-
-The NumpyDL user guide explains how to install NumpyDL, how to build and train
-neural networks using NumpyDL, and how to contribute to the library as a
-developer.
-
-.. toctree::
-   :maxdepth: 2
-   :numbered:
-
-   user_guides/installation
-   user_guides/development
-
-
-Tutorials
-=========
-
-This is the tutorials of Deep Learning.
-
-.. toctree::
-   :maxdepth: 2
-   :numbered:
-
-   tutorials/activations
-   tutorials/initializations
-   tutorials/objectives
-   tutorials/optimizers
-   tutorials/MLP
-   tutorials/CNN
-   tutorials/RNN
-
-
 API References
 ==============
 
