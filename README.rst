@@ -44,7 +44,6 @@ Descriptions
 
 1. Based on Pure Numpy/Python
 2. For DL Education
-3. And for My Homework
 
 
 Features
@@ -56,9 +55,8 @@ Its main features are:
 2. *Native* to Python
 3. *Automatic differentiations* are basically supported
 4. *Commonly used models* are provided: MLP, RNNs, LSTMs and CNNs
-5. *API* like ``Keras`` library
-6. *Examples* for several AI tasks
-7. *Application* for a toy chatbot
+5. *Examples* for several AI tasks
+6. *Application* for a toy chatbot
 
 
 Documentation
