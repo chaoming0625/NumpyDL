@@ -281,7 +281,7 @@ place will be calculated.
     & \frac{\partial E_{o1}}{\partial out_{h1}} = \frac{\partial E_{o1}}{\partial net_{o1}} *
         \frac{\partial net_{o1}}{\partial out_{h1}} \\
     & \frac{\partial E_{o1}}{\partial net_{o1}} = \frac{\partial E_{o1}}{\partial out_{o1}} *
-        \frac{\partial net_{o1}}{\partial out_{h1}} = 0.74136507 * 0.186815602 = 0.138498562 \\
+        \frac{\partial out_{o1}}{\partial net_{o1}} = 0.74136507 * 0.186815602 = 0.138498562 \\
     & net_{o1} = w_5 * out_{h1} + w_6 * out_{h2} + b_2 * 1 \\
     & \frac{\partial net_{o1}}{\partial out_{h1}} = w_5 = 0.40 \\
     & \frac{\partial E_{o1}}{\partial out_{h1}} =\frac{\partial E_{o1}}{\partial net_{o1}} *
@@ -296,7 +296,7 @@ place will be calculated.
     \frac{\partial E_{total}}{\partial out_{h1}} =
     \frac{\partial E_{o1}}{\partial out_{h1}} +
     \frac{\partial E_{o2}}{\partial out_{h1}} =
-    0.055399425 + -.019049119 + 0.036350306
+    0.055399425 + -.019049119 = 0.036350306
 
 * Then, calculate :math:`\frac{\partial out_{h1}}{\partial net_{h1}}`:
 
@@ -322,7 +322,7 @@ Putting it all together:
     \frac{\partial net_{h1}}{\partial w_1} =
     0.036350306 * 0.241300709 * 0.05 = 0.000438568
 
-In order to simplify the formula, :math:`\sigma_{h1}` is used to represent the error of the hidden layer
+In order to simplify the formula, :math:`\delta_{h1}` is used to represent the error of the hidden layer
 unit :math:`h_1`:
 
 .. math::
