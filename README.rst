@@ -125,8 +125,8 @@ One concrete code example in *examples/mlp-digits.py*:
 
     # model
     model = npdl.model.Model()
-    model.add(npdl.layers.Dense(n_out=500, n_in=64, activation=npdl.activation.ReLU()))
-    model.add(npdl.layers.Dense(n_out=n_classes, activation=npdl.activation.Softmax()))
+    model.add(npdl.layers.Dense(n_out=500, n_in=64, activation=npdl.activations.ReLU()))
+    model.add(npdl.layers.Dense(n_out=n_classes, activation=npdl.activations.Softmax()))
     model.compile(loss=npdl.objectives.SCCE(), optimizer=npdl.optimizers.SGD(lr=0.005))
 
     # train
