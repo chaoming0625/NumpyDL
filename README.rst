@@ -5,8 +5,8 @@
 .. image:: https://img.shields.io/badge/license-MIT-blue.svg
     :target: https://github.com/oujago/NumpyDL/blob/master/LICENSE
 
-.. image:: https://api.travis-ci.org/oujago/NumpyDL.svg
-    :target: https://travis-ci.org/oujago/NumpyDL
+.. image:: https://travis-ci.org/chaoming0625/NumpyDL.svg?branch=master
+    :target: https://travis-ci.org/chaoming0625/NumpyDL
 
 .. image:: https://coveralls.io/repos/github/oujago/NumpyDL/badge.svg
     :target: https://coveralls.io/github/oujago/NumpyDL
